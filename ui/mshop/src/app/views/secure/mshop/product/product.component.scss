@@ -1,0 +1,120 @@
+// // .product-image-container {
+// //     position: relative;
+// //     width: 100%;
+// //     padding-bottom: 100%;
+// //     background-color: #f8f9fa;
+// //     border: 2px dashed #dee2e6;
+// //     display: flex;
+// //     justify-content: center;
+// //     align-items: center;
+// //     text-align: center;
+// // }
+// .product-image-container {
+//     position: relative;
+//     width: 100%;
+//     // padding-bottom: 100%;
+//     height: 100% !important;
+//     background-color: #f8f9fa;
+//     // border: 2px dashed #dee2e6;
+//     // display: flex;
+//     justify-content: center;
+//     // align-items: center;
+//     text-align: center;
+
+//     a {
+//         text-decoration: underline !important;
+//         color: #636f7a;
+//         /* Bootstrap's text-muted color */
+//         font-weight: 500;
+//     }
+
+//     :hover {
+//         color: #343a40;
+//         /* Darker hover color */
+//     }
+
+//     img {
+//         position: absolute;
+//         top: 0;
+//         left: 0;
+//         width: 100%;
+//         height: 100% !important;
+//         object-fit: cover;
+//     }
+// }
+
+
+.product-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    .btn-sm {
+        font-size: x-small;
+    }
+
+    button {
+        margin: 5px;
+        width: fit-content;
+    }
+}
+
+
+.product-images {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    .product-image {
+        position: relative;
+        cursor: pointer;
+
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+        }
+
+    }
+}
+
+.upload-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border: 2px dashed #ced4da;
+    border-radius: 5px;
+    min-height: 200px;
+}
+
+.upload-placeholder:hover {
+    background-color: #e9ecef;
+}
+
+.element::before {
+    content: "Drop your files here";
+    height: 100%;
+    background-color: #e9ecef;
+    margin: 0;
+    padding: 0;
+    transition: opacity 0.7s ease;
+    width: 100%;
+}
+
+.product-image:hover .product-image-overlay {
+    opacity: 1;
+}
+
+.element .product-image-overlay {
+    opacity: 1;
+}

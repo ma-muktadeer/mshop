@@ -1,0 +1,13 @@
+{
+    "app": {
+        "appName": "M-SHOP",
+        "version": "1.0.0",
+        "desc": "IT House M-SHOP App",
+        "loginRequired": true,
+        "constantAppName": "M-SHOP",
+        "baseDevUrl": "http://localhost:8080",
+        "baseProdUrl": "http://localhost:8080",
+        "client": "ithouse",
+        "domain": "ithouse"
+    }
+}

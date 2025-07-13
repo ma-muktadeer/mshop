@@ -1,0 +1,23 @@
+<li class="nav-item pcoded-hasmenu" [routerLinkActive]="['active']">
+  <a [routerLinkActive]="['active']" href="javascript:" class="nav-link" (click)="navCollapse($event)">
+    @if (item.icon) {
+    <span class="pcoded-micon">
+      <i class="{{ item.icon }}"></i>
+    </span>
+    }
+    <span class="pcoded-mtext">{{ item.title }}</span>
+  </a>
+  <ul class="pcoded-submenu" [routerLinkActive]="['active']">
+    @for (item of item.children; track item) {
+    @if (item?.type === 'group') {
+    <ithouse-nav-group [item]="item"></ithouse-nav-group>
+    }
+    @if (item?.type === 'collapse') {
+    <ithouse-nav-collapse [item]="item"></ithouse-nav-collapse>
+    }
+    @if (item?.type === 'item') {
+    <ithouse-nav-item [item]="item"></ithouse-nav-item>
+    }
+    }
+  </ul>
+</li>
