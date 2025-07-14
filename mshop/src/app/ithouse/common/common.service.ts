@@ -173,64 +173,48 @@ export class CommonService {
   }
 
   public executeAdmin(actionType: ActionType, contentType: ContentType, payload: any, path = null) {
-
-    // var req = this.generateReqJson(actionType, contentType, '', payload);
-    // var url = path ? endpointConfig(this.config).url_admin + path : endpointConfig(this.config).url_admin + "/jsonRequest"
-    // return this.http.post(url, req);
-    return null;
+    var req = this.generateReqJson(actionType, contentType, '', payload);
+    var url = path ? endpointConfig(this.config).url_admin + path : endpointConfig(this.config).url_admin + "/jsonRequest"
+    return this.http.post(url, req);
   }
 
-
-  // private extractData(res: Response) {
-  //   let body = res.json();
-  //   return body || {};
-  // }
-  // private handleErrorObservable(error: Response | any) {
-  //   console.error(error.message || error);
-  //   return throwError(() => new Error(error!.message || error));
-  // }
-  // private handleErrorPromise(error: Response | any) {
-  //   console.error(error.message || error);
-  //   return Promise.reject(error.message || error);
-  // }
 
   public generateReqJson(actionType: ActionType, contentType: ContentType, referance: string, payload: any) {
 
-    // var loginUser = this.loadLoginUser();
-    // var userId = null;
-    // if (loginUser && loginUser.userId) {
-    //   userId = loginUser.userId;
-    // }
-    // var header = {
-    //   actionType: actionType.toString(),
-    //   contentType: contentType.toString(),
-    //   referance: referance,
-    //   userId: userId,
-    //   extraInfoMap: {
-    //     appName: app.constantAppName
-    //   }
-    // };
+    var loginUser = this.loadLoginUser();
+    var userId = null;
+    if (loginUser && loginUser.userId) {
+      userId = loginUser.userId;
+    }
+    var header = {
+      actionType: actionType.toString(),
+      contentType: contentType.toString(),
+      referance: referance,
+      userId: userId,
+      extraInfoMap: {
+        appName: app.constantAppName
+      }
+    };
 
-    // var data = {
-    //   header: header,
-    //   payload: payload instanceof Object ? [payload] : payload
-    // }
-    // return data;
-    return '';
+    var data = {
+      header: header,
+      payload: payload instanceof Object ? [payload] : payload
+    }
+    return data;
   }
 
-  // public reqJson(actionType: ActionType, contentType: ContentType, referance: string, payload: any): string {
+  public reqJson(actionType: ActionType, contentType: ContentType, referance: string, payload: any): string {
 
-  //   var req = this.generateReqJson(actionType, contentType, referance, payload);
-  //   if (req) {
-  //     return JSON.stringify(req);
-  //   }
-  //   return '';
+    var req = this.generateReqJson(actionType, contentType, referance, payload);
+    if (req) {
+      return JSON.stringify(req);
+    }
+    return '';
 
-  // }
+  }
 
   public storeLoginUser(loginUser: any) {
-    // this.sessionStorage?.setItem(Constants.APP_LOGIN_USER, JSON.stringify(loginUser ?? {}))
+    this.sessionStorage?.setItem(Constants.APP_LOGIN_USER, JSON.stringify(loginUser ?? {}))
   }
   storeToken(res: any) {
     // this.sessionStorage?.setItem("AUTH_TOKEN", res?.token);
