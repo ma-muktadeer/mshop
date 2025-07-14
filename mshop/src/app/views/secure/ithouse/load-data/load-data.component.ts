@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { AngularGridInstance, AngularSlickgridModule, Column, FieldType, GridOption, Metrics, Pagination } from 'angular-slickgrid';
 
 import { Pageable } from '../../../../ithouse/common/CustomGridData';
@@ -16,15 +16,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './load-data.component.scss'
 })
 export class LoadDataComponent extends Ithouse implements Service, OnInit {
-isBrowser = typeof window !== 'undefined';
-  slickGridComponent: any;
+isBrowser = signal<boolean>(false);
+  slickGridComponent= signal<any>(null);
   constructor(private cs: CommonService) {
     super();
   }
   async ngOnInit(): Promise<void> {
-    if (this.isBrowser) {
+    this.isBrowser.update(() => typeof window !== 'undefined');
+    console.log('isBrowser: ', this.isBrowser());
+    if (this.isBrowser()) {
       const { TestGrid } = await import('./test-grid/test-grid');
-      this.slickGridComponent = TestGrid;
+      this.slickGridComponent.update(()=>TestGrid);
     }
     this.loadUser(undefined);
   }

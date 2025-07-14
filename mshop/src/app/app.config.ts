@@ -35,7 +35,6 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([ithouseInterceptor])
     ),
     provideAppInitializer(() => initializeApplication(inject(ConfigService))),
-    // importProvidersFrom([AngularSlickgridModule.forRoot()]),
-
+    importProvidersFrom(AngularSlickgridModule.forRoot()),
   ]
 };
