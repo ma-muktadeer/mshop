@@ -4,7 +4,6 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { inject, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { parseBoolean } from 'angular-slickgrid';
 import { catchError, Observable, throwError } from 'rxjs';
 import { ActionType } from '../constants/action-type.enum';
 import { ContentType } from '../constants/content-type.enum';
@@ -31,7 +30,6 @@ export class CommonService {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: object
   ) {
-    debugger
     if (isPlatformBrowser(this.platformId)) {
     // ✅ Safe access with checks
     if (this.document?.defaultView) {
