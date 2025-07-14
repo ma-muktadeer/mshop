@@ -256,147 +256,143 @@ export class CommonService {
     return null;
   }
 
-  // isAuthenticated() {
-  //   var auth = this.sessionStorage?.getItem("IS_AUTHENTICATED");
+  isAuthenticated() {
+    var auth = this.sessionStorage?.getItem("IS_AUTHENTICATED");
 
-  //   if (auth) {
-  //     return parseBoolean(auth);
-  //   }
+    if (auth) {
+      return true;
+    }
 
-  //   return false;
-  // }
+    return false;
+  }
 
-  // public loadLoginUserRoleList() {
-  //   var loginUser = this.sessionStorage?.getItem(Constants.APP_LOGIN_USER);
-  //   if (loginUser) {
-  //     return JSON.parse(loginUser ? loginUser : '')?.roleList;
-  //   }
-  //   else {
-  //     return null;
-  //   }
-  // }
+  public loadLoginUserRoleList() {
+    var loginUser = this.sessionStorage?.getItem(Constants.APP_LOGIN_USER);
+    if (loginUser) {
+      return JSON.parse(loginUser ? loginUser : '')?.roleList;
+    }
+    else {
+      return null;
+    }
+  }
 
   public logout(service: Service) {
-    //if logged in status
-    // if (this.isAuthenticated()) {
-    //   var isLoggedIn = this.isLoggedIn();
-    //   var loginUser = this.loadLoginUser();
-    //   var payload = {
-    //     userId: loginUser.userId
-    //   }
-    //   this.sendRequest(service, ActionType.LOGOUT, ContentType.User, 'logout', payload);
+    if (this.isAuthenticated()) {
+      var loginUser = this.loadLoginUser();
+      var payload = {
+        userId: loginUser.userId
+      }
+      this.sendRequest(service, ActionType.LOGOUT, ContentType.User, 'logout', payload);
 
     this.removeUserInfo();
 
-    // }
+    }
   }
 
   public removeUserInfo() {
-    // this.storeLoginUser({});
-    // this.localStorage?.removeItem('permission');
+    this.storeLoginUser({});
+    this.localStorage?.removeItem('permission');
 
-    // //loginUser = this.loadLoginUser();
-    // this.sessionStorage?.removeItem("IS_AUTHENTICATED");
-    // this.sessionStorage?.removeItem("AUTH_TOKEN");
-    // this.sessionStorage?.removeItem(Constants.APP_LOGIN_USER);
+    //loginUser = this.loadLoginUser();
+    this.sessionStorage?.removeItem("IS_AUTHENTICATED");
+    this.sessionStorage?.removeItem("AUTH_TOKEN");
+    this.sessionStorage?.removeItem(Constants.APP_LOGIN_USER);
   }
 
 
-  // public isLoggedIn(): boolean {
-  //   return this.isAuthenticated()
-  // }
+  public isLoggedIn(): boolean {
+    return this.isAuthenticated()
+  }
 
-  // public hasAllRole(roleArray: AppRole[]): boolean {
-  //   if (!roleArray) {
-  //     return false;
-  //   }
-  //   var roles = this.loadLoginUserRoleList()
-  //   if (!roles) {
-  //     return false;
-  //   }
+  public hasAllRole(roleArray: AppRole[]): boolean {
+    if (!roleArray) {
+      return false;
+    }
+    var roles = this.loadLoginUserRoleList()
+    if (!roles) {
+      return false;
+    }
 
-  //   var roless = this.roleArray(roles)
-  //   return roleArray.every(x => roless.indexOf(x) > -1)
-  // }
-  // private roleArray(roles) {
-  //   var roleArray = [];
-  //   if (!roles) {
-  //     return roleArray;
-  //   }
+    var roless = this.roleArray(roles)
+    return roleArray.every(x => roless.indexOf(x) > -1)
+  }
+  private roleArray(roles) {
+    var roleArray = [];
+    if (!roles) {
+      return roleArray;
+    }
 
-  //   for (var i = 0; i < roles.length; i++) {
-  //     roleArray.push(roles[i].roleName);
-  //   }
-  //   return roleArray;
+    for (var i = 0; i < roles.length; i++) {
+      roleArray.push(roles[i].roleName);
+    }
+    return roleArray;
 
-  // }
-  // public hasAnyRole(roles: AppRole[]): boolean {
+  }
+  public hasAnyRole(roles: AppRole[]): boolean {
 
-  //   if (!roles) {
-  //     return false;
-  //   }
-  //   var loginUser = this.loadLoginUser();
-  //   var userRoles = loginUser?.roleList;
-  //   var loginRoleArray = this.roleArray(userRoles);
-  //   if (!userRoles) {
-  //     return false;
-  //   }
-  //   return roles.some(r => loginRoleArray.indexOf(r) >= 0);
-  // }
+    if (!roles) {
+      return false;
+    }
+    var loginUser = this.loadLoginUser();
+    var userRoles = loginUser?.roleList;
+    var loginRoleArray = this.roleArray(userRoles);
+    if (!userRoles) {
+      return false;
+    }
+    return roles.some(r => loginRoleArray.indexOf(r) >= 0);
+  }
 
   public filePostBySecure(path: string, formData: FormData, fileType: FileType, action: FileAction = 'OTHERS', header?: HttpHeaders) {
 
 
-    // formData.append('fileType', fileType);
-    // formData.append('action', action);
+    formData.append('fileType', fileType);
+    formData.append('action', action);
 
 
-    // let headers = new HttpHeaders({
-    //   'Authorization': this.sessionStorage?.getItem("AUTH_TOKEN"),
-    //   'UserId': this.getUserId() + '',
-    //   responseType: 'arraybuffer',
-    //   // responseType: 'blob',
-    //   observe: 'response'
-    // });
-    // const url = `${endpointConfig(this.config).url}/${path}`;
+    let headers = new HttpHeaders({
+      'Authorization': this.sessionStorage?.getItem("AUTH_TOKEN"),
+      'UserId': this.getUserId() + '',
+      responseType: 'arraybuffer',
+      // responseType: 'blob',
+      observe: 'response'
+    });
+    const url = `${endpointConfig(this.config).url}/${path}`;
 
-    // // Create the HTTP request
-    // const req = new HttpRequest('POST', url, formData, {
-    //   reportProgress: true,
-    //   responseType: 'arraybuffer', // ensure this is correctly typed
-    //   withCredentials: true,
-    //   headers: header || headers,
-    // });
+    // Create the HTTP request
+    const req = new HttpRequest('POST', url, formData, {
+      reportProgress: true,
+      responseType: 'arraybuffer', // ensure this is correctly typed
+      withCredentials: true,
+      headers: header || headers,
+    });
 
-    // return this.http.request(req);
-
-    return null;
+    return this.http.request(req);
   }
 
-  // public fileDownload(path: string, payload: any, header?: HttpHeaders): Observable<Blob> {
+  public fileDownload(path: string, payload: any, header?: HttpHeaders): Observable<Blob> {
 
-  //   let headers = new HttpHeaders({
-  //     'Authorization': this.sessionStorage?.getItem("AUTH_TOKEN"),
-  //     'UserId': this.getUserId() + '',
-  //     responseType: 'arraybuffer',
-  //     // responseType: 'blob',
-  //     observe: 'response'
-  //   });
+    let headers = new HttpHeaders({
+      'Authorization': this.sessionStorage?.getItem("AUTH_TOKEN"),
+      'UserId': this.getUserId() + '',
+      responseType: 'arraybuffer',
+      // responseType: 'blob',
+      observe: 'response'
+    });
 
-  //   if (header) {
-  //     headers = header;
-  //   }
+    if (header) {
+      headers = header;
+    }
 
-  //   return this.http.post(endpointConfig(this.config).url + path, payload, { headers: headers, responseType: 'blob' });
-  // }
-  // public check(path: string, payload: any, header?: HttpHeaders): Observable<any> {
+    return this.http.post(endpointConfig(this.config).url + path, payload, { headers: headers, responseType: 'blob' });
+  }
+  public check(path: string, payload: any, header?: HttpHeaders): Observable<any> {
 
 
-  //   return this.http.post(endpointConfig(this.config).url_public + path, payload);
-  // }
+    return this.http.post(endpointConfig(this.config).url_public + path, payload);
+  }
 
-  // testSetSession(key: string, value: string) {
-  //   this.sessionStorage?.setItem(key, value);
-  // }
+  testSetSession(key: string, value: string) {
+    this.sessionStorage?.setItem(key, value);
+  }
 
 }
