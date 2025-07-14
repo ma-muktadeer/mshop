@@ -111,66 +111,64 @@ export class CommonService {
 
   private doSendRequest(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
 
-    // let req = this.generateReqJson(actionType, contentType, referance, payload);
-    // let url = path ? endpointConfig(this.config).url + path : endpointConfig(this.config).url + "/jsonRequest"
+    let req = this.generateReqJson(actionType, contentType, referance, payload);
+    let url = path ? endpointConfig(this.config).url + path : endpointConfig(this.config).url + "/jsonRequest"
 
-    // this.http.post(url, req)
-    //   .pipe(
-    //     catchError((error: any) => {
-    //       service.onError(service, req, error);
-    //       return throwError(() => error);
-    //     })
-    //   )
-    //   .subscribe(
-    //     (res) => {
-    //       service.onResponse(service, req, res);
-    //     }
-    //   );
-    return null;
+    this.http.post(url, req)
+      .pipe(
+        catchError((error: any) => {
+          service.onError(service, req, error);
+          return throwError(() => error);
+        })
+      )
+      .subscribe(
+        (res) => {
+          service.onResponse(service, req, res);
+        }
+      );
   }
 
-  // public post(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any) {
+  public post(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any) {
 
-  //   var req = this.generateReqJson(actionType, contentType, referance, payload);
+    var req = this.generateReqJson(actionType, contentType, referance, payload);
 
-  //   // return this.http.post(endpointConfig(this.config).url, req)
-  //   //   .toPromise()
-  //   //   .then(res => {
-  //   //     return res;
-  //   //   })
-  //   //   .catch(res => {
-  //   //     service.onError(service, req, res);
-  //   //   });
+    // return this.http.post(endpointConfig(this.config).url, req)
+    //   .toPromise()
+    //   .then(res => {
+    //     return res;
+    //   })
+    //   .catch(res => {
+    //     service.onError(service, req, res);
+    //   });
 
-  //   return this.http.post(endpointConfig(this.config).url, req)
-  //     .pipe(
-  //       catchError((error: any) => {
-  //         service.onError(service, req, error);
-  //         return throwError(() => error);
-  //       })
-  //     )
-  //     .subscribe(
-  //       (res) => {
-  //         service.onResponse(service, req, res);
-  //       }
-  //     );
-  // }
-
+    return this.http.post(endpointConfig(this.config).url, req)
+      .pipe(
+        catchError((error: any) => {
+          service.onError(service, req, error);
+          return throwError(() => error);
+        })
+      )
+      .subscribe(
+        (res) => {
+          service.onResponse(service, req, res);
+        }
+      );
+  }
 
 
   public execute(actionType: ActionType, contentType: ContentType, payload: any) {
 
-    // var req = this.generateReqJson(actionType, contentType, '', payload);
+    var req = this.generateReqJson(actionType, contentType, '', payload);
 
-    // return this.http.post(endpointConfig(this.config).url, req);
+    return this.http.post(endpointConfig(this.config).url, req);
 
   }
 
   public executePublic(actionType: ActionType, contentType: ContentType, payload: any, path = null) {
 
-    // var req = this.generateReqJson(actionType, contentType, '', payload);
-    // var url = path ? endpointConfig(this.config).url_public + path : endpointConfig(this.config).url_public + "/jsonRequest"
-    // return this.http.post(url, req);
+    var req = this.generateReqJson(actionType, contentType, '', payload);
+    var url = path ? endpointConfig(this.config).url_public + path : endpointConfig(this.config).url_public + "/jsonRequest"
+    return this.http.post(url, req);
 
   }
 
