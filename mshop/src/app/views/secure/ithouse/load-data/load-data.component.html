@@ -9,5 +9,8 @@
         (onAngularGridCreated)="angularGridReady($event)"
         >
       </angular-slickgrid> -->
+      <ng-container *ngIf="isBrowser">
+      <ng-container *ngComponentOutlet="slickGridComponent"></ng-container>
+    </ng-container>
     </div>
   </div>

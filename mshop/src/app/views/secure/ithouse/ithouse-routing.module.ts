@@ -4,7 +4,6 @@ import { LoadDataComponent } from './load-data/load-data.component';
 import { UserComponent } from './user/user.component';
 
 const routes: Routes = [
-  // { path: 'user', component: UserComponent, pathMatch: 'full' },
   { path: 'user', component: UserComponent, pathMatch: 'full' },
   { path: 'userr', component: LoadDataComponent, pathMatch: 'full' },
 ];

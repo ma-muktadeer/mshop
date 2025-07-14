@@ -7,189 +7,29 @@ import { CommonService } from '../../../../ithouse/common/common.service';
 import { Service } from '../../../../ithouse/common/service';
 import { ActionType } from '../../../../ithouse/constants/action-type.enum';
 import { ContentType } from '../../../../ithouse/constants/content-type.enum';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'ithouse-load-data',
-  standalone: true,
-  imports: [AngularSlickgridModule],
+  imports: [CommonModule,],
   templateUrl: './load-data.component.html',
   styleUrl: './load-data.component.scss'
 })
 export class LoadDataComponent extends Ithouse implements Service, OnInit {
-
-
-  columnDefinitions: Column[];
-  columnDefinitionsMORE: Column[];
-  columnDefinitionsLESS: Column[];
-  gridOptions: GridOption;
-  dataset: any[] = [];
-  showMoreFields: boolean = true;
-  angularGrid: AngularGridInstance;
-  gridObj: any;
-  isEnableCheckboxSelector: boolean = true;
-
-  metrics!: Metrics;
-  paginationOptions!: Pagination;
-  pageSize: number = 1;
-  pageNumber: number = 1;
-  totalItem: number;
-
-  constructor(private cs: CommonService, private cdr: ChangeDetectorRef) {
+isBrowser = typeof window !== 'undefined';
+  slickGridComponent: any;
+  constructor(private cs: CommonService) {
     super();
   }
-  ngOnInit(): void {
-    this.paginationOptions = {
-      pageSizes: [1, 2, 5, 100, 500, 50000],
-      pageSize: this.pageSize,
-      pageNumber: this.pageNumber,
-      totalItems: this.totalItem,
-    };
-    this.columnDefinitions = [
-      {
-        id: 'userId',
-        name: 'User ID',
-        field: 'userId',
-        sortable: true,
-        // type: FieldType.text,
-        width: 20,
-        filterable: true,
-        minWidth: 65,
-        filterSearchType: FieldType.text
-      },
-      {
-        id: 'loginName',
-        name: 'Login Name',
-        field: 'loginName',
-        sortable: true,
-        // type: FieldType.text,
-        width: 20,
-        filterable: true,
-        minWidth: 65,
-        filterSearchType: FieldType.text
-      },
-      {
-        id: 'fullName',
-        name: 'Full Name',
-        field: 'fullName',
-        sortable: true,
-        // type: FieldType.text,
-        width: 20,
-        filterable: true,
-        minWidth: 65,
-        filterSearchType: FieldType.text
-      },
-      // { id: 'symbol', name: 'Symbol', field: 'symbol', filterable: true, sortable: true, minWidth: 65, width: 65 },
-      // {
-      //   id: 'title',
-      //   name: 'Title',
-      //   field: 'title',
-      //   sortable: true,
-      //   type: FieldType.string,
-      //   width: 70,
-      // },
-    ];
-    this.gridOptions = {
-      datasetIdPropertyName: 'userId',
-
-      enableAutoResize: true,
-      gridWidth: '100%',
-      autoResize: {
-        container: '#demo-container',
-        rightPadding: 10
-      },
-      checkboxSelector: {
-        hideInFilterHeaderRow: false,
-        hideInColumnTitleRow: true
-      },
-      enableCellNavigation: true,
-      enableFiltering: true,
-      enableCheckboxSelector: true,
-      enableRowSelection: true,
-      enablePagination: true,
-      // pagination: {
-      //   pageSizes: [1, 2, 5, 100, 500, 50000],
-      //   pageSize: this.pageSize,
-      //   pageNumber: this.pageNumber,
-      //   totalItems: this.totalItem,
-      // },
-      enableContextMenu: true,
-      enableCellMenu: true,
-      rowSelectionOptions: {
-        // True (Single Selection), False (Multiple Selections)
-        selectActiveRow: false,
-      },
-    };
-    this.dataset = [{ userId: 1 }];
+  async ngOnInit(): Promise<void> {
+    if (this.isBrowser) {
+      const { TestGrid } = await import('./test-grid/test-grid');
+      this.slickGridComponent = TestGrid;
+    }
     this.loadUser(undefined);
   }
 
-  angularGridReady(angularGrid: any) {
-    this.angularGrid = angularGrid.detail;
-    this.gridObj = angularGrid.slickGrid;
-    debugger;
-
-    this.angularGrid.paginationService.goToNextPage().then(v => {
-      debugger
-    })
-
-    this.angularGrid.eventPubSubService.subscribe('onPaginationChanged', (data) => {
-      this.paginationOptions.pageNumber = data.pageNumber;
-      this.paginationOptions.pageSize = data.pageSize;
-      debugger
-      const pageable = data as Pageable;
-      this.loadUser(pageable);
-    })
-    this.angularGrid.eventPubSubService.subscribe('onPaginationPresetsInitialized', (data) => {
-      // this.paginationOptions.pageNumber = data.pageNumber;
-      // this.paginationOptions.pageSize = data.pageSize;
-      debugger
-      // const pageable = data as Pageable;
-      // this.loadUser(pageable);
-    })
-
-    // const event = angularGrid.detail.slickGrid.onClick;
-
-    // if(event){
-
-    //   this.angularGrid.gridEventService.eventHandler.subscribe(event, (r,e)=>{
-    //     debugger
-    //   })
-    // }
-    // this.angularGrid.detail.paginationService.onPaginationChanged.subscribe((paginationArgs) => {
-    //   console.log('Pagination Changed:', paginationArgs);
-    // });
-  }
-
-  isPaginationChangeInProgress = false;
-  paginationChange(event: any) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    if (this.isPaginationChangeInProgress) {
-      return;
-    }
-
-    this.isPaginationChangeInProgress = true;
-
-    debugger
-    const detail = event.detail;
-    if (detail.change.type === 'pagination') {
-      const pageable = event.detail.change.newValues as Pageable
-
-      this.loadUser(pageable);
-    }
-  }
-
-
   loadUser(pageable: Pageable | undefined) {
-    if (this.isPaginationChangeInProgress) {
-      return;
-    }
-
-    this.isPaginationChangeInProgress = true;
-    this.gridOptions.pagination = {
-      ...pageable
-    }
-
     var payload = {
       pageNumber: pageable?.pageNumber ?? 1,
       pageSize: pageable?.pageSize ?? 1,
@@ -205,14 +45,6 @@ export class LoadDataComponent extends Ithouse implements Service, OnInit {
     const response = res.payload;
     debugger
     console.info('response: ', response);
-    // once pagination totalItems is filled, we can update the dataset
-    this.dataset = response.content;
-    this.paginationOptions = {
-      ...this.gridOptions.pagination,
-      totalItems: response.totalElements,
-    } as Pagination;
-    this.cdr.detectChanges();
-    this.isPaginationChangeInProgress = false;
   }
 
   onResponse(service: Service, req: any, res: any) {
@@ -221,8 +53,6 @@ export class LoadDataComponent extends Ithouse implements Service, OnInit {
       alert(super.getErrorMsg(res));
 
     } else if (res.header.referance === 'select') {
-      this.dataset = res.payload.content;
-      // this.totalItem = res.payload.total;
       this.getCustomerCallback(res);
     }
   }
