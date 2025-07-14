@@ -217,44 +217,44 @@ export class CommonService {
     this.sessionStorage?.setItem(Constants.APP_LOGIN_USER, JSON.stringify(loginUser ?? {}))
   }
   storeToken(res: any) {
-    // this.sessionStorage?.setItem("AUTH_TOKEN", res?.token);
-    // this.sessionStorage?.setItem("IS_AUTHENTICATED", res?.authenticated);
+    this.sessionStorage?.setItem("AUTH_TOKEN", res?.token);
+    this.sessionStorage?.setItem("IS_AUTHENTICATED", res?.authenticated);
   }
   public loadLoginUser(): any {
-    // var loginUser = this.sessionStorage?.getItem(Constants.APP_LOGIN_USER)
-    // if (loginUser && loginUser != 'undefined') {
-    //   const usr = JSON.parse(loginUser ? loginUser : '');
-    //   if (usr?.userId) {
-    //     return usr;
-    //   }
-    //   return null;
-    // }
-    // else {
-    //   return null;
-    // }
+    var loginUser = this.sessionStorage?.getItem(Constants.APP_LOGIN_USER)
+    if (loginUser && loginUser != 'undefined') {
+      const usr = JSON.parse(loginUser ? loginUser : '');
+      if (usr?.userId) {
+        return usr;
+      }
+      return null;
+    }
+    else {
+      return null;
+    }
   }
 
-  // isSameUser(creatorId) {
-  //   var loggged = this.loadLoginUser();
-  //   if (loggged.loginName == 'ithouse') {
-  //     return false;
-  //   }
-  //   return this.getUserId() == creatorId
-  // }
+  isSameUser(creatorId) {
+    var loggged = this.loadLoginUser();
+    if (loggged.loginName == 'ithouse') {
+      return false;
+    }
+    return this.getUserId() == creatorId
+  }
 
-  // forceAllow() {
-  //   var logg = this.loadLoginUser();
-  //   return logg.loginName == 'ithouse'
-  // }
+  forceAllow() {
+    var logg = this.loadLoginUser();
+    return logg.loginName == 'ithouse'
+  }
 
-  // public getUserId(): Number {
-  //   var loginUser = this.loadLoginUser();
-  //   // console.log(loginUser);
-  //   if (loginUser && loginUser.userId) {
-  //     return loginUser.userId
-  //   }
-  //   return null;
-  // }
+  public getUserId(): Number {
+    var loginUser = this.loadLoginUser();
+    // console.log(loginUser);
+    if (loginUser && loginUser.userId) {
+      return loginUser.userId
+    }
+    return null;
+  }
 
   // isAuthenticated() {
   //   var auth = this.sessionStorage?.getItem("IS_AUTHENTICATED");
