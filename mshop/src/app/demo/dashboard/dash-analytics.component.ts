@@ -44,7 +44,6 @@ export type ChartOptions = {
 
 @Component({
   selector: 'app-dash-analytics',
-  standalone: true,
   imports: [SharedModule, NgApexchartsModule, ProductSaleComponent],
   templateUrl: './dash-analytics.component.html',
   styleUrls: ['./dash-analytics.component.scss']

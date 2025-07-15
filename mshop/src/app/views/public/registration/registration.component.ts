@@ -12,7 +12,6 @@ import { LoadingComponent } from '../../../loading/loading.component';
 
 @Component({
   selector: 'app-registration',
-  standalone: true,
   imports: [FormsModule, CommonModule, LoadingComponent],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss'

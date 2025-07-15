@@ -1,13 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+import { RegistrationComponent } from './registration/registration.component';
 
-const routes: Routes = [
-  { path: '', loadComponent: () => import('./registration/registration.component').then(c => c.RegistrationComponent) },
+export const regRoutes: Routes = [
+  { path: '', loadComponent: () => RegistrationComponent, pathMatch: 'full' },
 
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class PublicRoutingModule { }

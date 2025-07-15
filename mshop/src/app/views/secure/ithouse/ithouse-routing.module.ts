@@ -3,13 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoadDataComponent } from './load-data/load-data.component';
 import { UserComponent } from './user/user.component';
 
-const routes: Routes = [
-  { path: 'user', component: UserComponent, pathMatch: 'full' },
-  { path: 'userr', component: LoadDataComponent, pathMatch: 'full' },
+export const itRoutes: Routes = [
+  { path: 'user', loadComponent:()=> UserComponent, pathMatch: 'full' },
+  { path: 'userr', loadComponent:()=> LoadDataComponent, pathMatch: 'full' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class IthouseRoutingModule { }

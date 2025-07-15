@@ -16,7 +16,6 @@ import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 
 @Component({
   selector: 'app-profile',
-  standalone: true,
   imports: [CommonModule, SpinnerComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
