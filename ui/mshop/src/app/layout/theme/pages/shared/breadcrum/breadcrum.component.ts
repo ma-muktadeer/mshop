@@ -40,7 +40,7 @@ export class BreadcrumComponent implements OnInit {
     this.setBreadcrumb();
   }
   ngOnInit(): void {
-    debugger
+    // debugger
     if (isPlatformBrowser(this.platformId)) {
       // this.setBreadcrumb();
     }
@@ -58,7 +58,7 @@ export class BreadcrumComponent implements OnInit {
       .subscribe((r: any) => {
         // if (r instanceof NavigationEnd) {
         const activeLink = r.url;
-        debugger
+        // debugger
         const breadcrumbList = this.filterNavigation(this.navigations, activeLink);
         this.navigationList = breadcrumbList;
         const title = breadcrumbList[breadcrumbList.length - 1]?.title || 'Welcome';

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { Ithouse } from '../../../../ithouse/common/Ithouse';
@@ -16,7 +16,7 @@ import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, SpinnerComponent],
+  imports: [SpinnerComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
@@ -37,9 +37,9 @@ export class ProfileComponent extends Ithouse implements Service, OnInit {
   interests: string[] = ["Coding", "Reading", "Traveling"];
   favoriteQuotes: string[] = ["The only way to do great work is to love what you do.", "Stay hungry, stay foolish."];
 
-  coverImage: string = 'https://via.placeholder.com/150'; // Placeholder URL for cover image
-  profileImage: string = 'https://via.placeholder.com/150'; // Placeholder URL for profile image
-  loading: boolean = false;
+  coverImage = signal<string>('');
+  profileImage = signal<string>('');
+  loading = signal<boolean>(false);
   userDetails: any;
   loads: any;
 
@@ -68,7 +68,7 @@ export class ProfileComponent extends Ithouse implements Service, OnInit {
   }
 
   loadUserInformation() {
-    this.loading = true;
+    this.loading.update(() => true);
     const payload = {
     }
     this.cs.sendRequest(this, ActionType.LOAD_DETAILS, ContentType.User, 'LOAD_DETAILS', payload);
@@ -108,7 +108,7 @@ export class ProfileComponent extends Ithouse implements Service, OnInit {
 
           }
         });
-        this.coverImage = value;
+        this.coverImage.update(() => value);
       })
         .catch(error => {
           this.alert.showAlert('Oppsss', error, 'error', true).then(() => fileInput.value = '');
@@ -137,7 +137,7 @@ export class ProfileComponent extends Ithouse implements Service, OnInit {
 
           }
         });
-        this.profileImage = r;
+        this.profileImage.update(() => r);
 
       })
         .catch(error => {
@@ -148,18 +148,18 @@ export class ProfileComponent extends Ithouse implements Service, OnInit {
   }
 
   onResponse(service: Service, req: any, res: any) {
-    this.loading = false;
+    this.loading.update(() => false);
     if (!super.isOK(res)) {
       Swal.fire(super.getErrorMsg(res));
       return;
     } else if (res.header.referance === 'LOAD_DETAILS') {
       this.userDetails = res.payload;
-      this.profileImage = this.userDetails?.profileImagePath ?? this.profileImage;
-      this.coverImage = this.userDetails?.profileBannerPath ?? this.coverImage;
+      this.profileImage.update(()=> this.userDetails?.profileImagePath ?? this.profileImage());
+      this.coverImage.update(()=>this.userDetails?.profileBannerPath ?? this.coverImage());
     }
   }
   onError(service: Service, req: any, res: any) {
-    this.loading = false;
+    this.loading.update(() => false);
     this.alert.showAlert('Error', `${res?.statusText} with error code:${res?.status}`, 'error');
     throw new Error('Method not implemented.');
   }

@@ -1,19 +1,19 @@
 
 <div class="container">
-    @if (!loading ) {
+    @if (!loading() ) {
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body position-relative">
                     <div style="position: relative;">
-                        <img [src]="coverImage" class="card-img-top" alt="Cover Image" style="height: 320px;">
+                        <img [src]="coverImage()" class="card-img-top" alt="Cover Image" style="height: 320px;">
                     </div>
                     <div class="position-relative" style="top: -100px;">
                         <div class="mb-3 row gradiant" style="margin: 0 2px;">
                             <div class="col-8 d-flex align-items-center">
                                 <div class="col-auto">
                                     <div class="position-relative">
-                                        <img [src]="profileImage" alt="Profile Image"
+                                        <img [src]="profileImage()" alt="Profile Image"
                                             class="rounded-circle me-3 col-auto shadow"
                                             style="height: 100px !important; width: 100px !important; border: 3px solid rgba(0, 0, 0, 0.438);">
                                         <button type="button" class="btn p-0 shadow position-absolute rounded-circle"
@@ -58,11 +58,15 @@
                         <p class="card-text"><strong>Contact Information:</strong> {{ contactInfo }}</p>
                         <p class="card-text"><strong>Interests:</strong></p>
                         <ul class="list-unstyled">
-                            <li *ngFor="let interest of interests">{{ interest }}</li>
+                          @for (interest of interests; track $index) {
+                            <li>{{ interest }}</li>
+                          }
                         </ul>
                         <p class="card-text"><strong>Favorite Quotes:</strong></p>
                         <ul class="list-unstyled">
-                            <li *ngFor="let quote of favoriteQuotes">{{ quote }}</li>
+                          @for (quote of favoriteQuotes; track $index) {
+                            <li>{{ quote }}</li>
+                          }
                         </ul>
                     </div>
                     <!-- Add more sections as needed -->
@@ -73,10 +77,12 @@
     }@else {
     <div class="container">
         <div class="row">
-            <div class="col-md-4" *ngFor="let load of loads">
+          @for (load of loads; track $index) {
+            <div class="col-md-4">
                 <!-- <app-card-loading></app-card-loading> -->
                 <ithouse-spinner></ithouse-spinner>
             </div>
+          }
         </div>
     </div>
     }
