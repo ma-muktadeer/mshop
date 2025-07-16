@@ -42,7 +42,6 @@ export class StructureComponent {
 
   // public method
   navMobClick() {
-    debugger
     if (this.windowWidth < 992) {
       if (this.navCollapsedMob() && !document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
         this.navCollapsedMob.update(() => !this.navCollapsedMob());

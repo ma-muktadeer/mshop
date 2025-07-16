@@ -56,7 +56,6 @@ export class NavRightComponent extends Ithouse implements OnInit, Service {
   }
 
   onResponse(service: Service, req: any, res: any) {
-    debugger
     if (!super.isOK(res)) {
       alert(super.getErrorMsg(res));
       return;
