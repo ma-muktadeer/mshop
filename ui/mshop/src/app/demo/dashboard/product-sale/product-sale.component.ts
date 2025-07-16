@@ -1,9 +1,6 @@
-// angular import
 import { Component, signal } from '@angular/core';
-
-// project import
-import { SharedModule } from '../../../layout/theme/pages/shared/shared.module';
-
+import { NgScrollbar } from "ngx-scrollbar";
+import { NgbProgressbar } from "@ng-bootstrap/ng-bootstrap";
 interface ProgressBarItem {
   value: string;
   color: string;
@@ -12,8 +9,7 @@ interface ProgressBarItem {
 
 @Component({
   selector: 'app-product-sale',
-  standalone: true,
-  imports: [SharedModule],
+  imports: [NgScrollbar, NgbProgressbar],
   templateUrl: './product-sale.component.html',
   styleUrls: ['./product-sale.component.scss']
 })

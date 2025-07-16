@@ -1,10 +1,7 @@
 // angular import
 import { Component, ViewChild } from '@angular/core';
 
-// project import
-// import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ApexTheme, NgApexchartsModule } from 'ng-apexcharts';
-import { SharedModule } from '../../layout/theme/pages/shared/shared.module';
 import { ProductSaleComponent } from './product-sale/product-sale.component';
 
 import {
@@ -23,6 +20,8 @@ import {
   ApexYAxis,
   ChartComponent
 } from 'ng-apexcharts';
+import { CardComponent } from "../../layout/theme/pages/shared/components/card/card.component";
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -44,7 +43,7 @@ export type ChartOptions = {
 
 @Component({
   selector: 'app-dash-analytics',
-  imports: [SharedModule, NgApexchartsModule, ProductSaleComponent],
+  imports: [ NgApexchartsModule, ProductSaleComponent, CardComponent, NgbNavModule],
   templateUrl: './dash-analytics.component.html',
   styleUrls: ['./dash-analytics.component.scss']
 })

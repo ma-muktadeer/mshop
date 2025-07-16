@@ -7,7 +7,6 @@ import { BreadcrumComponent } from "../pages/shared/breadcrum/breadcrum.componen
 
 @Component({
   selector: 'ithouse-structure',
-  standalone: true,
   imports: [NavigationModule, CommonModule, NavBarModule, BreadcrumComponent, RouterOutlet],
   templateUrl: './structure.component.html',
   styleUrl: './structure.component.scss'

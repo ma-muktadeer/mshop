@@ -16,7 +16,6 @@ interface titleType {
 }
 @Component({
   selector: 'ithouse-breadcrum',
-  standalone: true,
   imports: [RouterModule],
   templateUrl: './breadcrum.component.html',
   styleUrl: './breadcrum.component.scss'
