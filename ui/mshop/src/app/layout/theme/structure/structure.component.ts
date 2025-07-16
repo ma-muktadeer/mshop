@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, HostListener, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, HostListener, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavBarModule } from '../pages/nav-bar/nav-bar.module';
 import { NavigationModule } from '../pages/navigation/navigation.module';
@@ -12,9 +12,10 @@ import { BreadcrumComponent } from "../pages/shared/breadcrum/breadcrum.componen
   styleUrl: './structure.component.scss'
 })
 export class StructureComponent {
+
   // public props
-  navCollapsed!: boolean;
-  navCollapsedMob: boolean;
+  navCollapsed = signal<boolean>(null);
+  navCollapsedMob = signal<boolean>(null);
   windowWidth: number = 900;
 
   // constructor
@@ -22,9 +23,11 @@ export class StructureComponent {
     if (isPlatformBrowser(paltfromId)) {
       this.windowWidth = window.innerWidth;
     }
-    this.navCollapsedMob = false;
+    this.navCollapsedMob.set(false);
   }
-
+  navSetCollapsed() {
+    this.navCollapsed.update((value) => !value);
+  }
   @HostListener('window:resize', ['$event'])
   // eslint-disable-next-line
   onResize(event: any): void {
@@ -39,14 +42,15 @@ export class StructureComponent {
 
   // public method
   navMobClick() {
+    debugger
     if (this.windowWidth < 992) {
-      if (this.navCollapsedMob && !document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
-        this.navCollapsedMob = !this.navCollapsedMob;
+      if (this.navCollapsedMob() && !document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
+        this.navCollapsedMob.update(() => !this.navCollapsedMob());
         setTimeout(() => {
-          this.navCollapsedMob = !this.navCollapsedMob;
+          this.navCollapsedMob.update(() => !this.navCollapsedMob());
         }, 100);
       } else {
-        this.navCollapsedMob = !this.navCollapsedMob;
+        this.navCollapsedMob.update(() => !this.navCollapsedMob());
       }
     }
   }
