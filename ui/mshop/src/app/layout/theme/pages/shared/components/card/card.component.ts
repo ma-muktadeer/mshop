@@ -1,14 +1,14 @@
 // Angular Import
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular/animations';
 
 // bootstrap import
-import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownConfig, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-card',
-  imports: [CommonModule],
+  imports: [CommonModule, NgbDropdownModule],
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
   providers: [NgbDropdownConfig],
@@ -62,13 +62,14 @@ export class CardComponent implements OnInit {
   @Input() isCardFooter: boolean;
   @Input() footerClass!: string;
 
-  animation!: string;
-  fullIcon: string;
-  isAnimating: boolean;
-  collapsedCard: string;
-  collapsedIcon: string;
+  animation = signal<string>('');
+  fullIcon = signal<string>('');
+  isAnimating = signal<boolean>(null);
+  collapsedCard = signal<string>('');
+  collapsedIcon = signal<string>('');
+  ngCardClass = signal<string>('');
   loadCard: boolean;
-  cardRemove: string;
+  cardRemove = signal<string>('');
 
   // constructor
   constructor(/*animationService: AnimationService,*/ config: NgbDropdownConfig) {
@@ -78,37 +79,39 @@ export class CardComponent implements OnInit {
     this.options = true;
     this.hidHeader = false;
     this.cardTitle = 'Card Title';
-    this.fullIcon = 'icon-maximize';
-    this.isAnimating = false;
+    this.fullIcon.set('icon-maximize');
+    this.isAnimating.set(false);
     this.isCardFooter = false;
 
-    this.collapsedCard = 'expanded';
-    this.collapsedIcon = 'icon-minus';
+    this.collapsedCard.set('expanded');
+    this.collapsedIcon.set('icon-minus');
 
     this.loadCard = false;
 
-    this.cardRemove = 'open';
+    this.cardRemove.set('open');
   }
 
   // life cycle event
   ngOnInit() {
     if (!this.options || this.hidHeader || this.customHeader) {
-      this.collapsedCard = 'false';
+      this.collapsedCard.update(() => 'false');
     }
     if (!this.options || this.hidHeader || this.customDate) {
-      this.collapsedCard = 'false';
+      this.collapsedCard.update(() => 'false');
     }
+    this.ngCardClass.set(this.cardClass);
   }
 
   // public method
   fullCardToggle(element: HTMLElement, animation: string, status: boolean) {
+    debugger
     animation = this.cardClass === 'full-card' ? 'zoomOut' : 'zoomIn';
-    this.fullIcon = this.cardClass === 'full-card' ? 'icon-maximize' : 'icon-minimize';
+    this.fullIcon.update(() => this.cardClass === 'full-card' ? 'icon-maximize' : 'icon-minimize');
     this.cardClass = this.cardClass === 'full-card' ? this.cardClass : 'full-card';
     if (status) {
-      this.animation = animation;
+      this.animation.update(() => animation);
     }
-    this.isAnimating = true;
+    this.isAnimating.update(() => true);
 
     setTimeout(() => {
       this.cardClass = animation === 'zoomOut' ? '' : this.cardClass;
@@ -117,12 +120,13 @@ export class CardComponent implements OnInit {
       } else {
         (document.querySelector('body') as HTMLBodyElement).removeAttribute('style');
       }
+      this.ngCardClass.update(() => this.cardClass);
     }, 500);
   }
 
   collapsedCardToggle() {
-    this.collapsedCard = this.collapsedCard === 'collapsed' ? 'expanded' : 'collapsed';
-    this.collapsedIcon = this.collapsedCard === 'collapsed' ? 'icon-plus' : 'icon-minus';
+    this.collapsedCard.update((value) => value === 'collapsed' ? 'expanded' : 'collapsed');
+    this.collapsedIcon.update(() => this.collapsedCard() === 'collapsed' ? 'icon-plus' : 'icon-minus');
   }
 
   cardRefresh() {
@@ -131,10 +135,12 @@ export class CardComponent implements OnInit {
     setTimeout(() => {
       this.loadCard = false;
       this.cardClass = 'expanded';
+      this.ngCardClass.update(() => this.cardClass);
     }, 3000);
+    this.ngCardClass.update(() => this.cardClass);
   }
 
   cardRemoveAction() {
-    this.cardRemove = this.cardRemove === 'closed' ? 'open' : 'closed';
+    this.cardRemove.update((value) => value === 'closed' ? 'open' : 'closed');
   }
 }

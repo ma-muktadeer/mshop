@@ -1,4 +1,5 @@
-<div class="card" [ngClass]="cardClass" [@cardRemove]="cardRemove" #toAnimate>
+<div class="card" [ngClass]="ngCardClass()" [@cardRemove]="cardRemove()" #toAnimate>
+  <!-- [ngClass]="ngCardClass() -->
   @if (!hidHeader) {
     <div class="card-header" [ngClass]="headerClass">
       @if (!customHeader) {
@@ -17,16 +18,16 @@
               <li class="dropdown-item full-card" (click)="fullCardToggle(toAnimate, '', true)">
                 <a href="javascript:">
                   <span>
-                    <i class="feather" [ngClass]="fullIcon"></i>
-                    {{ this.cardClass === 'full-card' ? 'Restore' : 'Maximize' }}
+                    <i class="feather" [ngClass]="fullIcon()"></i>
+                    {{ cardClass === 'full-card' ? 'Restore' : 'Maximize' }}
                   </span>
                 </a>
               </li>
               <li class="dropdown-item minimize-card" (click)="collapsedCardToggle()">
                 <a href="javascript:">
                   <span>
-                    <i class="feather" [ngClass]="collapsedIcon"></i>
-                    {{ this.collapsedCard === 'collapsed' ? 'Expand' : 'Collapse' }}
+                    <i class="feather " [ngClass]="collapsedIcon()"></i>
+                    {{ this.collapsedCard() === 'collapsed' ? 'Expand' : 'Collapse' }}
                   </span>
                   <span style="display: none"><i class="feather icon-plus"></i></span>
                 </a>
@@ -57,7 +58,7 @@
     </div>
   }
 
-  <div [@collapsedCard]="collapsedCard">
+  <div [@collapsedCard]="collapsedCard()">
     <div class="card-body" [ngClass]="blockClass">
       <ng-content></ng-content>
     </div>

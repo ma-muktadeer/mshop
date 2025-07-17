@@ -1,3 +1,4 @@
+import { NgSelectComponent } from '@ng-select/ng-select';
 import { NgClass } from '@angular/common';
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +11,6 @@ import { Ithouse } from '../../../../ithouse/common/Ithouse';
 import { Service } from '../../../../ithouse/common/service';
 import { ActionType } from '../../../../ithouse/constants/action-type.enum';
 import { ContentType } from '../../../../ithouse/constants/content-type.enum';
-import { SelectDropdownComponent } from "../../../../ithouse/shard-componenrts/select-dropdown/select-dropdown.component";
 import { Category } from '../../../../objests/product-info/category';
 import { Product } from '../../../../objests/product-info/product';
 import { ProductSellBy } from '../../../../objests/product-info/product-sell-by';
@@ -18,7 +18,7 @@ import { SubCategory } from '../../../../objests/product-info/sub-category';
 
 @Component({
   selector: 'ithouse-product',
-  imports: [NgClass, FormsModule, SelectDropdownComponent],
+  imports: [NgClass, FormsModule, NgSelectComponent],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',
   providers: [NgbActiveModal]
