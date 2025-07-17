@@ -1,13 +1,7 @@
 <button (click)="check()">
-    check
+  check
 </button>
 
-<!-- <angular-slickgrid gridId="ud"
-     style="overflow: scroll;"
-    [dataset]="dataset()"
-    [columnDefinitions]="columnDefinitions"
-    [gridOptions]="gridOptions"
-    [paginationOptions]="paginationOptions"
-    (onAngularGridCreated)="angularGridReady($event)">
->
-</angular-slickgrid>  -->
+<ithouse-grid [columnDefinitions]="columnDefinitions" [datasetObs]="userList"
+  (onPaginationChanged)="paginationChanged($event)" [enablePagination]="true"
+  [customPagination]="{pageSizes: [10, 20, 50, 100], pageSize: pageSize}"></ithouse-grid>

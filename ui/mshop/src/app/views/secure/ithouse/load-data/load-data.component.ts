@@ -1,13 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
-import { AngularGridInstance, AngularSlickgridModule, Column, FieldType, GridOption, Metrics, Pagination } from 'angular-slickgrid';
-
-import { Pageable } from '../../../../ithouse/common/CustomGridData';
+import { Component, OnInit, signal } from '@angular/core';
 import { Ithouse } from '../../../../ithouse/common/Ithouse';
 import { CommonService } from '../../../../ithouse/common/common.service';
 import { Service } from '../../../../ithouse/common/service';
 import { ActionType } from '../../../../ithouse/constants/action-type.enum';
 import { ContentType } from '../../../../ithouse/constants/content-type.enum';
 import { CommonModule } from '@angular/common';
+import { Pagination } from 'angular-slickgrid';
 
 @Component({
   selector: 'ithouse-load-data',
@@ -31,7 +29,7 @@ isBrowser = signal<boolean>(false);
     this.loadUser(undefined);
   }
 
-  loadUser(pageable: Pageable | undefined) {
+  loadUser(pageable: Pagination | undefined) {
     var payload = {
       pageNumber: pageable?.pageNumber ?? 1,
       pageSize: pageable?.pageSize ?? 1,

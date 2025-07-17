@@ -1,19 +1,15 @@
 import { Component } from '@angular/core';
-import { AngularGridInstance, AngularSlickgridModule, Column, FieldType, GridOption, Metrics, Pagination } from 'angular-slickgrid';
-
+import { Column, Pagination } from 'angular-slickgrid';
+import { IthouseGrid } from "../../../../../ithouse/shard-componenrts/grid/it-grid/it-grid";
 @Component({
   selector: 'app-test-grid',
-  imports: [AngularSlickgridModule],
+  imports: [IthouseGrid],
   templateUrl: './test-grid.html',
   styleUrl: './test-grid.scss'
 })
 export class TestGrid {
-angularGridReady($event: Event) {
-throw new Error('Method not implemented.');
-}
 columnDefinitions: Column[]=[];
 gridOptions: any;
 dataset: any[];
-paginationOptions: Pagination;
 
 }

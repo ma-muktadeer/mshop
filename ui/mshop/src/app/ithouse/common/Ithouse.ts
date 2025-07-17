@@ -1,11 +1,9 @@
-import { IthouseBackendService } from "../../layout/service/IthouseBackendService";
 import { app } from "./App";
 import { Constants } from "./Constants";
 
-export class Ithouse extends IthouseBackendService {
-    
+export class Ithouse {
+
     constructor(){
-        super();
     }
     public static usre = {}
 
