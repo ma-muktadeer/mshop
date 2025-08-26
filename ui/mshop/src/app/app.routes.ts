@@ -16,7 +16,10 @@ export const routes: Routes = [
     canActivate: [layoutGuard],
     loadChildren: () => import('./views/secure/secure-routing.module').then(m => m.secRoutes),
   },
-  { path: '**', component: NotFoundComponent, canActivate: [notFoundGuard], },
+  {
+    path: 'not-found', component: NotFoundComponent,// canActivate: [notFoundGuard],
+
+  },
   // redirectTo:()=>{
   //     const usr = Inject(CommonService).loadLoginUser();
   //     return usr?usr.loginName:'login';

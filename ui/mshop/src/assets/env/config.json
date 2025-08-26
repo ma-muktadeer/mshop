@@ -5,7 +5,7 @@
         "desc": "IT House M-SHOP App",
         "loginRequired": true,
         "constantAppName": "M-SHOP",
-        "baseDevUrl": "http://localhost:8080",
+        "baseDevUrl": "http://localhost:8081",
         "baseProdUrl": "http://localhost:8080",
         "client": "ithouse",
         "domain": "ithouse"

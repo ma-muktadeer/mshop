@@ -29,7 +29,7 @@ export const replaceLoginName = (items: NavigationItem[], loginName: string, per
     if (item.id !== 'admin') {
       newItem = { ...item };
     }
-    else if (item.id === 'admin' && (loginName === 'ithousebd' || (item.permission === 'DEFAULT' || permissionStoreService.hasAnyPermission(item.permission)))) {
+    else if (item.permission === 'DEFAULT' || permissionStoreService.hasAnyPermission(item.permission)) {
     // else if (item.id === 'admin' && (loginName === 'ithousebd' || authorities?.[0]['authority'] === 'ADMIN')) {
       newItem = { ...item };
     }
