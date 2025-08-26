@@ -241,6 +241,7 @@ export class CommonService {
   }
 
   forceAllow() {
+    return false;
     var logg = this.loadLoginUser();
     return logg.loginName == 'ithouse'
   }

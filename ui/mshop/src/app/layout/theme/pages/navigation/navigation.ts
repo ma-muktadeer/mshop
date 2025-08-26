@@ -1,3 +1,5 @@
+import { AppPermission } from "../../../../ithouse/servies/PermissionStoreService";
+
 export interface NavigationItem {
   id: string;
   title: string;
@@ -11,11 +13,13 @@ export interface NavigationItem {
   external?: boolean;
   target?: boolean;
   breadcrumbs?: boolean;
+  permission: AppPermission[] | 'DEFAULT';
   badge?: {
     title?: string;
     type?: string;
   };
   children?: NavigationItem[];
+
 }
 
 export const NavigationItems: NavigationItem[] = [
@@ -24,13 +28,15 @@ export const NavigationItems: NavigationItem[] = [
     title: 'Navigation',
     type: 'group',
     icon: 'icon-group',
+    permission: 'DEFAULT',
     children: [
       {
         id: 'dashboard',
         title: 'Dashboard',
         type: 'item',
         url: '/:loginName/home',
-        icon: 'feather icon-home'
+        icon: 'feather icon-home',
+        permission: 'DEFAULT'
       }
     ]
   },
@@ -39,6 +45,7 @@ export const NavigationItems: NavigationItem[] = [
     title: 'Admin',
     type: 'group',
     icon: 'icon-group',
+    permission: [AppPermission.USER_VIEWER],
     children: [
       {
         id: 'ad_user',
@@ -46,20 +53,24 @@ export const NavigationItems: NavigationItem[] = [
         type: 'collapse',
         // url: '/:loginName/home',
         icon: 'feather icon-box',
-        children:[
+        permission: [AppPermission.USER_VIEWER],
+        children: [
           {
             id: 'user_list',
             title: 'User List',
             type: 'item',
             url: '/:loginName/admin/user',
-            icon: 'feather icon-home'
+            icon: 'feather icon-home',
+            permission: [AppPermission.USER_VIEWER]
           },
           {
             id: 'user_test',
             title: 'User test',
             type: 'item',
+            hidden: true,
             url: '/:loginName/admin/userr',
-            icon: 'feather icon-home'
+            icon: 'feather icon-home',
+            permission: [AppPermission.USER_VIEWER]
           }
         ]
       }
@@ -70,76 +81,61 @@ export const NavigationItems: NavigationItem[] = [
     title: 'M-SHOP',
     type: 'group',
     icon: 'icon-group',
-    children:[
+    permission: 'DEFAULT',
+    children: [
       {
-        id:'myShop',
+        id: 'myShop',
         title: 'M-Shop',
         type: 'collapse',
         icon: 'feather icon-box',
-        children:[
+        permission: 'DEFAULT',
+        children: [
           {
             id: 'product',
             title: 'Products',
             type: 'item',
             url: '/:loginName/mshop/products',
-            icon:'feather icon-shopping-cart'
+            icon: 'feather icon-shopping-cart',
+            permission: 'DEFAULT'
           }
         ]
       }
     ]
   }
+
+  // *********** this is the default url which was not showing in the nav-bar***********
   // {
-  //   id: 'ui-component',
-  //   title: 'Ui Component',
+  //   id: 'extra-uri',
+  //   title: 'Extra URL',
   //   type: 'group',
+  //   isHidden: true,
   //   icon: 'icon-group',
+  //   permission: 'DEFAULT',
   //   children: [
   //     {
-  //       id: 'basic',
-  //       title: 'Component',
-  //       type: 'collapse',
-  //       icon: 'feather icon-box',
-  //       children: [
-  //         {
-  //           id: 'button',
-  //           title: 'Button',
-  //           type: 'item',
-  //           url: '/component/button'
-  //         },
-  //         {
-  //           id: 'badges',
-  //           title: 'Badges',
-  //           type: 'item',
-  //           url: '/component/badges'
-  //         },
-  //         {
-  //           id: 'breadcrumb-pagination',
-  //           title: 'Breadcrumb & Pagination',
-  //           type: 'item',
-  //           url: '/component/breadcrumb-paging'
-  //         },
-  //         {
-  //           id: 'collapse',
-  //           title: 'Collapse',
-  //           type: 'item',
-  //           url: '/component/collapse'
-  //         },
-  //         {
-  //           id: 'tabs-pills',
-  //           title: 'Tabs & Pills',
-  //           type: 'item',
-  //           url: '/component/tabs-pills'
-  //         },
-  //         {
-  //           id: 'typography',
-  //           title: 'Typography',
-  //           type: 'item',
-  //           url: '/component/typography'
-  //         }
-  //       ]
+  //       id: 'bank-view',
+  //       isHidden: true,
+  //       title: 'Bank View',
+  //       type: 'item',
+  //       url: '/admin/bank-view',
+  //       permission: 'DEFAULT',
+  //       icon: 'feather icon-home'
+  //     },
+  //     {
+  //       id: 'mng-role',
+  //       isHidden: true,
+  //       title: 'Manage Role',
+  //       type: 'item',
+  //       url: '/admin/manage-role',
+  //       permission: 'DEFAULT',
+  //       icon: 'feather icon-home'
   //     }
+
   //   ]
   // },
+  // ******************************************end*********************************
+
+
   // {
   //   id: 'Authentication',
   //   title: 'Authentication',

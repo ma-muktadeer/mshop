@@ -11,6 +11,7 @@ import { ithouseInterceptor } from '../XhrInterceptor';
 import { CommonService } from './ithouse/common/common.service';
 import { ToggleFullScreenDirective } from './layout/theme/pages/shared/full-screen/toggle-full-screen';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { PermissionStoreService } from './ithouse/servies/PermissionStoreService';
 
 
 export const appConfig: ApplicationConfig = {
@@ -19,9 +20,6 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     // provideRouter(routes),
     // provideClientHydration(withEventReplay()),
-    ToggleFullScreenDirective,
-    DatePipe,
-    CommonService,
     // ConfigService,\
     // // HttpClient,
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
@@ -36,5 +34,9 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAppInitializer(() => initializeApplication(inject(ConfigService))),
     importProvidersFrom(AngularSlickgridModule.forRoot()),
+    ToggleFullScreenDirective,
+    DatePipe,
+    CommonService,
+    // PermissionStoreService,
   ]
 };
