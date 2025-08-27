@@ -19,7 +19,7 @@ export class ConfigService {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    debugger
+
     const http = inject(HttpClient);
     console.log("Loading config...");
     try {

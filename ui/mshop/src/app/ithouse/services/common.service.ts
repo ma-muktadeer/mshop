@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Service } from './service';
 import { ConfigService } from './config.service';
-import { environment as ENV } from '../../../environments/environment.prod';
+import { environment as ENV } from '../../../environments/environment';
 import { Constants } from '../constants/Constants';
 import { ActionType } from '../constants/action-type.enum';
 import { ContentType } from './content-type.enum';

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Ithouse } from '../ithouse/common/Ithouse';
 import { ActionType } from '../ithouse/constants/action-type.enum';
@@ -15,15 +15,15 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
-export class Login extends Ithouse implements Service{
-protected cs = inject(CommonService);
+export class Login extends Ithouse implements Service {
+  protected cs = inject(CommonService);
   private alert = inject(AlertService);
 
   isSignDivVisiable: boolean = false;
   loginName: any;
   email: any;
   password: any;
-  loading$:boolean=false;
+  loading = signal<boolean>(false);
 
   sessionExpired: boolean = false;
 
@@ -39,7 +39,7 @@ protected cs = inject(CommonService);
     this.route.queryParams.subscribe(params => {
       this.sessionExpired = params['sessionExpired'] === 'true';
     });
-    if(this.sessionExpired){
+    if (this.sessionExpired) {
       // this.cs.logout(this);
       this.alert.showAlert('Session Expriered.', 'Your session is expriered. Please login again.', 'error');
       this.cs.removeUserInfo();
@@ -48,7 +48,7 @@ protected cs = inject(CommonService);
   }
 
   onRegister() {
-    if (this.loading$) {
+    if (this.loading()) {
       return;
     }
     const payload = {
@@ -56,7 +56,7 @@ protected cs = inject(CommonService);
       email: this.email,
       password: this.password,
     }
-    this.loading$ = true;
+    this.loading.update(() => true);
     this.cs.sendRequestPublic(this, ActionType.REGISTER, ContentType.User, 'REGISTER', payload);
 
 
@@ -64,7 +64,7 @@ protected cs = inject(CommonService);
 
   onLogin() {
     debugger;
-    if (this.loading$) {
+    if (this.loading()) {
       return;
     }
 
@@ -74,7 +74,7 @@ protected cs = inject(CommonService);
       name: this.email,
       password: this.password,
     }
-    this.loading$ = true;
+    this.loading.update(() => true);
     this.cs.sendRequestPublic(this, ActionType.LOGIN, ContentType.User, 'LOGIN', payload, '/login');
   }
 
@@ -86,7 +86,7 @@ protected cs = inject(CommonService);
 
   onResponse(service: Service, req: any, res: any) {
     const response = res?.res ?? res;
-    this.loading$ = false;
+    this.loading.update(() => false);
     debugger
     if (!super.isOK(response)) {
       alert(super.getErrorMsg(response));

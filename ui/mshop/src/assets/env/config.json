@@ -4,13 +4,13 @@
         "version": "1.0.0",
         "desc": "Softcafe initial app",
         "loginRequired": true,
-        "constantAppName": "SOFT_RBS"
+        "constantAppName": "M-SHOP"
     },
     "env.local": {
-        "SERVER_URL": "http://127.0.0.1:8080",
-        "SERVER_BASE_URL": "http://127.0.0.1:8080/secure",
-        "SERVER_BASE_URL_PUBLIC": "http://127.0.0.1:8080/public",
-        "SERVER_BASE_URL_ADMIN": "http://127.0.0.1:8080/secure"
+        "SERVER_URL": "http://127.0.0.1:8081",
+        "SERVER_BASE_URL": "http://127.0.0.1:8081/secure",
+        "SERVER_BASE_URL_PUBLIC": "http://127.0.0.1:8081/public",
+        "SERVER_BASE_URL_ADMIN": "http://127.0.0.1:8081/secure"
     },
     "env.prod": {
         "SERVER_URL": "http://172.25.204.232:8080/rbs-server",
