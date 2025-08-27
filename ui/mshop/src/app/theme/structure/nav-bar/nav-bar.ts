@@ -30,7 +30,6 @@ export class NavBar {
   }
 
   navCollapse() {
-    debugger
     if (this.windowWidth >= 992) {
       this.NavCollapse.emit();
     }

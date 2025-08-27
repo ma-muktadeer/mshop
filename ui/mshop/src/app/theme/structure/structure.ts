@@ -24,7 +24,6 @@ export class Structure {
     this.navCollapsedMob.set(false);
   }
   navSetCollapsed() {
-    debugger
     this.navCollapsed.update((value) => !value);
   }
   @HostListener('window:resize', ['$event'])

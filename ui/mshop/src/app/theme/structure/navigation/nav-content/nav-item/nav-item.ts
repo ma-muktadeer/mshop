@@ -10,7 +10,7 @@ import { InjectPermissionService } from '../../../../../ithouse/services/inject-
   styleUrl: './nav-item.scss'
 })
 export class NavItem {
-@Input() item!: NavigationItem;
+  @Input() item!: NavigationItem;
   private injectPermission = inject(InjectPermissionService);
 
   // public method

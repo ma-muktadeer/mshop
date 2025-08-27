@@ -1,5 +1,5 @@
 import { Location, LocationStrategy, isPlatformBrowser } from '@angular/common';
-import { Component, EventEmitter, Inject, Output, PLATFORM_ID, signal } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output, PLATFORM_ID, signal } from '@angular/core';
 import { environment } from '../../../../../environments/environment.prod';
 import { NavigationItem, NavigationItems } from '../../navigation-items';
 import { NabItemsService } from './nab-items.service';
@@ -37,15 +37,12 @@ export class NavContent {
         this.document = document.querySelector('.pcoded-navbar')?.classList.add('menupos-static');
       }
     }
-    debugger
     this.navigations.set(this.nabItemService.buildNabItems(NavigationItems));
 
   }
-
   // public method
 
   navMob() {
-    debugger
     if (this.windowWidth < 992 && this.document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
       this.NavMobCollapse.emit();
     }

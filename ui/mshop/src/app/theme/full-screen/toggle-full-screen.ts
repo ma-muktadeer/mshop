@@ -1,5 +1,6 @@
 // Angular import
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Directive, ElementRef, HostListener, inject, PLATFORM_ID } from '@angular/core';
 
 // project import
 import screenfull from 'screenfull';
@@ -10,28 +11,26 @@ import screenfull from 'screenfull';
   selector: '[appToggleFullScreen]',
 })
 export class ToggleFullScreenDirective {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
+
   constructor(private elements: ElementRef) { }
+
   @HostListener('click')
   onClick() {
-    debugger
-    if (screenfull.isEnabled) {
-      this.elements.nativeElement.querySelector('.feather').classList.toggle('icon-maximize');
-      this.elements.nativeElement.querySelector('.feather').classList.toggle('icon-minimize');
+    if (!this.isBrowser) return;
+    if (!screenfull.isEnabled) return;
 
+    if (screenfull.isEnabled) {
+      const feather = this.elements.nativeElement.querySelector('.feather');
+      if (feather) {
+        feather.classList.toggle('icon-maximize');
+        feather.classList.toggle('icon-minimize');
+      }
       screenfull.toggle().catch(err => {
         console.error('Error trying to enable fullscreen:', err.message);
       });
     }
-
-    if (isScreenFull(screenfull)) {
-      if (screenfull.isFullscreen) {
-        screenfull.exit();
-      } else {
-        screenfull.request();
-      }
-    }
   }
-}
-function isScreenFull(sf: any): any {
-  return sf.isFullscreen;
+
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Event, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { NavigationItem, NavigationItems } from '../structure/navigation-items';
@@ -23,7 +23,7 @@ export class Breadcrumb {
 
   navigations: NavigationItem[];
   breadcrumbList: Array<string> = [];
-  navigationList!: titleType[];
+  navigationList= signal<titleType[]>([]);
 
   // constructor
   constructor(
@@ -43,7 +43,7 @@ export class Breadcrumb {
         if (!breadcrumbList.length) {
           breadcrumbList = this.buildBreadcrumbList(activeLink);
         }
-        this.navigationList = breadcrumbList;
+        this.navigationList.update(()=> breadcrumbList);
         const title = breadcrumbList[breadcrumbList.length - 1]?.title || 'Welcome';
         this.titleService.setTitle(title + ' | Soft-RBS');
       }
