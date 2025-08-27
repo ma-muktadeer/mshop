@@ -1,15 +1,14 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, EventEmitter, Inject, Output, PLATFORM_ID } from '@angular/core';
-import { NavContent } from "./nav-content/nav-content";
 
 @Component({
   selector: 'ithouse-navigation',
-  imports: [NavContent],
+  standalone: false,
   templateUrl: './navigation.html',
   styleUrl: './navigation.scss'
 })
 export class Navigation {
- windowWidth: number = 900;
+ windowWidth: number = 1200;
   @Output() NavMobCollapse = new EventEmitter();
 
   // constructor
@@ -21,6 +20,7 @@ export class Navigation {
 
   // public method
   navMobCollapse() {
+    debugger
     if (this.windowWidth < 992) {
       this.NavMobCollapse.emit();
     }

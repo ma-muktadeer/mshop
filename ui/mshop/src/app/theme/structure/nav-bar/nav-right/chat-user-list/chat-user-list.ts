@@ -6,7 +6,7 @@ import { FriendsList } from '../../../../../fack-db/friends-list';
 
 @Component({
   selector: 'ithouse-chat-user-list',
-  imports: [NgScrollbarModule, FormsModule, Friend],
+  standalone: false,
   templateUrl: './chat-user-list.html',
   styleUrl: './chat-user-list.scss'
 })

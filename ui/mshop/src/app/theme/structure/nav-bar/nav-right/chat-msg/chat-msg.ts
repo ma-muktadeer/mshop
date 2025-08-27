@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'ithouse-chat-msg',
-  imports: [NgScrollbarModule, NgClass, FormsModule],
+  standalone: false,
   templateUrl: './chat-msg.html',
   styleUrl: './chat-msg.scss'
 })

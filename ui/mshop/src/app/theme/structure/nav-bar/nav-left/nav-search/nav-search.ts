@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'ithouse-nav-search',
-  imports: [],
+  standalone: false,
   templateUrl: './nav-search.html',
   styleUrl: './nav-search.scss'
 })

@@ -3,7 +3,7 @@ import { NavSearch } from "./nav-search/nav-search";
 
 @Component({
   selector: 'ithouse-nav-left',
-  imports: [NavSearch],
+  standalone: false,
   templateUrl: './nav-left.html',
   styleUrl: './nav-left.scss'
 })

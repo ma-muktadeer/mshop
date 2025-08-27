@@ -1,13 +1,11 @@
-import { NgClass } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
 import { AppPermission } from '../../../../../ithouse/services/PermissionStoreService';
-import { NavigationItem } from '../../../navigation';
+import { NavigationItem } from '../../../navigation-items';
 import { InjectPermissionService } from '../../../../../ithouse/services/inject-permission.service';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'ithouse-nav-item',
-  imports: [NgClass, RouterLinkActive, RouterLink],
+  standalone: false,
   templateUrl: './nav-item.html',
   styleUrl: './nav-item.scss'
 })

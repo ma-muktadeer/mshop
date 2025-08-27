@@ -2,17 +2,17 @@ import { isPlatformBrowser, NgClass } from '@angular/common';
 import { Component, HostListener, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Breadcrumb } from "../breadcrumb/breadcrumb";
-import { NavBar } from "./nav-bar/nav-bar";
-import { Navigation } from "./navigation/navigation";
+import { NavBarModule } from "./nav-bar/nav-bar.module";
+import { NavigationModule } from './navigation/navigation.module';
 
 @Component({
   selector: 'app-structure',
-  imports: [RouterModule, Breadcrumb, NavBar, Navigation, NgClass],
+  imports: [RouterModule, Breadcrumb, NgClass, NavBarModule, NavigationModule],
   templateUrl: './structure.html',
   styleUrl: './structure.scss'
 })
 export class Structure {
-  navCollapsed = signal<boolean>(null);
+  navCollapsed = signal<boolean>(false);
   navCollapsedMob = signal<boolean>(null);
   windowWidth: number = 900;
 
@@ -24,6 +24,7 @@ export class Structure {
     this.navCollapsedMob.set(false);
   }
   navSetCollapsed() {
+    debugger
     this.navCollapsed.update((value) => !value);
   }
   @HostListener('window:resize', ['$event'])

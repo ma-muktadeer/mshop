@@ -3,18 +3,13 @@ import { Service } from '../../../../ithouse/services/service';
 import { CommonService } from '../../../../ithouse/services/common.service';
 import { Router } from '@angular/router';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { Ithouse } from '../../../../ithouse/common/Ithouse';
 import { ActionType } from '../../../../ithouse/constants/action-type.enum';
 import { ContentType } from '../../../../ithouse/services/content-type.enum';
-import { ChatUserList } from "./chat-user-list/chat-user-list";
-import { ChatMsg } from "./chat-msg/chat-msg";
-import { NgClass } from '@angular/common';
-
 
 @Component({
   selector: 'ithouse-nav-right',
-  imports: [ChatUserList, ChatMsg, NgClass],
+  standalone: false,
   templateUrl: './nav-right.html',
   styleUrl: './nav-right.scss',
   providers: [NgbDropdownConfig],

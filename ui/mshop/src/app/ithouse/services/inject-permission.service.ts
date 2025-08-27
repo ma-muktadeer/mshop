@@ -1,6 +1,6 @@
 import { Injectable, Input } from '@angular/core';
 import { AppPermission, PermissionStoreService } from './PermissionStoreService';
-import { NavigationItems } from '../../theme/structure/navigation';
+import { NavigationItems } from '../../theme/structure/navigation-items';
 import { NabItemsService } from '../../theme/structure/navigation/nav-content/nab-items.service';
 
 @Injectable({

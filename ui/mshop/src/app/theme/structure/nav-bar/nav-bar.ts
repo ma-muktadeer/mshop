@@ -1,13 +1,10 @@
 import { Component, EventEmitter, HostListener, Inject, Output, PLATFORM_ID } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
-import { RouterLink } from '@angular/router';
 import { isPlatformBrowser, NgClass } from '@angular/common';
-import { NavLeft } from "./nav-left/nav-left";
-import { NavRight } from "./nav-right/nav-right";
 
 @Component({
   selector: 'ithouse-nav-bar',
-  imports: [RouterLink, NgClass, NavLeft, NavRight],
+  standalone: false,
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.scss'
 })
@@ -33,6 +30,7 @@ export class NavBar {
   }
 
   navCollapse() {
+    debugger
     if (this.windowWidth >= 992) {
       this.NavCollapse.emit();
     }

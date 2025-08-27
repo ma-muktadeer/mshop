@@ -1,8 +1,8 @@
 <ithouse-navigation
   class="pcoded-navbar menupos-fixed menu-light"
   [ngClass]="{
-    'navbar-collapsed': navCollapsed,
-    'mob-open': navCollapsedMob
+    'navbar-collapsed': navCollapsed(),
+    'mob-open': navCollapsedMob()
   }"
   (NavCollapsedMob)="navMobClick()"
 ></ithouse-navigation>

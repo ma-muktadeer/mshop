@@ -1,12 +1,9 @@
 import { Component, Input, signal } from '@angular/core';
-import { NavGroup } from "../nav-group/nav-group";
-import { NavItem } from "../nav-item/nav-item";
-import { NavigationItem } from '../../../navigation';
-import { RouterLinkActive } from '@angular/router';
+import { NavigationItem } from '../../../navigation-items';
 
 @Component({
   selector: 'ithouse-nav-collapse',
-  imports: [NavGroup, NavItem, RouterLinkActive],
+  standalone: false,
   templateUrl: './nav-collapse.html',
   styleUrl: './nav-collapse.scss'
 })

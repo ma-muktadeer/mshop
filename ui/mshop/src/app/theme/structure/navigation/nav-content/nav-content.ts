@@ -1,19 +1,14 @@
 import { Location, LocationStrategy, isPlatformBrowser } from '@angular/common';
 import { Component, EventEmitter, Inject, Output, PLATFORM_ID, signal } from '@angular/core';
-import { NgScrollbarModule } from 'ngx-scrollbar';
-import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.prod';
-import { NavigationItem, NavigationItems } from '../../navigation';
+import { NavigationItem, NavigationItems } from '../../navigation-items';
 import { NabItemsService } from './nab-items.service';
-import { NavGroup } from "./nav-group/nav-group";
-import { NavCollapse } from "./nav-collapse/nav-collapse";
-import { NavItem } from "./nav-item/nav-item";
 
 @Component({
   selector: 'ithouse-nav-content',
-  imports: [NgScrollbarModule, NavGroup, NavCollapse, NavItem],
   templateUrl: './nav-content.html',
-  styleUrl: './nav-content.scss'
+  styleUrl: './nav-content.scss',
+  standalone: false
 })
 export class NavContent {
   title = 'Demo application for version numbering';
@@ -42,6 +37,7 @@ export class NavContent {
         this.document = document.querySelector('.pcoded-navbar')?.classList.add('menupos-static');
       }
     }
+    debugger
     this.navigations.set(this.nabItemService.buildNabItems(NavigationItems));
 
   }
@@ -49,6 +45,7 @@ export class NavContent {
   // public method
 
   navMob() {
+    debugger
     if (this.windowWidth < 992 && this.document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
       this.NavMobCollapse.emit();
     }

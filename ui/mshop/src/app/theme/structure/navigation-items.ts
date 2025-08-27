@@ -40,42 +40,42 @@ export const NavigationItems: NavigationItem[] = [
       }
     ]
   },
-  {
-    id: 'admin',
-    title: 'Admin',
-    type: 'group',
-    icon: 'icon-group',
-    permission: [AppPermission.USER_VIEWER],
-    children: [
-      {
-        id: 'ad_user',
-        title: 'Admin',
-        type: 'collapse',
-        // url: '/:loginName/home',
-        icon: 'feather icon-box',
-        permission: [AppPermission.USER_VIEWER],
-        children: [
-          {
-            id: 'user_list',
-            title: 'User List',
-            type: 'item',
-            url: '/:loginName/admin/user',
-            icon: 'feather icon-home',
-            permission: [AppPermission.USER_VIEWER]
-          },
-          {
-            id: 'user_test',
-            title: 'User test',
-            type: 'item',
-            isHidden: true,
-            url: '/:loginName/admin/userr',
-            icon: 'feather icon-home',
-            permission: [AppPermission.USER_VIEWER]
-          }
-        ]
-      }
-    ]
-  },
+  // {
+  //   id: 'admin',
+  //   title: 'Admin',
+  //   type: 'group',
+  //   icon: 'icon-group',
+  //   permission: [AppPermission.USER_VIEWER],
+  //   children: [
+  //     {
+  //       id: 'ad_user',
+  //       title: 'Admin',
+  //       type: 'collapse',
+  //       // url: '/:loginName/home',
+  //       icon: 'feather icon-box',
+  //       permission: [AppPermission.USER_VIEWER],
+  //       children: [
+  //         {
+  //           id: 'user_list',
+  //           title: 'User List',
+  //           type: 'item',
+  //           url: '/:loginName/admin/user',
+  //           icon: 'feather icon-home',
+  //           permission: [AppPermission.USER_VIEWER]
+  //         },
+  //         {
+  //           id: 'user_test',
+  //           title: 'User test',
+  //           type: 'item',
+  //           // isHidden: true,
+  //           url: '/:loginName/admin/userr',
+  //           icon: 'feather icon-home',
+  //           permission: [AppPermission.USER_VIEWER]
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // },
   {
     id: 'mshop',
     title: 'M-SHOP',

@@ -1,12 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { NavCollapse } from "../nav-collapse/nav-collapse";
-import { NavItem } from "../nav-item/nav-item";
 import { Location, LocationStrategy } from '@angular/common';
-import { NavigationItem } from '../../../navigation';
+import { NavigationItem } from '../../../navigation-items';
 
 @Component({
   selector: 'ithouse-nav-group',
-  imports: [NavCollapse, NavItem],
+  standalone: false,
   templateUrl: './nav-group.html',
   styleUrl: './nav-group.scss'
 })

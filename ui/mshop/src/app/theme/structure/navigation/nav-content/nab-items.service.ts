@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PermissionStoreService } from '../../../../ithouse/services/PermissionStoreService';
-import { NavigationItem } from '../../navigation';
+import { NavigationItem } from '../../navigation-items';
 
 @Injectable({
   providedIn: 'root'

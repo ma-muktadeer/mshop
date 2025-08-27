@@ -12,7 +12,7 @@ interface friendsList {
 
 @Component({
   selector: 'ithouse-friend',
-  imports: [NgClass],
+  standalone: false,
   templateUrl: './friend.html',
   styleUrl: './friend.scss'
 })

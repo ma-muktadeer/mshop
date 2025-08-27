@@ -1,11 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Ithouse } from '../ithouse/common/Ithouse';
-import { ActionType } from '../ithouse/constants/action-type.enum';
-import { CommonService } from '../ithouse/services/common.service';
-import { ContentType } from '../ithouse/services/content-type.enum';
-import { Service } from '../ithouse/services/service';
-import { AlertService } from '../ithouse/services/alert.service';
+import { Ithouse } from '../../../ithouse/common/Ithouse';
+import { ActionType } from '../../../ithouse/constants/action-type.enum';
+import { CommonService } from '../../../ithouse/services/common.service';
+import { ContentType } from '../../../ithouse/services/content-type.enum';
+import { Service } from '../../../ithouse/services/service';
+import { AlertService } from '../../../ithouse/services/alert.service';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
