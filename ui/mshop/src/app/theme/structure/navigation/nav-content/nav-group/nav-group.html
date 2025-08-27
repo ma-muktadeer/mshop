@@ -1,0 +1,14 @@
+<li class="nav-item pcoded-menu-caption py-1">
+  <label>{{ item.title }}</label>
+</li>
+@for (item of item.children; track item) {
+@if (item?.type === 'group') {
+<ithouse-nav-group [item]="item"></ithouse-nav-group>
+}
+@if (item?.type === 'collapse') {
+<ithouse-nav-collapse [item]="item"></ithouse-nav-collapse>
+}
+@if (item?.type === 'item') {
+<ithouse-nav-item [item]="item"></ithouse-nav-item>
+}
+}

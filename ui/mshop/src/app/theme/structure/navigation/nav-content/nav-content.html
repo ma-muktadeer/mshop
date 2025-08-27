@@ -1,0 +1,19 @@
+<ng-scrollbar (clickOutside)="navMob()" style="height: calc(100vh - 50px)">
+  <div class="navbar-content">
+    <ul class="nav pcoded-inner-navbar" (clickOutside)="fireOutClick()">
+      @for (item of (navigations()); track item ) {
+      @if (!item?.isHidden) {
+      @if (item?.type === 'group') {
+      <ithouse-nav-group [item]="item"></ithouse-nav-group>
+      }
+      @if (item?.type === 'collapse') {
+      <ithouse-nav-collapse [item]="item"></ithouse-nav-collapse>
+      }
+      @if (item?.type === 'item') {
+      <ithouse-nav-item [item]="item"></ithouse-nav-item>
+      }
+      }
+      }
+    </ul>
+  </div>
+</ng-scrollbar>

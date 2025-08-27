@@ -12,7 +12,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "ithouse",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
@@ -105,5 +105,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "098375cc-1915-4924-a699-4053f04c1444"
   }
 }
