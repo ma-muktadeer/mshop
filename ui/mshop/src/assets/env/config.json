@@ -8,14 +8,14 @@
     },
     "env.local": {
         "SERVER_URL": "http://127.0.0.1:8080",
-        "SERVER_BASE_URL": "http://127.0.0.1:8080/secure/api/v1",
-        "SERVER_BASE_URL_PUBLIC": "http://127.0.0.1:8080/public/api/v1",
-        "SERVER_BASE_URL_ADMIN": "http://127.0.0.1:8080/secure/api/v1"
+        "SERVER_BASE_URL": "http://127.0.0.1:8080/secure",
+        "SERVER_BASE_URL_PUBLIC": "http://127.0.0.1:8080/public",
+        "SERVER_BASE_URL_ADMIN": "http://127.0.0.1:8080/secure"
     },
     "env.prod": {
         "SERVER_URL": "http://172.25.204.232:8080/rbs-server",
-        "SERVER_BASE_URL": "http://172.25.204.232:8080/rbs-server/secure/api/v1",
-        "SERVER_BASE_URL_PUBLIC": "http://172.25.204.232:8080/rbs-server/public/api/v1",
-        "SERVER_BASE_URL_ADMIN": "http://172.25.204.232:8080/rbs-server/secure/api/v1"
+        "SERVER_BASE_URL": "http://172.25.204.232:8080/rbs-server/secure",
+        "SERVER_BASE_URL_PUBLIC": "http://172.25.204.232:8080/rbs-server/public",
+        "SERVER_BASE_URL_ADMIN": "http://172.25.204.232:8080/rbs-server/secure"
     }
 }

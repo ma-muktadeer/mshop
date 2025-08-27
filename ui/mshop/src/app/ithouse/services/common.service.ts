@@ -227,6 +227,10 @@ export class CommonService {
   public storeLoginUser(loginUser: any) {
     this.sessionStorage?.setItem(Constants.APP_LOGIN_USER, JSON.stringify(loginUser ?? {}))
   }
+
+  getToken(): string{
+    return this.sessionStorage?.getItem('AUTH_TOKEN');
+  }
   storeToken(res: any) {
     this.sessionStorage?.setItem("AUTH_TOKEN", res?.token);
     this.sessionStorage?.setItem("IS_AUTHENTICATED", res?.authenticated);

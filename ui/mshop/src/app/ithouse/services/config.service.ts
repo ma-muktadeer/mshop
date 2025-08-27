@@ -1,7 +1,8 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, PLATFORM_ID } from "@angular/core";
 import { firstValueFrom } from "rxjs";
-import { environment } from "../../../environments/environment.prod";
+import { environment } from "../../../environments/environment";
+import { isPlatformBrowser } from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +13,17 @@ export class ConfigService {
   browserName;
   os
 
+  private platformId = inject(PLATFORM_ID);
   constructor() { }
-
   async loadConfig(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    debugger
     const http = inject(HttpClient);
     console.log("Loading config...");
     try {
-      const url = environment.production ? '../rbs/assets/env/config.json' : '../assets/env/config.json';
+      const url = environment.production ? '../assets/env/config.json' : '../assets/env/config.json';
       const config = await firstValueFrom(http.get(url));
       this.config = config;
       console.log(this.config);
