@@ -3,12 +3,19 @@ import { CanActivateFn, Router } from '@angular/router';
 import { CommonService } from '../../../ithouse/services/common.service';
 
 export const loginGuard: CanActivateFn = (route, state) => {
-  const loginUser = inject(CommonService).loadLoginUser();
-  const router = inject(Router);
+  // const cs = inject(CommonService);
+  // const router = inject(Router);
 
-  if (loginUser?.userId) {
-    router.navigate(['/dashboard'])
-    return false;
-  }
-  return true;
+  // console.log('login');
+  // // return cs.loadLoginUser() ? router.parseUrl(`/${cs.loadLoginUser()?.loginName}/home`) : true;
+
+  // if (cs.getUserId()) {
+  //   return router.parseUrl(`/${cs.loadLoginUser()?.loginName}/home`);
+  // }
+  // return true;
+
+  const cs = inject(CommonService);
+  const router = inject(Router);
+  return cs.loadLoginUser() ? router.parseUrl(`/${cs.loadLoginUser()?.loginName}/home`) : true;
+
 };

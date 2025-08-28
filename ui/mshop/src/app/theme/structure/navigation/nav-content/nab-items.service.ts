@@ -1,45 +1,52 @@
-import { Injectable } from '@angular/core';
-import { PermissionStoreService } from '../../../../ithouse/services/PermissionStoreService';
-import { NavigationItem } from '../../navigation-items';
+// import { inject, Injectable } from '@angular/core';
+// import { PermissionStoreService } from '../../../../ithouse/services/PermissionStoreService';
+// import { NavigationItem } from '../../navigation-items';
+// import { Observable } from 'rxjs';
+// import { NavigationService } from '../navigation.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class NabItemsService {
+// @Injectable({
+//   providedIn: 'root'
+// })
+// export class NabItemsService {
+//   private navigationService = inject(NavigationService);
 
-  constructor(private permissionService: PermissionStoreService) { }
+//   constructor(private permissionService: PermissionStoreService) { }
 
-  buildNabItems = (items): NavigationItem[] => {
+//   buildNavItems = (items:NavigationItem[]): Observable<NavigationItem[]> => {
+// debugger
+//     const filtered = items
+//     .map(item => {
+//       if (item.permission === 'DEFAULT' || this.permissionService.hasAnyPermission(item.permission)) {
+//         const newItem: NavigationItem = { ...item };
 
-    return items.map(item => {
-      let newItem: NavigationItem;
+//         if (newItem.children) {
+//           // recursion still needs to unwrap observable
+//           newItem.children = this.buildNavItems(newItem.children) as any;
+//         }
 
-      if ( item.permission == 'DEFAULT' || this.permissionService.hasAnyPermission(item.permission)) {
-        newItem = { ...item };
-      }
+//         return newItem;
+//       }
+//       return undefined;
+//     })
+//       .filter((item): item is NavigationItem => !!item);
 
-      if(newItem?.children){
-        newItem.children = this.buildNabItems(newItem.children);
-      }
+//     return this.navigationService.getNavigationItems(filtered);
+//   }
 
-      return newItem;
-    });
-  }
+//   findNabItems = (items, url): NavigationItem[] => {
+//     for (const item of items) {
 
-  findNabItems = (items, url): NavigationItem[] => {
-    for (const item of items) {
+//       if (item.url === url) {
+//         return [{ ...item }];
+//       }
+//       if (item.children) {
+//         const childResult = this.findNabItems(item.children, url);
+//         if (childResult && childResult.length) {
+//           return childResult;
+//         }
+//       }
+//     }
+//     return [];
+//   };
 
-      if (item.url === url) {
-        return [{ ...item }];
-      }
-      if (item.children) {
-        const childResult = this.findNabItems(item.children, url);
-        if (childResult && childResult.length) {
-          return childResult;
-        }
-      }
-    }
-    return [];
-  };
-
-}
+// }

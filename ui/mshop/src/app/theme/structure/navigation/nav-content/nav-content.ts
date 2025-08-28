@@ -2,7 +2,8 @@ import { Location, LocationStrategy, isPlatformBrowser } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, Output, PLATFORM_ID, signal } from '@angular/core';
 import { environment } from '../../../../../environments/environment.prod';
 import { NavigationItem, NavigationItems } from '../../navigation-items';
-import { NabItemsService } from './nab-items.service';
+import { Observable } from 'rxjs';
+import { NavigationService } from '../navigation.service';
 
 @Component({
   selector: 'ithouse-nav-content',
@@ -15,7 +16,8 @@ export class NavContent {
   currentApplicationVersion = environment.appVersion;
 
   // public pops
-  navigations = signal<NavigationItem[]>([]);  // wrapperWidth!: number;
+  // navigations = signal<NavigationItem[]>([]);  // wrapperWidth!: number;
+  navigations: Observable<NavigationItem[]>;
   windowWidth: number = 900;
   document: any;
 
@@ -25,7 +27,7 @@ export class NavContent {
     @Inject(PLATFORM_ID) private paltfromId: Object,
     private location: Location,
     private locationStrategy: LocationStrategy,
-     private nabItemService: NabItemsService
+     private navigationService: NavigationService
   ) {
   }
 
@@ -36,8 +38,10 @@ export class NavContent {
       if (this.windowWidth < 992) {
         this.document = document.querySelector('.pcoded-navbar')?.classList.add('menupos-static');
       }
+
+      this.navigations = this.navigationService.getNavigationItems(NavigationItems);
     }
-    this.navigations.set(this.nabItemService.buildNabItems(NavigationItems));
+    // this.navigations.set(this.nabItemService.buildNavItems(NavigationItems));
 
   }
   // public method

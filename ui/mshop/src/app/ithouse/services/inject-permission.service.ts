@@ -1,7 +1,7 @@
 import { Injectable, Input } from '@angular/core';
 import { AppPermission, PermissionStoreService } from './PermissionStoreService';
 import { NavigationItems } from '../../theme/structure/navigation-items';
-import { NabItemsService } from '../../theme/structure/navigation/nav-content/nab-items.service';
+import { NavigationService } from '../../theme/structure/navigation/navigation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class InjectPermissionService {
   public isNabBar: boolean = false;
 
 
-  constructor(private permissionService: PermissionStoreService, private nabItemService: NabItemsService) { }
+  constructor(private permissionService: PermissionStoreService, private navigationService: NavigationService) { }
 
   getUrlPermission() {
     return this.urlPermission;
@@ -28,7 +28,7 @@ export class InjectPermissionService {
       return true;
     }
     if (!this.urlPermission && !this.isNabBar) {
-      const items = this.nabItemService.findNabItems(NavigationItems, url);
+      const items = this.navigationService.findNavItem(NavigationItems, url);
       this.urlPermission = items && items.length ? items[0].permission : null;
     }
     if (this.urlPermission == null) {

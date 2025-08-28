@@ -6,19 +6,21 @@ import { loginGuard } from './components/public/login/login.guard';
 import { Dashbord } from './components/secure/dashbord/dashbord';
 import { securiedGuard } from './ithouse/guard/securied.guard';
 import { PageNotFound } from './components/public/page-not-found/page-not-found';
+import { layoutGuard } from './ithouse/guard/layout.guard';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: Structure,
-    canActivate: [AuthGuard],
-    loadChildren: () => structureRouts
-  },
   {
     path: 'login',
     loadComponent: () => Login,
     canActivate: [loginGuard]
-  }
+  },
+  {
+    path: ':loginName',
+    component: Structure,
+    canActivate: [layoutGuard],
+    loadChildren: () => structureRouts
+  },
+
 ];
 
 export const structureRouts: Routes = [
