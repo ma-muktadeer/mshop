@@ -8,11 +8,6 @@ export const securiedGuard: CanActivateFn = (route, state) => {
   const cs = inject(CommonService);
   const router = inject(Router);
   console.log('securied ');
-debugger
-  // if (!cs.getUserId()) {
-  //   router.navigate(['/login']);
-  //   return false;
-  // }
   if (injectPermission.isAuthUrl(state.url)) {
     return true; // Or add your custom logic
   }

@@ -7,7 +7,6 @@ export const layoutGuard: CanActivateFn = (route, state) => {
   const user = cs.loadLoginUser();
   if (user) {
     if(!state.url.includes(`${user?.loginName}/`)){
-    // if(!state.url.includes(`ithousebd/`)){
       router.navigate([`/${user?.loginName}/home`]);
       return false;
     }

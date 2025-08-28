@@ -9,6 +9,11 @@ import { layoutGuard } from './ithouse/guard/layout.guard';
 
 export const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
     path: 'login',
     loadComponent: () => Login,
     canActivate: [loginGuard]
@@ -19,6 +24,10 @@ export const routes: Routes = [
     canActivate: [layoutGuard],
     loadChildren: () => structureRouts
   },
+  {
+    path: '**',
+    redirectTo: 'login'
+  }
 
 ];
 
@@ -37,5 +46,9 @@ export const structureRouts: Routes = [
     path: 'page-not-found',
     loadComponent: () => PageNotFound,
     pathMatch: 'full'
+  },
+  {
+    path: '**',
+    redirectTo: 'home'
   }
 ]
