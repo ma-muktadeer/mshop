@@ -24,11 +24,11 @@ export const routes: Routes = [
 export const structureRouts: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
-    path: 'dashboard',
+    path: 'home',
     loadComponent: () => Dashbord,
     canActivate: [securiedGuard]
   },

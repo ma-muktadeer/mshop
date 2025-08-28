@@ -19,11 +19,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.session.SessionInformation;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -193,15 +190,15 @@ public class PublicController {
 //        }
 //    }
 
-    @Autowired
-    private SessionRegistry sessionRegistry;
-    @GetMapping("/session")
-    public String getSessionId(HttpSession session) {
-
-        SessionInformation sf = sessionRegistry.getSessionInformation(session.getId());
-
-        return "Session ID: " + session.getId();
-    }
+//    @Autowired
+//    private SessionRegistry sessionRegistry;
+//    @GetMapping("/session")
+//    public String getSessionId(HttpSession session) {
+//
+//        SessionInformation sf = sessionRegistry.getSessionInformation(session.getId());
+//
+//        return "Session ID: " + session.getId();
+//    }
 
     @RequestMapping(path = "/check", method = RequestMethod.POST)
     public ResponseEntity<?> checkValid(@Valid @RequestBody User user, BindingResult result) {
