@@ -6,6 +6,8 @@ export const securiedChildGuard: CanActivateChildFn = (childRoute, state) => {
   const injectPermission = inject(InjectPermissionService);
   const router = inject(Router);
 
+  console.log('securied child');
+
   if (injectPermission.isAuthUrl(state.url)) {
     return true; // Or add your custom logic
   }

@@ -5,6 +5,8 @@ import { InjectPermissionService } from '../services/inject-permission.service';
 export const securiedGuard: CanActivateFn = (route, state) => {
   const injectPermission = inject(InjectPermissionService);
   const router = inject(Router);
+  console.log('securied ');
+
   if (injectPermission.isAuthUrl(state.url)) {
     return true; // Or add your custom logic
   }

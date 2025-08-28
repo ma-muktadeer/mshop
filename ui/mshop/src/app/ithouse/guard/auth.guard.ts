@@ -20,6 +20,8 @@ export const AuthGuard: CanActivateFn = (route, state) => {
   const loginUser = inject(CommonService).loadLoginUser();
   const router = inject(Router);
 
+  console.log('auth guard');
+
   if (loginUser?.userId) {
     return true;
   }

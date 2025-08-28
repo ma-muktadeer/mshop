@@ -22,6 +22,8 @@ export class InjectPermissionService {
   }
 
   isAuthUrl(url: string): boolean {
+    console.log('permission service', url);
+
     if(this.urlPermission && this.urlPermission == 'DEFAULT'){
       return true;
     }

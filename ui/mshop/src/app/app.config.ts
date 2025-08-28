@@ -31,6 +31,5 @@ export const appConfig: ApplicationConfig = {
       useFactory: rxStompServiceFactory
     },
     ToggleFullScreenDirective,
-    ConfigService,
   ]
 };
