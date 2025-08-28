@@ -28,7 +28,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 
-@CrossOrigin(origins = {"http://localhost:4200"}, allowCredentials = "true", allowedHeaders = {"Authorization", "Content-Type"})
+//@CrossOrigin(origins = {"http://localhost:4200"}, allowCredentials = "true", allowedHeaders = {"Authorization", "Content-Type"})
 @RestController
 @RequestMapping(value = "/secure")
 public class AppController {

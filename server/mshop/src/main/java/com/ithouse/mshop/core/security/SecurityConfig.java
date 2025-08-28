@@ -8,23 +8,15 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
@@ -42,6 +34,18 @@ public class SecurityConfig {
     @Value("${application.ul.domain}")
     private List<String> applicationDomain;
 
+    @Value("${security.allowed-method}")
+    private List<String> allowedMethod;
+
+    @Value("${security.allowed-headers}")
+    private List<String> allowedHeaders;
+
+    @Value("${security.allowed-credentials}")
+    private boolean allowedCredentials=false;
+
+    @Value("${security.allowed.exposed-headers}")
+    private List<String> exposedHeaders;
+
     @Value("${security.csp.report-only}")
     private boolean cspReportOnly;
 
@@ -50,10 +54,6 @@ public class SecurityConfig {
 
     @Value("${security.script-inline-allowed}")
     private boolean scriptInlineAllowed;
-
-    @Value("${security.allowed-method}")
-    private List<String> allowedMethod;
-
 
     private final RoleService roleService;
     private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
@@ -136,9 +136,9 @@ public class SecurityConfig {
         config.setAllowedOrigins(applicationDomain);
         config.setAllowedMethods(allowedMethod);
 //        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "appName", "Cache-Control"));
-        config.addAllowedHeader("*");
-        config.setExposedHeaders(List.of("Authorization"));
-        config.setAllowCredentials(true); // Set to false if credentials are not needed
+        config.setAllowedHeaders(allowedHeaders);
+        config.setExposedHeaders(exposedHeaders);
+        config.setAllowCredentials(allowedCredentials); // Set to false if credentials are not needed
         config.setMaxAge(3600L);
         return config;
     }

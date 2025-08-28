@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:321"}, allowCredentials = "true")
 @RestController
 @RequestMapping(value = "/public")
 public class PublicController {
