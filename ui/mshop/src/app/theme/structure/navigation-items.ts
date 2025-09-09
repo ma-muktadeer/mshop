@@ -59,7 +59,7 @@ export const NavigationItems: NavigationItem[] = [
             id: 'user_list',
             title: 'User List',
             type: 'item',
-            url: '/:loginName/admin/user',
+            url: '/:loginName/user',
             icon: 'feather icon-home',
             permission: 'DEFAULT'
           },

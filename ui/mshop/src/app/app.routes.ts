@@ -6,6 +6,8 @@ import { Dashbord } from './components/secure/dashbord/dashbord';
 import { securiedGuard } from './ithouse/guard/securied.guard';
 import { PageNotFound } from './components/public/page-not-found/page-not-found';
 import { layoutGuard } from './ithouse/guard/layout.guard';
+import { User } from './components/secure/user/user';
+import { secureRoutes } from './components/secure/secure.routing';
 
 export const routes: Routes = [
   {
@@ -41,6 +43,16 @@ export const structureRouts: Routes = [
     path: 'home',
     loadComponent: () => Dashbord,
     canActivate: [securiedGuard]
+  },
+  {
+    path: 'user',
+    loadComponent: () => User,
+    pathMatch: 'full'
+  },
+  {
+    path: 'admin',
+    loadChildren: () => secureRoutes,
+    pathMatch: 'full'
   },
   {
     path: 'page-not-found',

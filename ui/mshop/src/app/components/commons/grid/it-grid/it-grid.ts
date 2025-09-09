@@ -2,7 +2,7 @@ import { Component, effect, EventEmitter, Input, Output, Signal, ViewChild } fro
 import { GridBody } from "../grid-body/grid-body";
 import { GridPagination } from "../grid-pagination/grid-pagination";
 import { Column, Pagination, ContextMenu } from 'angular-slickgrid';
-import { CustomGridData } from '../../../common/CustomGridData';
+import { CustomGridData } from '../../../../ithouse/common/CustomGridData';
 
 @Component({
   selector: 'ithouse-grid',

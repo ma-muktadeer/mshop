@@ -1,8 +1,8 @@
 import { Component, EventEmitter, HostListener, Input, Output, signal, ViewChild } from '@angular/core';
 import { AngularGridInstance, AngularSlickgridComponent, AngularSlickgridModule, BackendServiceOption, Column, ContextMenu, FilterChangedArgs, GridOption, OperatorType, Pagination, SlickDataView } from "angular-slickgrid";
-import { FilterCriteria } from '../../../common/CustomGridData';
 import { GridPagination } from '../grid-pagination/grid-pagination';
 import { ExcelExportService } from '@slickgrid-universal/excel-export';
+import { FilterCriteria } from '../../../../ithouse/common/CustomGridData';
 
 let timer: any;
 const DEFAULT_FILTER_TYPING_DEBOUNCE = 10;

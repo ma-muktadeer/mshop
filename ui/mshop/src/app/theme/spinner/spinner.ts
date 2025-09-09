@@ -21,8 +21,6 @@ export class Spinner {
   ) {
     this.router.events.subscribe({
       next: (event: any) => {
-        console.log('event', event);
-
         if (event instanceof NavigationStart) {
           this.isSpinnerVisible.update(() => true);
         } else if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
