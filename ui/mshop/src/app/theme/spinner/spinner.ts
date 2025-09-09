@@ -10,7 +10,7 @@ import { Spinkit } from './spinkits';
   encapsulation: ViewEncapsulation.None
 })
 export class Spinner {
-isSpinnerVisible = signal<boolean>(true);
+  isSpinnerVisible = signal<boolean>(true);
   Spinkit = Spinkit;
   @Input() backgroundColor = '#2689E2';
   @Input() spinner = Spinkit.skLine;
@@ -21,6 +21,8 @@ isSpinnerVisible = signal<boolean>(true);
   ) {
     this.router.events.subscribe({
       next: (event: any) => {
+        console.log('event', event);
+
         if (event instanceof NavigationStart) {
           this.isSpinnerVisible.update(() => true);
         } else if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
