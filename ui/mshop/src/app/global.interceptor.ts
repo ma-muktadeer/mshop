@@ -16,7 +16,7 @@ export const globalInterceptor: HttpInterceptorFn = (req, next) => {
 
 
   let xhr = req;
-debugger
+
   if (req.url.includes('/public/')) {
     xhr = req.clone({
       withCredentials: false,

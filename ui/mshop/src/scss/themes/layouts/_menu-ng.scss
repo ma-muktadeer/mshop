@@ -11,7 +11,7 @@
         }
       }
 
-      .pcoded-submenu > app-nav-item > li {
+      .pcoded-submenu > ithouse-nav-item > li {
         &.active,
         &:focus,
         &:hover {
@@ -34,7 +34,7 @@
         height: calc(100% - 30px);
       }
 
-      li .pcoded-submenu > app-nav-item > li {
+      li .pcoded-submenu > ithouse-nav-item > li {
         > a {
           &:before {
             left: 65px;
@@ -60,21 +60,21 @@
           }
         }
 
-        .pcoded-submenu > app-nav-item > li > a {
+        .pcoded-submenu > ithouse-nav-item > li > a {
           padding: 7px 7px 7px 80px;
         }
       }
     }
 
-    app-nav-group:first-child {
+    ithouse-nav-group:first-child {
       > .pcoded-menu-caption {
         border-top: none;
         margin-top: 0;
       }
     }
 
-    app-nav-group > app-nav-collapse > li,
-    app-nav-group > app-nav-item > li {
+    ithouse-nav-group > ithouse-nav-collapse > li,
+    ithouse-nav-group > ithouse-nav-item > li {
       &.active,
       &.pcoded-trigger {
         > a {
@@ -100,8 +100,8 @@
         }
       }
 
-      > app-nav-group > app-nav-item > li,
-      > app-nav-group > app-nav-collapse > li {
+      > ithouse-nav-group > ithouse-nav-item > li,
+      > ithouse-nav-group > ithouse-nav-collapse > li {
         > a {
           padding: 7px 20px;
           width: $Menu-collapsed-width;
@@ -133,8 +133,8 @@
         }
       }
 
-      > app-nav-group > app-nav-item > li,
-      > app-nav-group > app-nav-collapse > li {
+      > ithouse-nav-group > ithouse-nav-item > li,
+      > ithouse-nav-group > ithouse-nav-collapse > li {
         &.pcoded-trigger {
           .pcoded-submenu {
             li {
@@ -158,8 +158,8 @@
 
     &:hover {
       .pcoded-inner-navbar {
-        > app-nav-group > app-nav-item > li,
-        > app-nav-group > app-nav-collapse > li {
+        > ithouse-nav-group > ithouse-nav-item > li,
+        > ithouse-nav-group > ithouse-nav-collapse > li {
           > a {
             width: 100%;
 
@@ -191,8 +191,8 @@
           }
         }
 
-        > app-nav-group > app-nav-item > li,
-        > app-nav-group > app-nav-collapse > li {
+        > ithouse-nav-group > ithouse-nav-item > li,
+        > ithouse-nav-group > ithouse-nav-collapse > li {
           &.pcoded-trigger {
             .pcoded-submenu {
               li {
@@ -231,8 +231,8 @@
 //=========================================================================================
 //=========================================================================================
 
-app-nav-group {
-  app-nav-collapse {
+ithouse-nav-group {
+  ithouse-nav-collapse {
     > li {
       overflow: hidden;
 
@@ -242,7 +242,7 @@ app-nav-group {
     }
   }
 
-  > app-nav-collapse {
+  > ithouse-nav-collapse {
     > li {
       overflow: hidden;
 
@@ -271,8 +271,8 @@ app-nav-group {
 
 .pcoded-navbar {
   &.menu-light {
-    .pcoded-inner-navbar app-nav-item > li.nav-item.active > a,
-    .pcoded-inner-navbar app-nav-item > li.nav-item.pcoded-trigger > a {
+    .pcoded-inner-navbar ithouse-nav-item > li.nav-item.active > a,
+    .pcoded-inner-navbar ithouse-nav-item > li.nav-item.pcoded-trigger > a {
       background: #f1f1f1;
       color: #000;
     }
@@ -283,8 +283,8 @@ app-nav-group {
   }
 
   &.navbar-collapsed {
-    .pcoded-inner-navbar > app-nav-group > app-nav-collapse > li.pcoded-hasmenu .pcoded-submenu,
-    .pcoded-inner-navbar app-nav-item > li.pcoded-hasmenu .pcoded-submenu {
+    .pcoded-inner-navbar > ithouse-nav-group > ithouse-nav-collapse > li.pcoded-hasmenu .pcoded-submenu,
+    .pcoded-inner-navbar ithouse-nav-item > li.pcoded-hasmenu .pcoded-submenu {
       display: block;
     }
   }
@@ -333,14 +333,14 @@ app-nav-group {
 
 .pcoded-navbar {
   &.menu-light {
-    .pcoded-inner-navbar > app-nav-group > app-nav-collapse > li.active > a,
-    .pcoded-inner-navbar > app-nav-group > app-nav-collapse > li.active a,
-    .pcoded-inner-navbar > app-nav-group > app-nav-collapse > li.pcoded-trigger > a,
-    .pcoded-inner-navbar > app-nav-group > app-nav-collapse > li.pcoded-trigger a,
-    .pcoded-inner-navbar > app-nav-group > app-nav-collapse > li:hover a,
-    .pcoded-inner-navbar app-nav-item > li.active a,
-    .pcoded-inner-navbar app-nav-item > li.pcoded-trigger a,
-    .pcoded-inner-navbar app-nav-item > li:hover a {
+    .pcoded-inner-navbar > ithouse-nav-group > ithouse-nav-collapse > li.active > a,
+    .pcoded-inner-navbar > ithouse-nav-group > ithouse-nav-collapse > li.active a,
+    .pcoded-inner-navbar > ithouse-nav-group > ithouse-nav-collapse > li.pcoded-trigger > a,
+    .pcoded-inner-navbar > ithouse-nav-group > ithouse-nav-collapse > li.pcoded-trigger a,
+    .pcoded-inner-navbar > ithouse-nav-group > ithouse-nav-collapse > li:hover a,
+    .pcoded-inner-navbar ithouse-nav-item > li.active a,
+    .pcoded-inner-navbar ithouse-nav-item > li.pcoded-trigger a,
+    .pcoded-inner-navbar ithouse-nav-item > li:hover a {
       background: transparent;
     }
   }
@@ -366,7 +366,7 @@ app-nav-group {
       }
 
       .pcoded-inner-navbar {
-        > app-nav-group > app-nav-collapse li {
+        > ithouse-nav-group > ithouse-nav-collapse li {
           &.active,
           &:focus,
           &:hover {
@@ -375,7 +375,7 @@ app-nav-group {
             }
           }
 
-          .pcoded-submenu > app-nav-item li {
+          .pcoded-submenu > ithouse-nav-item li {
             &.active,
             &:focus,
             &:hover {
@@ -388,7 +388,7 @@ app-nav-group {
           }
         }
 
-        > app-nav-group > app-nav-collapse > li {
+        > ithouse-nav-group > ithouse-nav-collapse > li {
           &.active,
           &.pcoded-trigger {
             &:after {

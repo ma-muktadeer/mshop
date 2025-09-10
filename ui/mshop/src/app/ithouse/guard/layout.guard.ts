@@ -15,7 +15,7 @@ export const layoutGuard: CanActivateFn = (route, state) => {
   //   router.navigate(['/login']);
   //   return false;
   // }
-debugger
+
   if (!user) {
     return router.parseUrl('/login');
   }
