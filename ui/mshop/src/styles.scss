@@ -1,3 +1,138 @@
+// // @use 'bootstrap/scss/bootstrap';
+// @use '../node_modules/@ng-select/ng-select/themes/default.theme.css';
+// @use '../node_modules/bootstrap-icons/font/bootstrap-icons.scss';
+// // Theme Font
+// // Import Bootstrap's SCSS variables, mixins, etc.
+// @use '../node_modules/bootstrap/scss/bootstrap' as *;
+// // Import Bootstrap's SCSS variables, mixins, etc.
+
+
+// // Theme Font
+// @import 'scss/themes/font/theme-font';
+
+// @import 'scss/settings/custom-variables';
+// @import 'scss/settings/theme-variables';
+
+// @import 'scss/themes/general';
+// @import 'scss/themes/generic';
+// @import 'scss/themes/minixs/function';
+
+// // // icon
+// @import 'scss/themes/font/datta-icon';
+// @import 'scss/themes/font/feather';
+// @import 'scss/themes/font/fontawesome';
+// @import 'scss/themes/font/flaticon';
+
+// // component
+// @import 'scss/themes/component/component';
+
+// // // theme layouts
+// @import 'scss/themes/layouts/menu-lite';
+// @import 'scss/themes/layouts/menu-ng';
+
+// // // dashboard
+// @import 'scss/themes/pages/dashboard.scss';
+// @import 'scss/themes/pages/authentication';
+
+// @import 'scss/themes/chat/chat';
+
+// // // custom
+// @import 'scss/themes/custom';
+
+// // /* basic elements */
+// @import 'scss/variables';
+// @import 'scss/theme-elements/theme-elements';
+
+// input[readonly] {
+//   background-color: #f5f5f5;
+//   color: #999;
+//   border: 1px solid #ccc;
+//   cursor: not-allowed;
+// }
+
+// .dropdown-item:hover {
+//   cursor: pointer;
+//   background-color: #bed4f7 !important;
+//   color: #000;
+// }
+
+// .active-value {
+//   background-color: #0d6efd !important;
+//   color: #fff;
+// }
+
+// .accordion-item {
+//   .accordion-header {
+
+//     .accordion-button,
+//     .collapsed {
+//       cursor: pointer;
+//       background-color: rgba(43, 108, 176, 0.08) !important; // আপনার থিম কালার ব্যবহার
+//       color: #2c3e50;
+//       border: 1px solid rgba(43, 108, 176, 0.1); // সাবটল বর্ডার
+//     }
+
+//     .accordion-button:not(.collapsed) {
+//       background: linear-gradient(135deg, #2b6cb0, #1e4a7e) !important;
+//       color: white;
+//       font-weight: 600;
+//       box-shadow: 0 2px 8px rgba(43, 108, 176, 0.3);
+//       &::after {
+//         filter: brightness(0) saturate(100%) invert(100%);
+//       }
+//     }
+
+//     :hover {
+//       background: linear-gradient(135deg, #2b6cb0, #4099ff) !important;
+//       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+//       color: white;
+//     }
+
+//     :focus {
+//       box-shadow: 0 0 0 0.25rem rgba(43, 108, 176, 0.25);
+//     }
+//   }
+
+//   .accordion-collapse,
+//   .show {
+//     background: linear-gradient(to bottom,
+//         rgba(43, 108, 176, 0.05),
+//         rgba(255, 255, 255, 0.9)) !important; // সাবটল গ্রেডিয়েন্ট
+//     border-left: 3px solid #2b6cb0; // থিক বর্ডার
+//     border-radius: 0 0 5px 5px; // রাউন্ডেড কর্নার
+//   }
+// }
+// h5.bg-rbs{
+//   background: linear-gradient(to left, #2b6cb0, #1e4a7e) !important;
+//   color: white;
+//   padding: 8px;
+//   // background-color: red;
+// }
+
+// .loan-wrapper {
+//   height: calc(100vh - 40px);
+//   background: #f9f9f9;
+//   overflow-y: scroll;
+//   scrollbar-width: none;
+//   -ms-overflow-style: none;
+
+//   &::-webkit-scrollbar {
+//     display: none;
+//   }
+//   .sticky-tabs {
+//     position: sticky;
+//     top: 0;
+//     z-index: 1020;
+//     background: #f9f9f9 !important;
+//   }
+// }
+
+// .btn-close{
+//   filter: invert(37%) sepia(94%) saturate(7480%) hue-rotate(356deg) brightness(96%) contrast(102%) !important;
+// }
+
+
+
 // @use 'bootstrap/scss/bootstrap';
 @use '../node_modules/@ng-select/ng-select/themes/default.theme.css';
 @use '../node_modules/bootstrap-icons/font/bootstrap-icons.scss';
@@ -67,9 +202,9 @@ input[readonly] {
     .accordion-button,
     .collapsed {
       cursor: pointer;
-      background-color: rgba(43, 108, 176, 0.08) !important; // আপনার থিম কালার ব্যবহার
+      background-color: rgba(43, 108, 176, 0.08) !important;
       color: #2c3e50;
-      border: 1px solid rgba(43, 108, 176, 0.1); // সাবটল বর্ডার
+      border: 1px solid rgba(43, 108, 176, 0.1);
     }
 
     .accordion-button:not(.collapsed) {
@@ -97,9 +232,9 @@ input[readonly] {
   .show {
     background: linear-gradient(to bottom,
         rgba(43, 108, 176, 0.05),
-        rgba(255, 255, 255, 0.9)) !important; // সাবটল গ্রেডিয়েন্ট
-    border-left: 3px solid #2b6cb0; // থিক বর্ডার
-    border-radius: 0 0 5px 5px; // রাউন্ডেড কর্নার
+        rgba(255, 255, 255, 0.9)) !important;
+    border-left: 3px solid #2b6cb0;
+    border-radius: 0 0 5px 5px;
   }
 }
 h5.bg-rbs{
@@ -129,4 +264,8 @@ h5.bg-rbs{
 
 .btn-close{
   filter: invert(37%) sepia(94%) saturate(7480%) hue-rotate(356deg) brightness(96%) contrast(102%) !important;
+}
+
+.ng-dropdown-panel{
+  z-index: 99999 !important;
 }
