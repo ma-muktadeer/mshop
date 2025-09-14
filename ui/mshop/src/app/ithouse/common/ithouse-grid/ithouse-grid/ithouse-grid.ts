@@ -5,7 +5,7 @@ import { IthouseGridBody } from '../ithouse-grid-body/ithouse-grid-body';
 import { IthouseGridPagination } from '../ithouse-grid-pagination/ithouse-grid-pagination';
 
 @Component({
-  selector: 'app-ithouse-grid',
+  selector: 'ithouse-grid',
   templateUrl: './ithouse-grid.html',
   styleUrl: './ithouse-grid.scss',
   standalone: false
