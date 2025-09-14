@@ -1,0 +1,38 @@
+{
+    "group": {
+        "Navigation": "মূল",
+        "Admin": "অ্যাডমিন",
+        "Application Config": "অ্যাপ্লিকেশন কনফিগারেশন"
+    },
+    "section": {
+        "Admin": "অ্যাডমিন",
+        "Application Config": "অ্যাপ্লিকেশন কনফিগারেশন"
+    },
+    "title":{
+        "Welcome": "স্বাগতম",
+        "Admin":"অ্যাডমিন",
+        "Dashboard": "ড্যাশবোর্ড",
+        "Users": "ব্যবহারকারীরা",
+        "Add User": "Add User",
+        "User List": "ব্যবহারকারী তালিকা",
+        "Permission List": "অনুমতি তালিকা",
+        "Bank List": "ব্যাংক তালিকা",
+        "Branch": "শাখা",
+        "Role List": "ভূমিকা তালিকা",
+        "Application Config": "অ্যাপ্লিকেশন কনফিগারেশন",
+        "Department Config": "বিভাগ কনফিগারেশন",
+        "Page Not Found": "পৃষ্ঠা পাওয়া যায়নি"
+    },
+    "login": {
+        "title": "লগইন করুন",
+        "username": "ইমেইল",
+        "password": "পাসওয়ার্ড",
+        "button": "লগইন",
+        "2faCode": "কোড",
+        "2faSentMessage": "একটি কোড আপনার ডিভাইসে পাঠানো হয়েছে। এটি {{time}} সেকেন্ডে মেয়াদোত্তীর্ণ হবে।",
+        "resetCode": "কোড পুনরায় পাঠান"
+    },
+    "page-not-found": {
+        "message": "আপনি যে পৃষ্ঠাটি খুঁজছেন তা বিদ্যমান নেই।"
+    }
+}

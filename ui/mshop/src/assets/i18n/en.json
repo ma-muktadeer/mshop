@@ -1,0 +1,37 @@
+{
+    "group":{
+        "Navigation": "Navigation",
+        "Admin": "Admin",
+        "Application Config": "Application Config"
+    },
+    "section":{
+        "Admin": "Admin",
+        "Application Config": "Application Config"
+    },
+    "title": {
+        "Dashboard": "Dashboard",
+        "Welcome": "Welcome",
+        "Admin": "Admin",
+        "Add User": "Add User",
+        "User List": "User List",
+        "Permission List": "Permission List",
+        "Bank List": "Bank List",
+        "Branch": "Branch",
+        "Role List": "Role List",
+        "Application Config": "Application Config",
+        "Department Config": "Department Config",
+        "Page Not Found": "Page Not Found"
+    },
+    "login": {
+        "title": "Login",
+        "username": "Username",
+        "password": "Password",
+        "button": "Login",
+        "2faCode": "Code",
+        "2faSentMessage": "A code was sent to your device. It will expire in {{time}} seconds.",
+        "resetCode": "Resend Code"
+    },
+    "page-not-found": {
+        "message": "The page you are looking for does not exist."
+    }
+}
