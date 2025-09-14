@@ -1,22 +1,23 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { FriendsList } from '../../../../../fack-db/friends-list';
-import { UserChat } from '../../../../../fack-db/user-chat';
-import { NgScrollbarModule } from 'ngx-scrollbar';
+// Angular Import
 import { NgClass } from '@angular/common';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgScrollbar } from "ngx-scrollbar";
+
+// project import
 
 @Component({
-  selector: 'ithouse-chat-msg',
-  standalone: false,
-  templateUrl: './chat-msg.html',
-  styleUrl: './chat-msg.scss'
+  selector: 'app-chat-msg',
+  templateUrl: './chat-msg.component.html',
+  styleUrls: ['./chat-msg.component.scss'],
+  imports: [NgScrollbar, NgClass, FormsModule]
 })
-export class ChatMsg {
+export class ChatMsgComponent implements OnInit {
   @Input() friendId!: number;
   @Output() ChatToggle = new EventEmitter();
   @ViewChild('newChat', { read: ElementRef, static: false }) newChat!: ElementRef;
-  friendsList = FriendsList.friends;
-  userChat = UserChat.chat;
+  // friendsList = FriendsList.friends;
+  // userChat = UserChat.chat;
   // eslint-disable-next-line
   chatMessage: any;
   message!: string;
@@ -24,18 +25,18 @@ export class ChatMsg {
   friendWriting!: boolean;
   newReplay: string;
 
-  constructor() {
+  constructor(private rend: Renderer2) {
     this.newReplay = '';
   }
 
   ngOnInit() {
-    this.chatMessage = findObjectByKeyValue(this.friendsList, 'id', this.friendId);
-    if (this.chatMessage) {
-      const message = findObjectByKeyValue(this.userChat, 'friend_id', this.friendId);
-      if (message) {
-        this.chatMessage['chat'] = message['messages'];
-      }
-    }
+    // this.chatMessage = findObjectByKeyValue(this.friendsList, 'id', this.friendId);
+    // if (this.chatMessage) {
+    //   const message = findObjectByKeyValue(this.userChat, 'friend_id', this.friendId);
+    //   if (message) {
+    //     this.chatMessage['chat'] = message['messages'];
+    //   }
+    // }
   }
 
   sentMsg(flag: number) {
