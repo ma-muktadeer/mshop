@@ -1,15 +1,21 @@
-import { Component, Input } from '@angular/core';
+// Angular Import
 import { Location, LocationStrategy } from '@angular/common';
-import { NavigationItem } from '../../../navigation-items';
+import { Component, Input, OnInit } from '@angular/core';
+
+// project import
+import { NavigationItem } from '../../navigation';
+import { NavCollapseComponent } from "../nav-collapse/nav-collapse.component";
+import { NavItemComponent } from "../nav-item/nav-item.component";
 
 @Component({
-  selector: 'ithouse-nav-group',
-  standalone: false,
-  templateUrl: './nav-group.html',
-  styleUrl: './nav-group.scss'
+  selector: 'app-nav-group',
+  templateUrl: './nav-group.component.html',
+  styleUrls: ['./nav-group.component.scss'],
+  imports: [NavCollapseComponent, NavItemComponent]
 })
-export class NavGroup {
- @Input() item!: NavigationItem;
+export class NavGroupComponent implements OnInit {
+  // public props
+  @Input() item!: NavigationItem;
 
   // constructor
   constructor(

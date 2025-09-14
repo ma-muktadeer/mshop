@@ -1,15 +1,18 @@
 import { Component, inject, Input } from '@angular/core';
-import { AppPermission } from '../../../../../ithouse/services/PermissionStoreService';
-import { NavigationItem } from '../../../navigation-items';
-import { InjectPermissionService } from '../../../../../ithouse/services/inject-permission.service';
+import { NavigationItem } from '../../navigation';
+import { AppPermission } from '../../../../../services/permissioin-store.service';
+import { InjectPermissionService } from '../../../../../services/inject-permission.service';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'ithouse-nav-item',
-  standalone: false,
-  templateUrl: './nav-item.html',
-  styleUrl: './nav-item.scss'
+  selector: 'app-nav-item',
+  templateUrl: './nav-item.component.html',
+  styleUrls: ['./nav-item.component.scss'],
+  imports: [RouterLinkActive, RouterLink, NgClass]
 })
-export class NavItem {
+export class NavItemComponent {
+  // public props
   @Input() item!: NavigationItem;
   private injectPermission = inject(InjectPermissionService);
 
@@ -37,8 +40,8 @@ export class NavItem {
         last_parent.classList.add('active');
       }
     }
-    if (document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
-      document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.remove('mob-open');
+    if (document.querySelector('app-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
+      document.querySelector('app-navigation.pcoded-navbar')?.classList.remove('mob-open');
     }
     this.injectPermission.urlPermission = appPermission;
     this.injectPermission.isNabBar = true;

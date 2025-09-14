@@ -1,13 +1,30 @@
+// Angular Import
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, signal } from '@angular/core';
-import { NavigationItem } from '../../../navigation-items';
+
+// project import
+import { NavigationItem } from '../../navigation';
+import { NavGroupComponent } from "../nav-group/nav-group.component";
+import { NavItemComponent } from "../nav-item/nav-item.component";
+import { RouterLinkActive } from '@angular/router';
 
 @Component({
-  selector: 'ithouse-nav-collapse',
-  standalone: false,
-  templateUrl: './nav-collapse.html',
-  styleUrl: './nav-collapse.scss'
+  selector: 'app-nav-collapse',
+  templateUrl: './nav-collapse.component.html',
+  styleUrls: ['./nav-collapse.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)', display: 'block' }),
+        animate('250ms ease-in', style({ transform: 'translateY(0%)' }))
+      ]),
+      transition(':leave', [animate('250ms ease-in', style({ transform: 'translateY(-100%)' }))])
+    ])
+  ],
+  imports: [RouterLinkActive, NavGroupComponent, NavItemComponent]
 })
-export class NavCollapse {
+export class NavCollapseComponent {
+  // public props
   @Input() item!: NavigationItem;
 
   setClass = signal<string>('fw-normal');
