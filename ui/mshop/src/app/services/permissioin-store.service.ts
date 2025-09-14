@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { CommonService } from "./common.service";
 import { Status } from "./status";
-import { AppRole } from "./common/AppRole";
 
 @Injectable({
   providedIn: "root",

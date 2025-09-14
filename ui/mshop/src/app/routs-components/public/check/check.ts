@@ -70,12 +70,57 @@ export class Check {
       filterable: true, filter: { model: Filters['inputText'], },
     },
     {
+      id: 'fullNamed', name: 'Full Name', field: 'fullName',
+      sortable: true, type: FieldType.text, minWidth: 130,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
+      id: 'fullNasme', name: 'Full Name', field: 'fullName',
+      sortable: true, type: FieldType.text, minWidth: 130,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
+      id: 'fullNadme', name: 'Full Name', field: 'fullName',
+      sortable: true, type: FieldType.text, minWidth: 130,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
       id: 'email', name: 'Email', field: 'email',
       sortable: true, type: FieldType.text, minWidth: 170,
       filterable: true, filter: { model: Filters['inputText'], },
     },
     {
       id: 'branch', name: 'Branch', field: 'branch',
+      sortable: true, type: FieldType.text,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
+      id: 'email', name: 'Email', field: 'email',
+      sortable: true, type: FieldType.text, minWidth: 170,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
+      id: 'branch', name: 'Branch', field: 'branch',
+      sortable: true, type: FieldType.text,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
+      id: 'd', name: 'Email', field: 'email',
+      sortable: true, type: FieldType.text, minWidth: 170,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
+      id: 'sds', name: 'Branch', field: 'branch',
+      sortable: true, type: FieldType.text,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
+      id: 'emeail', name: 'Email', field: 'email',
+      sortable: true, type: FieldType.text, minWidth: 170,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
+      id: 'branwch', name: 'Branch', field: 'branch',
       sortable: true, type: FieldType.text,
       filterable: true, filter: { model: Filters['inputText'], },
     },
@@ -95,7 +140,23 @@ export class Check {
       sortable: true, type: FieldType.text,
       filterable: true, filter: { model: Filters['inputText'] },
       formatter: (row: number, cell: number, value: any, columnDef?: Column, dataContext?: any, grid?: any) => { return dataContext.allowLogin == 'Yes' ? "Yes" : "No" }
-    }
+    },
+    {
+      id: 'logienName', name: 'Login Name', field: 'loginName',
+      sortable: true, type: FieldType.text,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
+      id: 'userStaetus', name: 'Status', field: 'userStatus',
+      sortable: true, type: FieldType.text,
+      filterable: true, filter: { model: Filters['inputText'], },
+    },
+    {
+      id: 'allowLqogin', name: 'Allow Login', field: 'allowLogin',
+      sortable: true, type: FieldType.text,
+      filterable: true, filter: { model: Filters['inputText'] },
+      formatter: (row: number, cell: number, value: any, columnDef?: Column, dataContext?: any, grid?: any) => { return dataContext.allowLogin == 'Yes' ? "Yes" : "No" }
+    },
   ];
   callPagination = false;
   pageSize = 10;

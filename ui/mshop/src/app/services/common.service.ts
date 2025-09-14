@@ -1,18 +1,44 @@
 import { environment } from './../../environments/environment';
-import { HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
+import { DOCUMENT, Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment as ENV }  from './../../environments/environment';
 import { ConfigService } from '../../config.service';
+import { Constants } from './common/Constants';
+import { AppRole } from '../ithouse/constants/AppRole';
+import { ActionType } from '../ithouse/constants/action-type.enum';
+import { Service } from './service';
+import { ContentType } from './common/constants/content-type.enum';
+import { FileAction, FileType } from './file.service';
+import { isPlatformBrowser } from '@angular/common';
+import { Router } from 'express';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommonService {
 
-  // config = inject(ConfigService)
-  constructor(private http: HttpClient, private readonly _config: ConfigService) {
+
+  private config = inject(ConfigService);
+  // app = app;
+  sessionStorage: any;
+  localStorage: any;
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: object,
+    private readonly _config: ConfigService
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+    // ✅ Safe access with checks
+    if (this.document?.defaultView) {
+      this.sessionStorage = this.document.defaultView.sessionStorage;
+      this.localStorage = this.document.defaultView.localStorage;
+      }
+
+    }
   }
+
 
   get environment() {
     if (!this._config.config) {
@@ -26,385 +52,362 @@ export class CommonService {
     }
   }
 
-  /**
-   * This method responsible for communicating with server.
-   * All request pass to server and return to sender [onResponse] if success.
-   * if not access to server response will return to sender [onError] method
-   *
-   * @param service Service
-   * @param actionType ActionType
-   * @param contentType ContentType
-   * @param referance string
-   * @param payload any
-   */
-  // public sendRequest(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
-  //   this.doSendRequest(service, actionType, contentType, referance, payload, path);
-  // }
+  // /**
+  //  * This method responsible for communicating with server.
+  //  * All request pass to server and return to sender [onResponse] if success.
+  //  * if not access to server response will return to sender [onError] method
+  //  *
+  //  * @param service Service
+  //  * @param actionType ActionType
+  //  * @param contentType ContentType
+  //  * @param referance string
+  //  * @param payload any
+  //  */
+  public sendRequest(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
+    this.doSendRequest(service, actionType, contentType, referance, payload, path);
+  }
 
-  // public sendRequestPublic(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
-  //   this.doSendRequestPublic(service, actionType, contentType, referance, payload, path);
-  // }
-
-
-
-  // private doSendRequestPublic(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
-
-  //   var req = this.generateReqJson(actionType, contentType, referance, payload);
-
-  //   var url = path ? this.environment.SERVER_BASE_URL_PUBLIC + path : this.environment.SERVER_BASE_URL_PUBLIC + "/jsonRequest"
-
-  //   this.http.post(url, req)
-  //     .toPromise()
-  //     .then(res => {
-  //       service.onResponse(service, req, res);
-  //     })
-  //     .catch(res => {
-  //       service.onError(service, req, res);
-  //     });
-
-  // }
-
-  // public sendRequestAdmin(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
-  //   this.doSendRequestAdmin(service, actionType, contentType, referance, payload, path);
-  // }
-
-
-  // private doSendRequestAdmin(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
-
-  //   var req = this.generateReqJson(actionType, contentType, referance, payload);
-
-  //   var url = path ? this.environment.SERVER_BASE_URL_ADMIN + path : this.environment.SERVER_BASE_URL_ADMIN + "/jsonRequest"
-  //   /* let headers = new HttpHeaders({
-  //     'Content-Type': 'application/json',
-  //     'Authorization': sessionStorage.getItem("AUTH_TOKEN")
-  //   });
-  //   let options = { headers: headers }; */
-  //   this.http.post(url, req)
-  //     .toPromise()
-  //     .then(res => {
-  //       service.onResponse(service, req, res);
-  //     })
-  //     .catch(res => {
-  //       service.onError(service, req, res);
-  //     });
-
-  // }
-
-
-  // private doSendRequest(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
-
-  //   var req = this.generateReqJson(actionType, contentType, referance, payload);
-
-  //   var url = path ? this.environment.SERVER_BASE_URL_ADMIN + path : this.environment.SERVER_BASE_URL_ADMIN + "/jsonRequest"
-
-  //   this.http.post(url, req)
-  //     .toPromise()
-  //     .then(res => {
-  //       service.onResponse(service, req, res);
-  //     })
-  //     .catch(res => {
-  //       service.onError(service, req, res);
-  //     });
-
-  // }
-
-  // public post(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any) {
-
-  //   var req = this.generateReqJson(actionType, contentType, referance, payload);
-
-  //   return this.http.post(this.environment.SERVER_URL, req)
-  //     .toPromise()
-  //     .then(res => {
-  //       return res;
-  //     })
-  //     .catch(res => {
-  //       service.onError(service, req, res);
-  //     });
-
-  // }
+  public sendRequestPublic(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
+    this.doSendRequestPublic(service, actionType, contentType, referance, payload, path);
+  }
 
 
 
-  // public execute(actionType: ActionType, contentType: ContentType, payload: any, path = null) {
+  private doSendRequestPublic(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
 
-  //   var req = this.generateReqJson(actionType, contentType, '', payload);
-  //   var url = path ? this.environment.SERVER_URL + path : this.environment.SERVER_BASE_URL_PUBLIC + "/jsonRequest"
-  //   return this.http.post(url, req);
-  //   // return this.http.post(environment.SERVER_URL, req);
+    var req = this.generateReqJson(actionType, contentType, referance, payload);
 
-  // }
+    var url = path ? this.environment.SERVER_BASE_URL_PUBLIC + path : this.environment.SERVER_BASE_URL_PUBLIC + "/jsonRequest"
 
-  // public executePublic(actionType: ActionType, contentType: ContentType, payload: any, path = null) {
+    this.http.post(url, req)
+      .pipe(
+        catchError((error: any) => {
+          service.onError(service, req, error);
+          return throwError(() => error);
+        })
+      )
+      .subscribe(
+        (res) => {
+          service.onResponse(service, req, res);
+        }
+      );
+  }
 
-  //   var req = this.generateReqJson(actionType, contentType, '', payload);
-  //   var url = path ? this.environment.SERVER_BASE_URL_PUBLIC + path : this.environment.SERVER_BASE_URL_PUBLIC + "/jsonRequest"
-  //   return this.http.post(url, req);
-
-  // }
-
-  // public executeAdmin(actionType: ActionType, contentType: ContentType, payload: any, path = null) {
-
-  //   var req = this.generateReqJson(actionType, contentType, '', payload);
-  //   var url = path ? this.environment.SERVER_BASE_URL_ADMIN + path : this.environment.SERVER_BASE_URL_ADMIN + "/jsonRequest"
-  //   return this.http.post(url, req);
-
-  // }
-
-
-  // private extractData(res: Response) {
-  //   let body = res.json();
-  //   return body || {};
-  // }
+  public sendRequestAdmin(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
+    this.doSendRequestAdmin(service, actionType, contentType, referance, payload, path);
+  }
 
 
-  // public generateReqJson(actionType: ActionType, contentType: ContentType, referance: string, payload: any) {
+  private doSendRequestAdmin(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
 
-  //   var loginUser = this.loadLoginUser();
-  //   var userId = null;
-  //   let customerId = null;
-  //   if (loginUser && loginUser.userId) {
-  //     userId = loginUser.userId;
-  //     customerId = loginUser.customerId;
-  //   }
+    var req = this.generateReqJson(actionType, contentType, referance, payload);
 
-  //   var header = {
-  //     actionType: actionType.toString(),
-  //     contentType: contentType.toString(),
-  //     referance: referance,
-  //     userId: userId,
-  //     customerId: customerId,
-  //     extraInfoMap: {
-  //       appName: this._config.config.app.constantAppName
-  //     }
-  //   };
+    var url = path ? this.environment.SERVER_BASE_URL_ADMIN + path : this.environment.SERVER_BASE_URL_ADMIN + "/jsonRequest"
 
-  //   var data = {
-  //     header: header,
-  //     payload: payload instanceof Object ? [payload] : payload
-  //   }
-  //   return data;
+    this.http.post(url, req)
+      .pipe(
+        catchError((error: any) => {
+          service.onError(service, req, error);
+          return throwError(() => error);
+        })
+      )
+      .subscribe(
+        (res) => {
+          service.onResponse(service, req, res);
+        }
+      );
+  }
 
-  // }
 
-  // public reqJson(actionType: ActionType, contentType: ContentType, referance: string, payload: any): string {
+  private doSendRequest(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
 
-  //   var req = this.generateReqJson(actionType, contentType, referance, payload);
-  //   return JSON.stringify(req);
+    let req = this.generateReqJson(actionType, contentType, referance, payload);
+    let url = path ? this.environment.SERVER_BASE_URL + path : this.environment.SERVER_BASE_URL + "/jsonRequest"
 
-  // }
+    this.http.post(url, req)
+      .pipe(
+        catchError((error: any) => {
+          service.onError(service, req, error);
+          return throwError(() => error);
+        })
+      )
+      .subscribe(
+        (res) => {
+          service.onResponse(service, req, res);
+        }
+      );
+  }
 
-  // public storeLoginUser(loginUser: any) {
-  //   sessionStorage.setItem(Constants.APP_LOGIN_USER, JSON.stringify(loginUser))
-  // }
+  public post(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any) {
 
+    var req = this.generateReqJson(actionType, contentType, referance, payload);
+
+    // return this.http.post(this.environment.SERVER_BASE_URL, req)
+    //   .toPromise()
+    //   .then(res => {
+    //     return res;
+    //   })
+    //   .catch(res => {
+    //     service.onError(service, req, res);
+    //   });
+
+    return this.http.post(this.environment.SERVER_BASE_URL, req)
+      .pipe(
+        catchError((error: any) => {
+          service.onError(service, req, error);
+          return throwError(() => error);
+        })
+      )
+      .subscribe(
+        (res) => {
+          service.onResponse(service, req, res);
+        }
+      );
+  }
+
+
+  public execute(actionType: ActionType, contentType: ContentType, payload: any) {
+
+    var req = this.generateReqJson(actionType, contentType, '', payload);
+
+    return this.http.post(this.environment.SERVER_BASE_URL, req);
+
+  }
+
+  public executePublic(actionType: ActionType, contentType: ContentType, payload: any, path = null) {
+
+    var req = this.generateReqJson(actionType, contentType, '', payload);
+    var url = path ? this.environment.SERVER_BASE_URL_PUBLIC + path : this.environment.SERVER_BASE_URL_PUBLIC + "/jsonRequest"
+    return this.http.post(url, req);
+
+  }
+
+  public executeAdmin(actionType: ActionType, contentType: ContentType, payload: any, path = null) {
+    var req = this.generateReqJson(actionType, contentType, '', payload);
+    var url = path ? this.environment.SERVER_BASE_URL_ADMIN + path : this.environment.SERVER_BASE_URL_ADMIN + "/jsonRequest"
+    return this.http.post(url, req);
+  }
+
+
+  public generateReqJson(actionType: ActionType, contentType: ContentType, referance: string, payload: any) {
+
+    var loginUser = this.loadLoginUser();
+    var userId = null;
+    if (loginUser && loginUser.userId) {
+      userId = loginUser.userId;
+    }
+    var header = {
+      actionType: actionType.toString(),
+      contentType: contentType.toString(),
+      referance: referance,
+      userId: userId,
+      extraInfoMap: {
+        appName: this._config.config.app.constantAppName
+      }
+    };
+
+    var data = {
+      header: header,
+      payload: payload instanceof Object ? [payload] : payload
+    }
+    return data;
+  }
+
+  public reqJson(actionType: ActionType, contentType: ContentType, referance: string, payload: any): string {
+
+    var req = this.generateReqJson(actionType, contentType, referance, payload);
+    if (req) {
+      return JSON.stringify(req);
+    }
+    return '';
+
+  }
+
+  public storeLoginUser(loginUser: any) {
+    this.sessionStorage?.setItem(Constants.APP_LOGIN_USER, JSON.stringify(loginUser ?? {}))
+  }
+
+  getToken(): string{
+    return this.sessionStorage?.getItem('AUTH_TOKEN');
+  }
+  storeToken(res: any) {
+    this.sessionStorage?.setItem("AUTH_TOKEN", res?.token);
+    this.sessionStorage?.setItem("IS_AUTHENTICATED", res?.authenticated);
+  }
   public loadLoginUser(): any {
-    // var loginUser = sessionStorage.getItem(Constants.APP_LOGIN_USER)
-    // if (loginUser && loginUser != 'undefined') {
-    //   return JSON.parse(loginUser);
-    // }
-    // else {
-    //   return null;
-    // }
+    var loginUser = this.sessionStorage?.getItem(Constants.APP_LOGIN_USER)
+    if (loginUser && loginUser != 'undefined') {
+      const usr = JSON.parse(loginUser ? loginUser : '');
+      if (usr?.userId) {
+        return usr;
+      }
+      return null;
+    }
+    else {
+      return null;
+    }
+  }
 
+  isSameUser(creatorId) {
+    var loggged = this.loadLoginUser();
+    if (loggged.loginName == 'ithouse') {
+      return false;
+    }
+    return this.getUserId() == creatorId
+  }
+
+  forceAllow() {
+    return false;
+    var logg = this.loadLoginUser();
+    return logg.loginName == 'ithouse'
+  }
+
+  public getUserId(): Number {
+    var loginUser = this.loadLoginUser();
+    // console.log(loginUser);
+    if (loginUser && loginUser.userId) {
+      return loginUser.userId
+    }
     return null;
   }
 
-  // isSameUser(creatorId) {
-  //   var loggged = this.loadLoginUser();
-  //   if (loggged.loginName == 'softcafe') {
-  //     return false;
-  //   }
-  //   return this.getUserId() == creatorId
-  // }
+  isAuthenticated() {
+    var auth = this.sessionStorage?.getItem("IS_AUTHENTICATED");
 
-  // forceAllow() {
-  //   var logg = this.loadLoginUser();
-  //   return logg.loginName == 'softcafe'
-  // }
+    if (auth) {
+      return true;
+    }
 
-  // public getUserId(): Number {
-  //   var loginUser = this.loadLoginUser();
-  //   console.log(loginUser);
-  //   if (loginUser && loginUser.userId) {
-  //     return loginUser.userId
-  //   }
-  //   return null;
-  // }
+    return false;
+  }
 
-  // isAuthenticated() {
-  //   var auth = sessionStorage.getItem("IS_AUTHENTICATED");
+  public loadLoginUserRoleList() {
+    var loginUser = this.sessionStorage?.getItem(Constants.APP_LOGIN_USER);
+    if (loginUser) {
+      return JSON.parse(loginUser ? loginUser : '')?.roleList;
+    }
+    else {
+      return null;
+    }
+  }
 
-  //   if (auth) {
-  //     return (auth.toLowerCase() === 'true');
-  //   }
+  public logout(service: Service) {
+    if (this.isAuthenticated()) {
+      var loginUser = this.loadLoginUser();
+      var payload = {
+        userId: loginUser.userId
+      }
+      this.sendRequest(service, ActionType.LOGOUT, ContentType.User, 'logout', payload);
 
-  //   return false;
-  // }
+    this.removeUserInfo();
 
-  // public loadLoginUserRoleList() {
-  //   var loginUser = sessionStorage.getItem(Constants.APP_LOGIN_USER);
-  //   if (loginUser) {
-  //     return JSON.parse(loginUser).roleList;
-  //   }
-  //   else {
-  //     return null;
-  //   }
-  // }
+    }
+  }
 
-  // public logout(service: Service) {
-  //   //if logged in status
-  //   debugger
-  //   if (this.isAuthenticated()) {
-  //     var isLoggedIn = this.isLoggedIn();
-  //     var loginUser = this.loadLoginUser();
-  //     this.storeLoginUser({});
-  //     localStorage.removeItem('permission');
+  public removeUserInfo() {
+    this.storeLoginUser({});
+    this.localStorage?.removeItem('permission');
 
-  //     //loginUser = this.loadLoginUser();
-  //     var payload = {
-  //       userId: loginUser.userId,
-  //     }
-  //     this.sendRequestAdmin(service, ActionType.LOGOUT, ContentType.User, 'logout', payload);
-
-  //     // this.router.navigate(['/login'])
-  //   }
-  // }
-
-  // removeSession() {
-  //   sessionStorage.removeItem("IS_AUTHENTICATED");
-  //   sessionStorage.removeItem("AUTH_TOKEN");
-  //   sessionStorage.removeItem("APP_LOGIN_USER");
-  //   sessionStorage.clear();
-  // }
+    //loginUser = this.loadLoginUser();
+    this.sessionStorage?.removeItem("IS_AUTHENTICATED");
+    this.sessionStorage?.removeItem("AUTH_TOKEN");
+    this.sessionStorage?.removeItem(Constants.APP_LOGIN_USER);
+  }
 
 
-  // public isLoggedIn(): boolean {
-  //   return this.isAuthenticated()
-  // }
+  public isLoggedIn(): boolean {
+    return this.isAuthenticated()
+  }
 
-  // public hasAllRole(roleArray: AppRole[]): boolean {
-  //   if (!roleArray) {
-  //     return false;
-  //   }
-  //   var roles = this.loadLoginUserRoleList()
-  //   if (!roles) {
-  //     return false;
-  //   }
+  public hasAllRole(roleArray: AppRole[]): boolean {
+    if (!roleArray) {
+      return false;
+    }
+    var roles = this.loadLoginUserRoleList()
+    if (!roles) {
+      return false;
+    }
 
-  //   var roless = this.roleArray(roles)
-  //   return roleArray.every(x => roless.indexOf(x) > -1)
-  // }
-  // private roleArray(roles) {
-  //   var roleArray = [];
-  //   if (!roles) {
-  //     return roleArray;
-  //   }
+    var roless = this.roleArray(roles)
+    return roleArray.every(x => roless.indexOf(x) > -1)
+  }
+  private roleArray(roles) {
+    var roleArray = [];
+    if (!roles) {
+      return roleArray;
+    }
 
-  //   for (var i = 0; i < roles.length; i++) {
-  //     roleArray.push(roles[i].roleName);
-  //   }
-  //   return roleArray;
+    for (var i = 0; i < roles.length; i++) {
+      roleArray.push(roles[i].roleName);
+    }
+    return roleArray;
 
-  // }
-  // public hasAnyRole(roles: AppRole[]): boolean {
+  }
+  public hasAnyRole(roles: AppRole[]): boolean {
 
-  //   if (!roles) {
-  //     return false;
-  //   }
-  //   var loginUser = this.loadLoginUser();
-  //   var userRoles = loginUser.roleList;
-  //   var loginRoleArray = this.roleArray(userRoles);
-  //   if (!userRoles) {
-  //     return false;
-  //   }
-  //   return roles.some(r => loginRoleArray.indexOf(r) >= 0);
-  // }
+    if (!roles) {
+      return false;
+    }
+    var loginUser = this.loadLoginUser();
+    var userRoles = loginUser?.roleList;
+    var loginRoleArray = this.roleArray(userRoles);
+    if (!userRoles) {
+      return false;
+    }
+    return roles.some(r => loginRoleArray.indexOf(r) >= 0);
+  }
 
-  // public filePostBySecure(path: string, formData: FormData, header?: HttpHeaders): Observable<any> {
-
-  //   let headers = new HttpHeaders({
-  //     'Authorization': "Bearer "+ sessionStorage.getItem("AUTH_TOKEN"),
-  //     'UserId': this.getUserId() + '',
-  //   });
-
-  //   if (header) {
-  //     headers = header;
-  //   }
-
-  //   const request = {
-  //     reportProgress: true,
-  //     observe: 'events',
-  //     headers: headers,
-  //   };
+  public filePostBySecure(path: string, formData: FormData, fileType: FileType, action: FileAction = 'OTHERS', header?: HttpHeaders) {
 
 
-  //   return this.http.post(this.environment.SERVER_BASE_URL + path, formData, {
-  //     reportProgress: true,
-  //     observe: 'events',
-  //     headers: headers
-  //   });
-  // }
-
-  // public fileDownload(path: string, payload: any, header?: HttpHeaders): Observable<any> {
-
-  //   return this.http.request('POST', this.environment.SERVER_BASE_URL + path, {
-  //     body: payload,
-  //     headers: header,
-  //     observe: 'events',
-  //     reportProgress: true,
-  //     responseType: 'blob',
-  //   })
-  //     .pipe(
-  //       map((event) => this.mapProgress(event))
-  //     );
-
-  // }
-
-  // mapProgress(event: HttpEvent<any>): any {
-
-  //   switch (event.type) {
-  //     case HttpEventType.UploadProgress:
-  //       return {
-  //         progress: 10,
-  //         state: 'progress',
-  //       };
-  //     case HttpEventType.ResponseHeader:
-  //       return {
-  //         progress: 15,
-  //         state: 'progress',
-  //       };
-  //     case HttpEventType.DownloadProgress:
-  //       return {
-  //         progress: Math.round((event.loaded / (event.total || 1)) * 100),
-  //         state: 'progress',
-  //       };
-  //     case HttpEventType.Response:
-  //       return {
-  //         progress: 100,
-  //         state: 'completed',
-  //         file: event.body,
-  //         fileName: this.getFileName(event),
-  //       };
-  //     default:
-  //       return {
-  //         state: 'unknown'
-  //       };
-  //   }
-  // }
-  // getFileName(event: HttpResponse<any>) {
-  //   const contentDisposition = event?.headers?.get('Content-Disposition');
-  //   let fileName = '';
-
-  //   if (contentDisposition) {
-  //     const match = contentDisposition.match(/filename="?(.+)"?/);
-  //     if (match && match[1]) {
-  //       fileName = match[1];
-  //     }
-  //   }
-  //   return fileName;
-  // }
+    formData.append('fileType', fileType);
+    formData.append('action', action);
 
 
+    let headers = new HttpHeaders({
+      'Authorization': this.sessionStorage?.getItem("AUTH_TOKEN"),
+      'UserId': this.getUserId() + '',
+      responseType: 'arraybuffer',
+      // responseType: 'blob',
+      observe: 'response'
+    });
+    const url = `${this.environment.SERVER_BASE_URL}/${path}`;
 
+    // Create the HTTP request
+    const req = new HttpRequest('POST', url, formData, {
+      reportProgress: true,
+      responseType: 'arraybuffer', // ensure this is correctly typed
+      withCredentials: true,
+      headers: header || headers,
+    });
+
+    return this.http.request(req);
+  }
+
+  public fileDownload(path: string, payload: any, header?: HttpHeaders): Observable<Blob> {
+
+    let headers = new HttpHeaders({
+      'Authorization': this.sessionStorage?.getItem("AUTH_TOKEN"),
+      'UserId': this.getUserId() + '',
+      responseType: 'arraybuffer',
+      // responseType: 'blob',
+      observe: 'response'
+    });
+
+    if (header) {
+      headers = header;
+    }
+
+    return this.http.post(this.environment.SERVER_BASE_URL + path, payload, { headers: headers, responseType: 'blob' });
+  }
+  public check(path: string, payload: any, header?: HttpHeaders): Observable<any> {
+
+
+    return this.http.post(this.environment.SERVER_BASE_URL_PUBLIC + path, payload);
+  }
+
+  testSetSession(key: string, value: string) {
+    this.sessionStorage?.setItem(key, value);
+  }
 
 }
