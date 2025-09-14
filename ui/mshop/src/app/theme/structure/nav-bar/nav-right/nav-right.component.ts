@@ -4,13 +4,13 @@ import { Component, inject, Input, input, OnInit, signal } from '@angular/core';
 
 // bootstrap
 import { Router } from '@angular/router';
-import { NgbDropdown, NgbDropdownConfig, NgbModal, NgbModalOptions, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownConfig, NgbModal, NgbModalOptions, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from '../../../../services/common.service';
-import { Softcafe } from '../../../../services/common/Softcafe';
 import { Service } from '../../../../services/service';
 import { ChatUserListComponent } from "./chat-user-list/chat-user-list.component";
 import { ChatMsgComponent } from "./chat-msg/chat-msg.component";
 import { NgClass } from '@angular/common';
+import { Ithouse } from 'src/app/services/common/Ithouse';
 
 @Component({
 
@@ -30,7 +30,7 @@ import { NgClass } from '@angular/common';
   // ],
   imports: [ChatUserListComponent, ChatMsgComponent, NgClass, NgbModule]
 })
-export class NavRightComponent extends Softcafe implements OnInit, Service {
+export class NavRightComponent extends Ithouse implements OnInit, Service {
 
   protected cs = inject(CommonService);
   protected router = inject(Router);
