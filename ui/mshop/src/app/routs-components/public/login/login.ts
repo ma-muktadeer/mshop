@@ -136,6 +136,8 @@ export class Login extends Ithouse implements Service {
     }
   }
   onError(service: Service, req: any, res: any) {
+    this.loading.update(() => false);
+    alert('Server error. Please try again later.');
     throw new Error('Method not implemented.');
   }
 }

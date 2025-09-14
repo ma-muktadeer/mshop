@@ -55,5 +55,6 @@ export enum ContentType {
   Bank = "Bank",
   ProfitMargin = "ProfitMargin",
   PostApprovalDetails = "PostApprovalDetails",
+  Product = "Product",
 
 }
