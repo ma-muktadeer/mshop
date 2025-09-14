@@ -12,7 +12,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "ithouse",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
@@ -20,18 +20,39 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "polyfills": [
-              "@angular/localize/init"
-            ],
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
               },
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              },
+              "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/bootstrap/scss/bootstrap.scss",
+              "node_modules/@slickgrid-universal/common/dist/styles/sass/slickgrid-theme-bootstrap.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles.scss",
+                "bootstrap/scss/bootstrap"
+              ]
+            },
+            "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "angular-slickgrid",
+              "jquery-ui-dist/jquery-ui",
+              "sweetalert2",
+              "file-saver"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
@@ -93,10 +114,22 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.css"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles.scss"
+              ]
+            },
+            "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           }
         }
@@ -104,6 +137,6 @@
     }
   },
   "cli": {
-    "analytics": "098375cc-1915-4924-a699-4053f04c1444"
+    "analytics": "832984a0-c416-4300-8916-22f1a43c5b34"
   }
 }
