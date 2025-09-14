@@ -1,0 +1,10 @@
+<div class="container-fluid" style="margin-top: 10px">
+  <div class="row">
+    <app-ithouse-grid-body #commonGrid (onFilterChanged)="filterChanged($event)" [contextMenu]="contextMenu"
+      (onPaginationChanged)="paginationChanged($event)" (onSortChanged)="sortChanged($event)" [gridDataValue]="gridDataValue">
+    </app-ithouse-grid-body>
+    <div class="col-sm-12">
+      <app-ithouse-grid-pagination #commonGridPag></app-ithouse-grid-pagination>
+    </div>
+  </div>
+</div>

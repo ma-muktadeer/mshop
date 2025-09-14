@@ -1,0 +1,8 @@
+@if (showGrid()) {
+<div class="card pb-2">
+  <app-ithouse-grid [columnDefinitions]="colDef" [datasetObs]="dataset" [enableContextMenu]="true"
+    [contextMenu]="contextMenu" (onPaginationChanged)="paginationChanged($event)" [enablePagination]="true"
+    [customPagination]="{pageSizes: [1, 10, 20, 50, 100, 500], pageSize: pageSize}">
+  </app-ithouse-grid>
+</div>
+}
