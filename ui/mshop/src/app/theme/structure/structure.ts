@@ -1,66 +1,67 @@
+import { Component, HostListener, Inject, inject, PLATFORM_ID } from '@angular/core';
+import { RouterModule } from "@angular/router";
 import { isPlatformBrowser, NgClass } from '@angular/common';
-import { Component, HostListener, Inject, PLATFORM_ID, signal } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { Breadcrumb } from "../breadcrumb/breadcrumb";
-import { NavBarModule } from "./nav-bar/nav-bar.module";
-import { NavigationModule } from './navigation/navigation.module';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { BreadcrumbComponent } from '../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-structure',
-  imports: [RouterModule, Breadcrumb, NgClass, NavBarModule, NavigationModule],
+  imports: [NavBarComponent, BreadcrumbComponent, RouterModule, NgClass],
   templateUrl: './structure.html',
   styleUrl: './structure.scss'
 })
 export class Structure {
-  navCollapsed = signal<boolean>(false);
-  navCollapsedMob = signal<boolean>(null);
-  windowWidth: number = 900;
+ // public props
+ navCollapsed!: boolean;
+ navCollapsedMob: boolean;
+  windowWidth: number;
+  document: any;
 
-  // constructor
-  constructor(@Inject(PLATFORM_ID) private paltfromId: Object) {
-    if (isPlatformBrowser(paltfromId)) {
-      this.windowWidth = window.innerWidth;
-    }
-    this.navCollapsedMob.set(false);
-  }
-  navSetCollapsed() {
-    this.navCollapsed.update((value) => !value);
-  }
-  @HostListener('window:resize', ['$event'])
-  // eslint-disable-next-line
-  onResize(event: any): void {
-    this.windowWidth = event.target.innerWidth;
-    if (this.windowWidth < 992) {
-      document.querySelector('.pcoded-navbar')?.classList.add('menupos-static');
-      if (document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.contains('navbar-collapsed')) {
-        document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.remove('navbar-collapsed');
-      }
-    }
-  }
+ // constructor
+  constructor(@Inject(PLATFORM_ID) private platformId: any) {
+   if (isPlatformBrowser(this.platformId)) {
+     this.windowWidth = window.innerWidth;
+     this.document = document;
+   }
+   this.navCollapsedMob = false;
+ }
 
-  // public method
-  navMobClick() {
-    if (this.windowWidth < 992) {
-      if (this.navCollapsedMob() && !document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
-        this.navCollapsedMob.update(() => !this.navCollapsedMob());
-        setTimeout(() => {
-          this.navCollapsedMob.update(() => !this.navCollapsedMob());
-        }, 100);
-      } else {
-        this.navCollapsedMob.update(() => !this.navCollapsedMob());
-      }
-    }
-  }
+ @HostListener('window:resize', ['$event'])
+ // eslint-disable-next-line
+ onResize(event: any): void {
+   this.windowWidth = event.target.innerWidth;
+   if (this.windowWidth < 992) {
+     this.document.querySelector('.pcoded-navbar')?.classList.add('menupos-static');
+     if (this.document.querySelector('app-navigation.pcoded-navbar')?.classList.contains('navbar-collapsed')) {
+       this.document.querySelector('app-navigation.pcoded-navbar')?.classList.remove('navbar-collapsed');
+     }
+   }
+ }
 
-  handleKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Escape') {
-      this.closeMenu();
-    }
-  }
+ // public method
+ navMobClick() {
+   if (this.windowWidth < 992) {
+     if (this.navCollapsedMob && !document.querySelector('app-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
+       this.navCollapsedMob = !this.navCollapsedMob;
+       setTimeout(() => {
+         this.navCollapsedMob = !this.navCollapsedMob;
+       }, 100);
+     } else {
+       this.navCollapsedMob = !this.navCollapsedMob;
+     }
+   }
+ }
 
-  closeMenu() {
-    if (document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
-      document.querySelector('ithouse-navigation.pcoded-navbar')?.classList.remove('mob-open');
-    }
-  }
+ handleKeyDown(event: KeyboardEvent): void {
+   if (event.key === 'Escape') {
+     this.closeMenu();
+   }
+ }
+
+ closeMenu() {
+   if (document.querySelector('app-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
+     document.querySelector('app-navigation.pcoded-navbar')?.classList.remove('mob-open');
+   }
+ }
+
 }
