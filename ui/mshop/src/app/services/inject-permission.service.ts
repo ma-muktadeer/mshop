@@ -22,6 +22,7 @@ export class InjectPermissionService {
   }
 
   isAuthUrl(url: string): boolean {
+    debugger
     if(this.urlPermission && this.urlPermission == 'DEFAULT'){
       return true;
     }

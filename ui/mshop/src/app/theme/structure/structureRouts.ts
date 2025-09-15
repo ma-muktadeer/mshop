@@ -13,7 +13,7 @@ export const structureRouts: Routes = [
   {
     path: 'home',
     loadComponent: () => Dashbord,
-    canActivate: [securiedGuard]
+    // canActivate: [securiedGuard]
   },
   {
     path: 'user',

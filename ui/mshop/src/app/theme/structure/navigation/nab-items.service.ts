@@ -27,6 +27,7 @@ export class NabItemsService {
   }
 
   findNabItems = (items, url): NavigationItem[] => {
+    debugger
     for (const item of items) {
 
       if (item.url === url) {

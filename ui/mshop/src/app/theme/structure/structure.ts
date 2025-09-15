@@ -3,13 +3,15 @@ import { RouterModule } from "@angular/router";
 import { isPlatformBrowser, NgClass } from '@angular/common';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { BreadcrumbComponent } from '../shared/components/breadcrumb/breadcrumb.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 @Component({
   selector: 'app-structure',
-  imports: [NavBarComponent, BreadcrumbComponent, RouterModule, NgClass],
+  imports: [NavBarComponent, BreadcrumbComponent, RouterModule, NgClass, NavigationComponent],
   templateUrl: './structure.html',
   styleUrl: './structure.scss'
 })
+
 export class Structure {
  // public props
  navCollapsed!: boolean;
