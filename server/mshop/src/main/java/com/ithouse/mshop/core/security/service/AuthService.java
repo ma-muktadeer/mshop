@@ -27,7 +27,8 @@ public class AuthService {
 
     public Authentication authenticate(String username, String password) {
         try {
-            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            Authentication auth = new UsernamePasswordAuthenticationToken(username, password);
+            return authenticationManager.authenticate(auth);
         }catch (BadCredentialsException e) {
             log.info("Username or password is incorrect");
             throw new BadCredentialsException("Invalid username or password");
@@ -37,10 +38,6 @@ public class AuthService {
 
     public AccessTokenResponse authenticateAndCreateToken(UserPrincipal userPrincipal) throws NoSuchAlgorithmException {
 
-//        Authentication authentication = authenticate(userPrincipal.getUsername(), userPrincipal.getPassword());
-//        if (authentication.isAuthenticated()) {
-//            return jwtTokenProvider.createToken(authentication);
-//        }
         return jwtTokenProvider.createToken(userPrincipal);
     }
 

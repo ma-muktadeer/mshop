@@ -12,6 +12,7 @@ import com.ihouse.core.message.interfaces.Message;
 import com.ihouse.core.message.service.IthouseService;
 import com.ithouse.mshop.core.principal.UserPrincipal;
 import com.ithouse.mshop.core.principal.UserPrincipalService;
+import com.ithouse.mshop.core.security.service.AuthService;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,16 +46,16 @@ public class UserService extends IthouseService<List<User>> {
     private final UserRepo userRepo;
     private final LoginRepo loginRepo;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager manager;
+    private final AuthService authService;
     private final UserPrincipalService userPrincipalService;
     private final RoleService roleService;
 
 
-    public UserService(UserRepo userRepo, LoginRepo loginRepo, PasswordEncoder passwordEncoder, AuthenticationManager manager, UserPrincipalService userPrincipalService, RoleService roleService) {
+    public UserService(UserRepo userRepo, LoginRepo loginRepo, PasswordEncoder passwordEncoder, AuthService authService, UserPrincipalService userPrincipalService, RoleService roleService) {
         this.userRepo = userRepo;
         this.loginRepo = loginRepo;
         this.passwordEncoder = passwordEncoder;
-        this.manager = manager;
+        this.authService = authService;
         this.userPrincipalService = userPrincipalService;
         this.roleService = roleService;
     }
@@ -325,13 +327,7 @@ public class UserService extends IthouseService<List<User>> {
     // }
 
     public void doAuthenticate(User user) {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getLoginName(),
-                user.getPassword());
-        try {
-            manager.authenticate(auth);
-        } catch (Exception e) {
-            throw new BadCredentialsException("Invalid user name or password");
-        }
+        authService.authenticate(user.getLoginName(),  user.getPassword());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
