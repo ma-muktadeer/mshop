@@ -6,14 +6,14 @@
 @use '../node_modules/bootstrap/scss/bootstrap' as *;
 // Import Bootstrap's SCSS variables, mixins, etc.
 
-
-// Theme Font
-@import 'scss/themes/font/theme-font';
-
 @import 'scss/settings/custom-variables';
 @import 'scss/settings/theme-variables';
 
 @import 'scss/themes/general';
+// Theme Font
+@import 'scss/themes/font/theme-font';
+
+
 @import 'scss/themes/generic';
 @import 'scss/themes/minixs/function';
 

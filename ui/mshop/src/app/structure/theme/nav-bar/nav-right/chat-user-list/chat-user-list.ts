@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { FriendsList } from 'src/app/fack-db/friends-list';
 
 @Component({
   selector: 'app-chat-user-list',
@@ -11,7 +12,7 @@ export class ChatUserList {
   @Output() ChatToggle = new EventEmitter();
   searchFriends!: string;
   // eslint-disable-next-line
-  // friendsList: any = FriendsList.friends;
+  friendsList: any = FriendsList.friends;
 
   // public method
   ChatOn() {

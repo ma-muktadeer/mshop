@@ -121,20 +121,6 @@
   </li>
 </ul>
 
-
-@if (visibleUserList) {
-<section class="header-user-list" [ngClass]="{ open: visibleUserList }" >
-  <app-chat-user-list (ChatToggle)="onChatToggle($event)"
-    (ChatCollapse)="this.visibleUserList = !this.visibleUserList; this.chatMessage = false"></app-chat-user-list>
-</section>
-}
-
-@if (chatMessage) {
-<section class="header-chat" [ngClass]="{ open: chatMessage }" animate.enter="slideInOutLeft-in" animate.leave="slideInOutLeft-out">
-  <app-chat-msg (ChatToggle)="this.chatMessage = !this.chatMessage" [friendId]="friendId"></app-chat-msg>
-</section>
-}
-
 @if (visibleUserList) {
 <section class="header-user-list" [ngClass]="{ open: visibleUserList }"
 animate.enter="slideInOutRight-in" animate.leave="slideInOutRight-out">
