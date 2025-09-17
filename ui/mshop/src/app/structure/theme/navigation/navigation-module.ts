@@ -5,7 +5,7 @@ import { NavContent } from './nav-content/nav-content';
 import { NavCollapse } from './nav-content/nav-collapse/nav-collapse';
 import { NavGroup } from './nav-content/nav-group/nav-group';
 import { NavItem } from './nav-content/nav-item/nav-item';
-import { NgScrollbar, NgScrollbarModule } from 'ngx-scrollbar';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
