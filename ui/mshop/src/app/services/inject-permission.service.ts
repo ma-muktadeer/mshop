@@ -1,7 +1,7 @@
 import { Injectable, Input } from '@angular/core';
 import { AppPermission, PermissioinStoreService } from './permissioin-store.service';
-import { NavigationItems } from '../theme/structure/navigation/navigation';
-import { NabItemsService } from '../theme/structure/navigation/nab-items.service';
+import { NabItemsService } from '../structure/theme/navigation/nab-items.service';
+import { NavigationItems } from '../structure/theme/navigation/navigation-items';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,6 @@ export class InjectPermissionService {
 
   @Input()
   public isNabBar: boolean = false;
-
 
   constructor(private permissionService: PermissioinStoreService, private nabItemService: NabItemsService) { }
 

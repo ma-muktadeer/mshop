@@ -44,9 +44,9 @@ export class PermissioinStoreService {
     permissioin: Array<AppPermission>,
     p?: { status: any; matchStatus: Status[] }
   ) {
-    // if (this.cs.forceAllow() || !permissioin) {
-    //   return true;
-    // }
+    if (this.cs.forceAllow() || !permissioin) {
+      return true;
+    }
     if (p && p.status && p.matchStatus && p.matchStatus.length > 0) {
       if (!this.checkStatus(p)) {
         return false;

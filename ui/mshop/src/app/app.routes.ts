@@ -1,10 +1,9 @@
 import { Routes } from '@angular/router';
-import { Structure } from './theme/structure/structure';
-import { Check } from './routs-components/public/check/check';
 import { Login } from './routs-components/public/login/login';
 import { loginGuard } from './routs-components/public/login/login.guard';
 import { layoutGuard } from './ithouse/guard/layout.guard';
-import { structureRouts } from './theme/structure/structureRouts';
+import { Structure } from './structure/structure';
+import { structureRouts } from './structure/structureRouts';
 
 export const routes: Routes = [
 

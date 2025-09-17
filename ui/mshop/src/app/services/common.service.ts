@@ -11,7 +11,6 @@ import { Service } from './service';
 import { ContentType } from './common/constants/content-type.enum';
 import { FileAction, FileType } from './file.service';
 import { isPlatformBrowser } from '@angular/common';
-import { Router } from 'express';
 
 @Injectable({
   providedIn: 'root'
@@ -257,9 +256,8 @@ export class CommonService {
   }
 
   forceAllow() {
-    return false;
     var logg = this.loadLoginUser();
-    return logg.loginName == 'ithouse'
+    return logg.loginName == 'ithousebd' || logg.loginName == 'ithouse';
   }
 
   public getUserId(): Number {

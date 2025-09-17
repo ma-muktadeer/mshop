@@ -8,7 +8,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { CommonService } from './services/common.service';
 import { globalInterceptor } from '../global.interceptor';
 import { ConfigService, initializeApplication } from '../config.service';
-import { ToggleFullScreenDirective } from './theme/shared/components/full-screen/toggle-full-screen';
+import { ToggleFullScreenDirective } from './structure/shared/full-screen/toggle-full-screen';
 
 export const appConfig: ApplicationConfig = {
   providers: [
