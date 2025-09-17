@@ -3,14 +3,11 @@ import { NgbDropdownConfig, NgbModal, NgbModalOptions, NgbModalRef } from '@ng-b
 import { CommonService } from 'src/app/services/common.service';
 import { Ithouse } from 'src/app/services/common/Ithouse';
 import { Service } from 'src/app/services/service';
-import { ChatUserList } from "./chat-user-list/chat-user-list";
-import { ChatMsg } from "./chat-msg/chat-msg";
-import { NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-right',
-  imports: [ChatUserList, ChatMsg, NgClass],
+  standalone: false,
   templateUrl: './nav-right.html',
   styleUrl: './nav-right.scss',
   providers: [NgbDropdownConfig],
@@ -38,7 +35,7 @@ export class NavRight extends Ithouse implements OnInit, Service {
   }
 
   ngOnInit(): void {
-      this.user = this.cs.loadLoginUser();
+    this.user = this.cs.loadLoginUser();
   }
 
   openProfile() {
@@ -48,7 +45,7 @@ export class NavRight extends Ithouse implements OnInit, Service {
       backdrop: 'static',
       keyboard: true
     };
-   const currentUser = this.cs.loadLoginUser();
+    const currentUser = this.cs.loadLoginUser();
 
     // this.updateDialog = this.modalService.open(ProfileComponent, modalOptions);
     // this.updateDialog.componentInstance.isPopup = true;
@@ -64,7 +61,6 @@ export class NavRight extends Ithouse implements OnInit, Service {
     this.friendId = friendID;
     this.chatMessage = !this.chatMessage;
   }
-
 
   logout() {
     // this.cs.logout(this);

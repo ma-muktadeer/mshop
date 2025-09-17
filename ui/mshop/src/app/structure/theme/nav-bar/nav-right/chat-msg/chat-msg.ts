@@ -1,11 +1,8 @@
-import { NgClass } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgScrollbar } from 'ngx-scrollbar';
 
 @Component({
   selector: 'app-chat-msg',
-  imports: [NgClass, FormsModule, NgScrollbar],
+  standalone: false,
   templateUrl: './chat-msg.html',
   styleUrl: './chat-msg.scss'
 })

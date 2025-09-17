@@ -3,14 +3,13 @@ import { ToggleFullScreenDirective } from 'src/app/structure/shared/full-screen/
 
 @Component({
   selector: 'app-nav-left',
-  imports: [],
+  standalone: false,
   templateUrl: './nav-left.html',
   styleUrl: './nav-left.scss'
 })
 export class NavLeft {
   private tgl = inject(ToggleFullScreenDirective);
   click2FullScreen() {
-    debugger
     this.tgl.onClick();
   }
 }

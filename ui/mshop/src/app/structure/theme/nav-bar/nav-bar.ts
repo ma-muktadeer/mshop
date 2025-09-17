@@ -1,13 +1,10 @@
-import { isPlatformBrowser, NgClass } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { Component, EventEmitter, HostListener, Inject, Output, PLATFORM_ID } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { NavRight } from "./nav-right/nav-right";
-import { NavLeft } from "./nav-left/nav-left";
 
 @Component({
   selector: 'app-nav-bar',
-  imports: [RouterLink, NgClass, NavRight, NavLeft],
+  standalone: false,
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.scss'
 })

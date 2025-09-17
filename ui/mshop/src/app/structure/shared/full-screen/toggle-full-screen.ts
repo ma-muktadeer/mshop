@@ -20,7 +20,6 @@ export class ToggleFullScreenDirective {
   onClick() {
     if (!this.isBrowser) return;
     if (!screenfull.isEnabled) return;
-debugger
     if (screenfull.isEnabled) {
       const feather = this.elements.nativeElement.querySelector('.feather');
       if (feather) {

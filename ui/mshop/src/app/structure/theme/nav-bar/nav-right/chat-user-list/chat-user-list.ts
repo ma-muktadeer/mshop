@@ -1,10 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgScrollbar } from 'ngx-scrollbar';
 
 @Component({
   selector: 'app-chat-user-list',
-  imports: [NgScrollbar, FormsModule],
+  standalone: false,
   templateUrl: './chat-user-list.html',
   styleUrl: './chat-user-list.scss'
 })

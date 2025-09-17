@@ -1,4 +1,3 @@
-import { NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 interface friendsList {
@@ -12,7 +11,7 @@ interface friendsList {
 
 @Component({
   selector: 'app-friend',
-  imports: [NgClass],
+  standalone: false,
   templateUrl: './friend.html',
   styleUrl: './friend.scss'
 })
