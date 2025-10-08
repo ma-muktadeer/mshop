@@ -4,10 +4,11 @@ import { Breadcrumb } from "./shared/components/breadcrumb/breadcrumb";
 import { RouterOutlet } from '@angular/router';
 import { NavigationModule } from './theme/navigation/navigation-module';
 import { NavBarModule } from './theme/nav-bar/nav-bar-module';
+import { ContainerComponent } from "@coreui/angular";
 
 @Component({
   selector: 'app-structure',
-  imports: [Breadcrumb, RouterOutlet, NavigationModule, NgClass, NavBarModule],
+  imports: [Breadcrumb, RouterOutlet, NavigationModule, NgClass, NavBarModule, ContainerComponent],
   templateUrl: './structure.html',
   styleUrl: './structure.scss'
 })

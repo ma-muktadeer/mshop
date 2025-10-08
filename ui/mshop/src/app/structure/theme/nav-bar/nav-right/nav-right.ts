@@ -1,9 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgbDropdownConfig, NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from 'src/app/services/common.service';
 import { Ithouse } from 'src/app/services/common/Ithouse';
 import { Service } from 'src/app/services/service';
 import { Router } from '@angular/router';
+import { ColorModeService } from '@coreui/angular';
 
 @Component({
   selector: 'app-nav-right',
@@ -25,7 +26,21 @@ export class NavRight extends Ithouse implements OnInit, Service {
   updateDialog: NgbModalRef | null = null;
   userList: Array<any> = [];
   total: number;
-  // constructor
+
+  readonly #colorModeService = inject(ColorModeService);
+  readonly colorMode = this.#colorModeService.colorMode;
+
+  readonly colorModes = [
+    { name: 'light', text: 'Light', icon: 'cilSun' },
+    { name: 'dark', text: 'Dark', icon: 'cilMoon' },
+    { name: 'auto', text: 'Auto', icon: 'cilContrast' }
+  ];
+
+  readonly icons = computed(() => {
+    const currentMode = this.colorMode();
+    return this.colorModes.find(mode => mode.name === currentMode)?.icon ?? 'cilSun';
+  });
+
   constructor(
     private modalService: NgbModal
   ) {
@@ -36,6 +51,10 @@ export class NavRight extends Ithouse implements OnInit, Service {
 
   ngOnInit(): void {
     this.user = this.cs.loadLoginUser();
+    console.log('color mode', this.colorMode());
+
+    this.#colorModeService.colorMode.set('light');
+
   }
 
   openProfile() {

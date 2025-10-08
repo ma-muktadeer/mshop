@@ -80,7 +80,21 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": {
+                "styles": {
+                  "inlineCritical": true,
+                  "minify": true
+                },
+                "scripts": true,
+                "fonts": {
+                  "inline": true
+                }
+              },
+              "sourceMap": false,
+              "extractLicenses": true,
+              "namedChunks": false,
+              "prerender":true
             },
             "development": {
               "optimization": false,
@@ -98,6 +112,9 @@
             },
             "development": {
               "buildTarget": "mshop:build:development"
+            },
+            "options":{
+              "inspect": false
             }
           },
           "defaultConfiguration": "development"
