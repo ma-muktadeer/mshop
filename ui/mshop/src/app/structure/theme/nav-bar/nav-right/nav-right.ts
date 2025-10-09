@@ -25,7 +25,7 @@ export class NavRight extends Ithouse implements OnInit, Service {
   updateDialog: NgbModalRef | null = null;
   userList: Array<any> = [];
   total: number;
-  // constructor
+
   constructor(
     private modalService: NgbModal
   ) {
@@ -63,15 +63,15 @@ export class NavRight extends Ithouse implements OnInit, Service {
   }
 
   logout() {
-    // this.cs.logout(this);
+    this.cs.logout(this);
   }
 
   onResponse(service: Service, req: any, res: any) {
     debugger
-    // if(!super.isOK(res)){
-    //   alert(super.getErrorMsg(res));
-    //   return;
-    // }
+    if(!super.isOK(res)){
+      alert(super.getErrorMsg(res));
+      return;
+    }
     if (res.header.referance === 'logout') {
       this.router.navigate(['/login']);
     }
