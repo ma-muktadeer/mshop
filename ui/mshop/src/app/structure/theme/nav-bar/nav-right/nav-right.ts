@@ -73,6 +73,7 @@ export class NavRight extends Ithouse implements OnInit, Service {
       return;
     }
     if (res.header.referance === 'logout') {
+      this.cs.removeUserInfo();
       this.router.navigate(['/login']);
     }
 

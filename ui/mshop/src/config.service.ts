@@ -8,7 +8,6 @@ import { isPlatformBrowser } from "@angular/common";
   providedIn: 'root'
 })
 export class ConfigService {
-
   config: any;
 
   browserName;
@@ -35,7 +34,9 @@ export class ConfigService {
     }
   }
 
-
+  get appName(): string{
+    return this.config.app.constantAppName
+  }
   get baseUrl(): string {
     return this.config.baseUrl;
   }

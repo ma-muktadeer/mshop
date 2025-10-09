@@ -15,7 +15,7 @@ export class App {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit(): void {
-    debugger
+
     if (isPlatformBrowser(this.platformId)) {
       const loader = document.getElementById('loading');
       if (loader) loader.remove();

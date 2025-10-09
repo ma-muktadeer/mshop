@@ -1,21 +1,21 @@
 {
-    "app": {
-        "name": "Soft RBS",
-        "version": "1.0.0",
-        "desc": "Softcafe initial app",
-        "loginRequired": true,
-        "constantAppName": "M-SHOP"
-    },
-    "env.local": {
-        "SERVER_URL": "http://127.0.0.1:8081",
-        "SERVER_BASE_URL": "http://127.0.0.1:8081/secure",
-        "SERVER_BASE_URL_PUBLIC": "http://127.0.0.1:8081/public",
-        "SERVER_BASE_URL_ADMIN": "http://127.0.0.1:8081/secure"
-    },
-    "env.prod": {
-        "SERVER_URL": "http://172.25.204.232:8080/rbs-server",
-        "SERVER_BASE_URL": "http://172.25.204.232:8080/rbs-server/secure",
-        "SERVER_BASE_URL_PUBLIC": "http://172.25.204.232:8080/rbs-server/public",
-        "SERVER_BASE_URL_ADMIN": "http://172.25.204.232:8080/rbs-server/secure"
-    }
+  "app": {
+    "name": "MSHOP",
+    "version": "1.0.0",
+    "desc": "IT-House initial app",
+    "loginRequired": true,
+    "constantAppName": "M-SHOP"
+  },
+  "env.local": {
+    "SERVER_URL": "http://127.0.0.1:8081",
+    "SERVER_BASE_URL": "http://127.0.0.1:8081/secure",
+    "SERVER_BASE_URL_PUBLIC": "http://127.0.0.1:8081/public",
+    "SERVER_BASE_URL_ADMIN": "http://127.0.0.1:8081/secure"
+  },
+  "env.prod": {
+    "SERVER_URL": "http://172.25.204.232:8080/rbs-server",
+    "SERVER_BASE_URL": "http://172.25.204.232:8080/rbs-server/secure",
+    "SERVER_BASE_URL_PUBLIC": "http://172.25.204.232:8080/rbs-server/public",
+    "SERVER_BASE_URL_ADMIN": "http://172.25.204.232:8080/rbs-server/secure"
+  }
 }

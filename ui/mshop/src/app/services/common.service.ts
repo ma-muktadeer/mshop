@@ -297,7 +297,7 @@ export class CommonService {
       }
       this.sendRequest(service, ActionType.LOGOUT, ContentType.User, 'logout', payload);
 
-    this.removeUserInfo();
+    // this.removeUserInfo();
 
     }
   }

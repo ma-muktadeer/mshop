@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,7 @@ import { ContentType } from 'src/app/services/common/constants/content-type.enum
 import { Ithouse } from 'src/app/services/common/Ithouse';
 import { Service } from 'src/app/services/service';
 import { AlertService } from 'src/app/services/alert.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'ithouse-login',
@@ -17,6 +18,7 @@ import { AlertService } from 'src/app/services/alert.service';
 })
 export class Login extends Ithouse implements Service {
   protected cs = inject(CommonService);
+  protected _destroyRef = inject(DestroyRef);
   private alert = inject(AlertService);
 
   isSignDivVisiable: boolean = false;
@@ -35,8 +37,9 @@ export class Login extends Ithouse implements Service {
   }
 
   ngOnInit() {
-    debugger
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(params => {
       this.sessionExpired = params['sessionExpired'] === 'true';
     });
     if (this.sessionExpired) {
@@ -63,7 +66,6 @@ export class Login extends Ithouse implements Service {
   }
 
   onLogin() {
-    debugger;
     if (this.loading()) {
       return;
     }

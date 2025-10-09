@@ -42,7 +42,7 @@ export class NavContent {
 
   buildNavigation() {
     // this.navigations.set();
-    debugger
+
     const navs = this.nabItemService.buildNabItems(NavigationItems);
     this.navigations.update(() => navs);
   }
