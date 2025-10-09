@@ -44,7 +44,7 @@ export class Breadcrumb {
         }
         this.navigationList = breadcrumbList;
         const title = breadcrumbList[breadcrumbList.length - 1]?.title || 'Welcome';
-        this.titleService.setTitle(title + ' | Soft-RBS');
+        this.titleService.setTitle(title + ' | M-SHOP');
       }
     });
   }
