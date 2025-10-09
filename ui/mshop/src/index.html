@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Mshop</title>
@@ -7,7 +8,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
+
 <body>
-  <app-root></app-root>
+  <div id="loading" class="fade show" style="
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100vw;
+         height: 100vh;
+         background-color: white;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         z-index: 9999;
+       ">
+    <i class="spinner-grow spinner-grow-sm"></i>
+    <span class="m-1">Loading...</span>
+  </div>
+  <app-root>
+  </app-root>
 </body>
+
 </html>

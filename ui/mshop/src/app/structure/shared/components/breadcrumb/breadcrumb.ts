@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Event, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { NavigationItem, NavigationItems } from 'src/app/structure/theme/navigation/navigation-items';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 
 interface titleType {
   // eslint-disable-next-line
@@ -19,6 +21,8 @@ interface titleType {
   styleUrl: './breadcrumb.scss'
 })
 export class Breadcrumb {
+  readonly destroyRef = inject(DestroyRef);
+
   @Input() type!: string;
 
   navigations: NavigationItem[];
@@ -35,18 +39,20 @@ export class Breadcrumb {
   }
   // public method
   setBreadcrumb() {
-    this.route.events.subscribe((router: Event) => {
-      if (router instanceof NavigationEnd) {
-        const activeLink = router.url;
-        let breadcrumbList = this.filterNavigation(this.navigations, activeLink);
-        if (!breadcrumbList.length) {
-          breadcrumbList = this.buildBreadcrumbList(activeLink);
+    this.route.events
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((router: Event) => {
+        if (router instanceof NavigationEnd) {
+          const activeLink = router.url;
+          let breadcrumbList = this.filterNavigation(this.navigations, activeLink);
+          if (!breadcrumbList.length) {
+            breadcrumbList = this.buildBreadcrumbList(activeLink);
+          }
+          this.navigationList = breadcrumbList;
+          const title = breadcrumbList[breadcrumbList.length - 1]?.title || 'Welcome';
+          this.titleService.setTitle(title + ' | M-SHOP');
         }
-        this.navigationList = breadcrumbList;
-        const title = breadcrumbList[breadcrumbList.length - 1]?.title || 'Welcome';
-        this.titleService.setTitle(title + ' | M-SHOP');
-      }
-    });
+      });
   }
 
   buildBreadcrumbList(activeLink: string): titleType[] {
