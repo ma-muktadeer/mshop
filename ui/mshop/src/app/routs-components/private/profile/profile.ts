@@ -11,11 +11,12 @@ import { Service } from 'src/app/services/service';
 import Swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
 import { EditProfile } from './edit-profile/edit-profile';
+import { Spinner } from "src/app/structure/shared/components/spinner/spinner";
 
 
 @Component({
   selector: 'app-profile',
-  imports: [],
+  imports: [Spinner],
   templateUrl: './profile.html',
   styleUrl: './profile.scss'
 })

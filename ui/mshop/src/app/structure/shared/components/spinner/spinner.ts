@@ -3,7 +3,7 @@ import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Rout
 import { Spinkit } from './spinkits';
 
 @Component({
-  selector: 'app-spinner',
+  selector: 'ithouse-spinner',
   imports: [],
   templateUrl: './spinner.html',
   styleUrl: './spinner.scss',
