@@ -4,6 +4,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { Ithouse } from 'src/app/services/common/Ithouse';
 import { Service } from 'src/app/services/service';
 import { Router } from '@angular/router';
+import { Profile } from 'src/app/routs-components/private/profile/profile';
 
 @Component({
   selector: 'app-nav-right',
@@ -47,12 +48,12 @@ export class NavRight extends Ithouse implements OnInit, Service {
     };
     const currentUser = this.cs.loadLoginUser();
 
-    // this.updateDialog = this.modalService.open(ProfileComponent, modalOptions);
-    // this.updateDialog.componentInstance.isPopup = true;
-    // this.updateDialog.componentInstance.isViewMode = false;
-    // this.updateDialog.componentInstance.isUpdate = true;
-    // this.updateDialog.componentInstance.userId = currentUser.userId;
-    // this.updateDialog.componentInstance.currentUser = currentUser;
+    this.updateDialog = this.modalService.open(Profile, modalOptions);
+    this.updateDialog.componentInstance.isPopup = true;
+    this.updateDialog.componentInstance.isViewMode = false;
+    this.updateDialog.componentInstance.isUpdate = true;
+    this.updateDialog.componentInstance.userId = currentUser.userId;
+    this.updateDialog.componentInstance.currentUser = currentUser;
 
 
   }

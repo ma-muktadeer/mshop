@@ -3,6 +3,7 @@ import { securiedGuard } from 'src/app/ithouse/guard/securied.guard';
 import { Dashbord } from 'src/app/routs-components/private/dashbord/dashbord';
 import { User } from 'src/app/routs-components/private/user/user';
 import { PageNotFound } from "src/app/routs-components/public/page-not-found/page-not-found";
+import { Profile } from '../routs-components/private/profile/profile';
 
 export const structureRouts: Routes = [
   {
@@ -20,6 +21,8 @@ export const structureRouts: Routes = [
     loadComponent: () => User,
     pathMatch: 'full'
   },
+  { path: 'profile', loadComponent: () => Profile, pathMatch: 'full' },
+
   {
     path: 'page-not-found',
     loadComponent: () => PageNotFound,

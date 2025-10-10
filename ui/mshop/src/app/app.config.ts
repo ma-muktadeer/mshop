@@ -9,6 +9,7 @@ import { CommonService } from './services/common.service';
 import { globalInterceptor } from '../global.interceptor';
 import { ConfigService, initializeApplication } from '../config.service';
 import { ToggleFullScreenDirective } from './structure/shared/full-screen/toggle-full-screen';
+import { DatePipe } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +25,7 @@ export const appConfig: ApplicationConfig = {
     // },
     ToggleFullScreenDirective,
     CommonService,
+    DatePipe,
     provideClientHydration(withEventReplay(),
       withHttpTransferCacheOptions({ includePostRequests: true })
     ),
