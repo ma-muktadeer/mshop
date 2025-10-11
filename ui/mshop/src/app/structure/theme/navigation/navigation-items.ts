@@ -34,7 +34,7 @@ export const NavigationItems: NavigationItem[] = [
         id: 'dashboard',
         title: 'Dashboard',
         type: 'item',
-        url: 'dashboard',
+        url: '/:loginName/dashboard',
         permission: 'DEFAULT',
         icon: 'feather icon-home'
       }
