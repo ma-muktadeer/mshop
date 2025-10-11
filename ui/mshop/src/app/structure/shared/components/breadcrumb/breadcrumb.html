@@ -7,7 +7,7 @@
       <div class="col-md-12">
         <ul class="breadcrumb" style="font-size: 14px; margin-bottom: 0;">
           <li class="breadcrumb-item me-2">
-            <a [routerLink]="['/']" title="Home"><i class="feather icon-home"></i></a>
+            <a [routerLink]="['/']" title="Dashboard"><i class="feather icon-home"></i></a>
           </li>
           @for (breadcrumb of navigationList; track breadcrumb?.id) {
           @if (breadcrumb.url !== false) {

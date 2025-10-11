@@ -8,11 +8,11 @@ import { Profile } from '../routs-components/private/profile/profile';
 export const structureRouts: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   },
   {
-    path: 'home',
+    path: 'dashboard',
     loadComponent: () => Dashbord,
     // canActivate: [securiedGuard]
   },
@@ -30,6 +30,6 @@ export const structureRouts: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'home'
+    redirectTo: 'dashboard'
   }
 ]
