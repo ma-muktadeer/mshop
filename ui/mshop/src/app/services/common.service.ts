@@ -1,8 +1,8 @@
 import { environment } from './../../environments/environment';
 import { HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
-import { DOCUMENT, Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { DestroyRef, DOCUMENT, Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { environment as ENV }  from './../../environments/environment';
+import { environment as ENV } from './../../environments/environment';
 import { ConfigService } from '../../config.service';
 import { Constants } from './common/Constants';
 import { AppRole } from '../ithouse/constants/AppRole';
@@ -11,6 +11,7 @@ import { Service } from './service';
 import { ContentType } from './common/constants/content-type.enum';
 import { FileAction, FileType } from './file.service';
 import { isPlatformBrowser } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -18,21 +19,21 @@ import { isPlatformBrowser } from '@angular/common';
 export class CommonService {
 
 
-  private config = inject(ConfigService);
+  private readonly _config = inject(ConfigService);
+  private readonly _destroyRef = inject(DestroyRef);
   // app = app;
   sessionStorage: any;
   localStorage: any;
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private readonly _config: ConfigService
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
     if (isPlatformBrowser(this.platformId)) {
-    // ✅ Safe access with checks
-    if (this.document?.defaultView) {
-      this.sessionStorage = this.document.defaultView.sessionStorage;
-      this.localStorage = this.document.defaultView.localStorage;
+      // ✅ Safe access with checks
+      if (this.document?.defaultView) {
+        this.sessionStorage = this.document.defaultView.sessionStorage;
+        this.localStorage = this.document.defaultView.localStorage;
       }
 
     }
@@ -78,24 +79,12 @@ export class CommonService {
 
     var url = path ? this.environment.SERVER_BASE_URL_PUBLIC + path : this.environment.SERVER_BASE_URL_PUBLIC + "/jsonRequest"
 
-    this.http.post(url, req)
-      .pipe(
-        catchError((error: any) => {
-          service.onError(service, req, error);
-          return throwError(() => error);
-        })
-      )
-      .subscribe(
-        (res) => {
-          service.onResponse(service, req, res);
-        }
-      );
+    this._postRequest(url, req, service);
   }
 
   public sendRequestAdmin(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
     this.doSendRequestAdmin(service, actionType, contentType, referance, payload, path);
   }
-
 
   private doSendRequestAdmin(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
 
@@ -103,18 +92,7 @@ export class CommonService {
 
     var url = path ? this.environment.SERVER_BASE_URL_ADMIN + path : this.environment.SERVER_BASE_URL_ADMIN + "/jsonRequest"
 
-    this.http.post(url, req)
-      .pipe(
-        catchError((error: any) => {
-          service.onError(service, req, error);
-          return throwError(() => error);
-        })
-      )
-      .subscribe(
-        (res) => {
-          service.onResponse(service, req, res);
-        }
-      );
+    this._postRequest(url, req, service);
   }
 
 
@@ -123,45 +101,23 @@ export class CommonService {
     let req = this.generateReqJson(actionType, contentType, referance, payload);
     let url = path ? this.environment.SERVER_BASE_URL + path : this.environment.SERVER_BASE_URL + "/jsonRequest"
 
-    this.http.post(url, req)
-      .pipe(
-        catchError((error: any) => {
-          service.onError(service, req, error);
-          return throwError(() => error);
-        })
-      )
-      .subscribe(
-        (res) => {
-          service.onResponse(service, req, res);
-        }
-      );
+    this._postRequest(url, req, service);
   }
 
-  public post(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any) {
-
-    var req = this.generateReqJson(actionType, contentType, referance, payload);
-
-    // return this.http.post(this.environment.SERVER_BASE_URL, req)
-    //   .toPromise()
-    //   .then(res => {
-    //     return res;
-    //   })
-    //   .catch(res => {
-    //     service.onError(service, req, res);
-    //   });
-
-    return this.http.post(this.environment.SERVER_BASE_URL, req)
+  private _postRequest(url: string, req: any, service: Service) {
+    this.http.post(url, req)
       .pipe(
+        takeUntilDestroyed(this._destroyRef),
         catchError((error: any) => {
           service.onError(service, req, error);
           return throwError(() => error);
         })
       )
-      .subscribe(
-        (res) => {
-          service.onResponse(service, req, res);
-        }
-      );
+      .subscribe({
+      next: (res) => {
+        service.onResponse(service, req, res);
+      }
+    });
   }
 
 
@@ -226,7 +182,7 @@ export class CommonService {
     this.sessionStorage?.setItem(Constants.APP_LOGIN_USER, JSON.stringify(loginUser ?? {}))
   }
 
-  getToken(): string{
+  getToken(): string {
     return this.sessionStorage?.getItem('AUTH_TOKEN');
   }
   storeToken(res: any) {
@@ -297,7 +253,7 @@ export class CommonService {
       }
       this.sendRequest(service, ActionType.LOGOUT, ContentType.User, 'logout', payload);
 
-    // this.removeUserInfo();
+      // this.removeUserInfo();
 
     }
   }
