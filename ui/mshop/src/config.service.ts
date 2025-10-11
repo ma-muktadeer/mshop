@@ -41,6 +41,9 @@ export class ConfigService {
     return this.config.baseUrl;
   }
 
+  get blockMultiTab(): boolean{
+    return this.config?.app.blockMultiTab || true;
+  }
   getAppVersion() {
     return this.config?.product?.version
   }

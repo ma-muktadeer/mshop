@@ -8,6 +8,8 @@ bootstrapApplication(App, appConfig)
   .then(ref => {
     const plateFormId = ref.injector.get(PLATFORM_ID);
     if (isPlatformBrowser(plateFormId)) {
+      console.log('App bootstrapped');
+
       const loader = document.getElementById('loading');
       if (loader) {
         loader.style.opacity = '0';

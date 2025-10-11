@@ -1,1 +1,10 @@
-<router-outlet />
+@if (activeTab()) {
+  <router-outlet>
+    <ithouse-spinner></ithouse-spinner>
+  </router-outlet>
+
+} @else {
+  <div class="bg-warning h5">
+    You are active in another tab......
+  </div>
+}
