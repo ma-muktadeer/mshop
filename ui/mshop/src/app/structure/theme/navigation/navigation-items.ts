@@ -69,7 +69,7 @@ export const NavigationItems: NavigationItem[] = [
               AppPermission.USER_MAKER,
             ],
             type: 'item',
-            url: '/admin/profile'
+            url: '/profile'
           },
           {
             id: 'user-list',

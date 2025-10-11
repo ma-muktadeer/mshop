@@ -42,8 +42,9 @@ export class NavContent {
 
   buildNavigation() {
     // this.navigations.set();
-
     const navs = this.nabItemService.buildNabItems(NavigationItems);
+    console.log('nav items', navs);
+
     this.navigations.update(() => navs);
   }
 

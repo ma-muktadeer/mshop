@@ -21,8 +21,8 @@ export class NabItemsService {
       if (newItem && newItem?.url) {
         newItem.url = /:loginName/.test(newItem.url)
         ? newItem.url.replace(/:loginName/g, this.loginName)
-        : `${newItem.url}`;
-        console.log('url', newItem?.url);
+        : `/${this.loginName}${newItem.url}`;
+        // console.log('url', newItem?.url);
         // newItem.url = newItem.url.replace(/:loginName/g, this.loginName);
       }
 
