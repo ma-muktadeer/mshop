@@ -1,6 +1,7 @@
-import { Component, Input, signal, ViewEncapsulation } from '@angular/core';
+import { Component, DestroyRef, inject, Input, signal, ViewEncapsulation } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { Spinkit } from './spinkits';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'ithouse-spinner',
@@ -11,6 +12,7 @@ import { Spinkit } from './spinkits';
 
 })
 export class Spinner {
+  private readonly resposeRef = inject(DestroyRef);
 // public props
   isSpinnerVisible = signal<boolean>(true);
   Spinkit = Spinkit;
@@ -21,7 +23,9 @@ export class Spinner {
   constructor(
     private router: Router,
   ) {
-    this.router.events.subscribe({
+    this.router.events
+      .pipe(takeUntilDestroyed(this.resposeRef))
+      .subscribe({
       next: (event: any) => {
         if (event instanceof NavigationStart) {
           this.isSpinnerVisible.update(() => true);

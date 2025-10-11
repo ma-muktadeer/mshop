@@ -42,6 +42,7 @@ export class Breadcrumb {
     this.route.events
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((router: Event) => {
+        // debugger
         if (router instanceof NavigationEnd) {
           const activeLink = router.url;
           let breadcrumbList = this.filterNavigation(this.navigations, activeLink);

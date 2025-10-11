@@ -16,7 +16,7 @@ import { Spinner } from "src/app/structure/shared/components/spinner/spinner";
 
 @Component({
   selector: 'app-profile',
-  imports: [Spinner],
+  imports: [],
   templateUrl: './profile.html',
   styleUrl: './profile.scss'
 })
