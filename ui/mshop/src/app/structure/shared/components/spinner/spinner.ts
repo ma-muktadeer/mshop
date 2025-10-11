@@ -12,20 +12,19 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 })
 export class Spinner {
-  private readonly resposeRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 // public props
   isSpinnerVisible = signal<boolean>(true);
-  Spinkit = Spinkit;
-  @Input() backgroundColor = '#2689E2';
+  readonly Spinkit = Spinkit;
+  @Input() backgroundColor = 'linear-gradient(to right, #4099ff, #73b4ff)';
+  // @Input() backgroundColor = '#004077ff';
   @Input() spinner = Spinkit.skLine;
 
   // constructor
-  constructor(
-    private router: Router,
-  ) {
+  constructor( private router: Router) {
     this.router.events
-      .pipe(takeUntilDestroyed(this.resposeRef))
-      .subscribe({
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
       next: (event: any) => {
         if (event instanceof NavigationStart) {
           this.isSpinnerVisible.update(() => true);

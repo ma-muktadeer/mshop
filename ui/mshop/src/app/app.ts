@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { Spinner } from "./structure/shared/components/spinner/spinner";
 import { ConfigService } from 'src/config.service';
 import { TabManagerService } from './services/tab-manager.service';
+import { Spinkit } from './structure/shared/components/spinner/spinkits';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,8 @@ import { TabManagerService } from './services/tab-manager.service';
 export class App {
   private readonly blockMultiTab = inject(ConfigService).blockMultiTab;
   protected readonly title = signal('mshop');
+
+  readonly spinner = Spinkit.skLine
 
   activeTab = signal<boolean>(true);
 
