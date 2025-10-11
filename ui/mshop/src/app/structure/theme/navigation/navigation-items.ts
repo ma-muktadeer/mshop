@@ -34,9 +34,36 @@ export const NavigationItems: NavigationItem[] = [
         id: 'dashboard',
         title: 'Dashboard',
         type: 'item',
-        url: '/:loginName/dashboard',
+        url: 'dashboard',
         permission: 'DEFAULT',
         icon: 'feather icon-home'
+      }
+    ]
+  },
+  {
+    id: 'navigwation',
+    title: 'Navigation',
+    type: 'group',
+    icon: 'icon-group',
+    permission: 'DEFAULT',
+    children: [
+      {
+        id: 'dashwboard',
+        title: 'Dashboard',
+        type: 'collapse',
+        // url: 'dashboard',
+        permission: 'DEFAULT',
+        icon: 'feather icon-home',
+        children: [
+          {
+            id: 'dashwbdoard',
+            title: 'Dashboard',
+            type: 'item',
+            url: 'dashboard',
+            permission: 'DEFAULT',
+            icon: 'feather icon-home'
+          }
+        ]
       }
     ]
   },
@@ -98,7 +125,7 @@ export const NavigationItems: NavigationItem[] = [
             type: 'item',
             url: '/admin/banks'
           },
-           {
+          {
             id: 'branch',
             title: 'Branch',
             permission: [
@@ -180,16 +207,16 @@ export const NavigationItems: NavigationItem[] = [
           {
             id: 'document_list',
             title: 'Document Config',
-             permission: [
+            permission: [
               AppPermission.VIEW_DOCUMENT,
             ],
             type: 'item',
             url: '/admin/document-configuration'
           },
-            {
+          {
             id: 'profit-margin',
             title: 'Profit-Margin',
-            permission:[
+            permission: [
               AppPermission.VIEW_PROFIT_MARGIN,
             ],
             type: 'item',
@@ -216,7 +243,7 @@ export const NavigationItems: NavigationItem[] = [
         permission: 'DEFAULT',
         icon: 'feather icon-clock',
         children: [
-        {
+          {
             id: 'creat-ln',
             title: 'Creat Loan',
             permission: [

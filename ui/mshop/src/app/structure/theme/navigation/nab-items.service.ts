@@ -19,7 +19,11 @@ export class NabItemsService {
         newItem = { ...item };
       }
       if (newItem && newItem?.url) {
-        newItem.url = newItem.url.replace(/:loginName/g, this.loginName);
+        newItem.url = /:loginName/.test(newItem.url)
+        ? newItem.url.replace(/:loginName/g, this.loginName)
+        : `${newItem.url}`;
+        console.log('url', newItem?.url);
+        // newItem.url = newItem.url.replace(/:loginName/g, this.loginName);
       }
 
       if(newItem?.children){
