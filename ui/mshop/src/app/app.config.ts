@@ -11,6 +11,7 @@ import { ConfigService, initializeApplication } from '../config.service';
 import { ToggleFullScreenDirective } from './structure/shared/full-screen/toggle-full-screen';
 import { DatePipe } from '@angular/common';
 import { NabItemsService } from './structure/theme/navigation/nab-items.service';
+import { TabManagerService } from './services/tab-manager.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,12 +25,13 @@ export const appConfig: ApplicationConfig = {
     //   provide: RxStompService,
     //   useFactory: rxStompServiceFactory,
     // },
+    provideClientHydration(withEventReplay(),
+      withHttpTransferCacheOptions({ includePostRequests: true })
+    ),
     ToggleFullScreenDirective,
     CommonService,
     DatePipe,
     NabItemsService,
-    provideClientHydration(withEventReplay(),
-      withHttpTransferCacheOptions({ includePostRequests: true })
-    ),
+    TabManagerService,
   ]
 };

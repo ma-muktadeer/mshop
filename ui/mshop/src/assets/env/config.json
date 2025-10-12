@@ -4,7 +4,8 @@
     "version": "1.0.0",
     "desc": "IT-House initial app",
     "loginRequired": true,
-    "constantAppName": "M-SHOP"
+    "constantAppName": "M-SHOP",
+    "blockMultiTab": false
   },
   "env.local": {
     "SERVER_URL": "http://127.0.0.1:8081",

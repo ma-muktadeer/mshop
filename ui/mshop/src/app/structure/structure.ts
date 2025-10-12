@@ -9,7 +9,7 @@ import { NavBarModule } from './theme/nav-bar/nav-bar-module';
   selector: 'app-structure',
   imports: [Breadcrumb, RouterOutlet, NavigationModule, NgClass, NavBarModule],
   templateUrl: './structure.html',
-  styleUrl: './structure.scss'
+  styleUrl: './structure.scss',
 })
 export class Structure {
   navCollapsed!: boolean;

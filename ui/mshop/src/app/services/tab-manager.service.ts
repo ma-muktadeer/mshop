@@ -1,15 +1,14 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TabManagerService {
-
   private sessionStorage: any;
 
   private uniqueId: string;
   constructor(@Inject(PLATFORM_ID) private platformId: any) {
+    console.log('tab manager service init');
+
     if (isPlatformBrowser(platformId)) {
       this.uniqueId = this.generateUniqueId();
       console.log('active tab id', this.uniqueId);

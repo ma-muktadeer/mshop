@@ -15,6 +15,7 @@ import { Spinkit } from './structure/shared/components/spinner/spinkits';
 })
 export class App {
   private readonly blockMultiTab = inject(ConfigService).blockMultiTab;
+  private readonly tabManagment = inject(TabManagerService);
   protected readonly title = signal('mshop');
 
   readonly spinner = Spinkit.skLine
@@ -27,6 +28,8 @@ export class App {
 
     if (isPlatformBrowser(this.platformId)) {
       if (this.blockMultiTab) {
+        console.log('Block multiple tab is enabled');
+
         window.addEventListener('storage', (event) => {
           this.checkActiveTab(event);
         });
@@ -36,7 +39,7 @@ export class App {
 
   checkActiveTab(event: StorageEvent): void {
     if (event.key === 'activeTab') {
-      this.activeTab.update(() => inject(TabManagerService).isActiveTab(event.newValue));
+      this.activeTab.update(() => this.tabManagment.isActiveTab(event.newValue));
     }
   }
 

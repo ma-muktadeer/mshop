@@ -21,7 +21,6 @@ export class NabItemsService {
       if (item.permission == 'DEFAULT' || this.permissionService.hasAnyPermission(item.permission)) {
         newItem = { ...item };
       }
-      debugger
       if (newItem && newItem?.url) {
         newItem.url = /:loginName/.test(newItem.url)
           ? newItem.url.replace(/:loginName/g, this.loginName)

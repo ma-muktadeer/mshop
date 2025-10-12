@@ -42,7 +42,7 @@ export class ConfigService {
   }
 
   get blockMultiTab(): boolean{
-    return this.config?.app.blockMultiTab || true;
+    return this.config?.app.blockMultiTab ?? true;
   }
   getAppVersion() {
     return this.config?.product?.version
