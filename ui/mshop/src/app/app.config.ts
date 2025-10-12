@@ -10,6 +10,7 @@ import { globalInterceptor } from '../global.interceptor';
 import { ConfigService, initializeApplication } from '../config.service';
 import { ToggleFullScreenDirective } from './structure/shared/full-screen/toggle-full-screen';
 import { DatePipe } from '@angular/common';
+import { NabItemsService } from './structure/theme/navigation/nab-items.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,6 +27,7 @@ export const appConfig: ApplicationConfig = {
     ToggleFullScreenDirective,
     CommonService,
     DatePipe,
+    NabItemsService,
     provideClientHydration(withEventReplay(),
       withHttpTransferCacheOptions({ includePostRequests: true })
     ),

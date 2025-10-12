@@ -3,6 +3,8 @@ package com.ithouse.mshop.core.security;
 import com.ithouse.mshop.core.principal.UserPrincipal;
 import com.ithouse.mshop.core.principal.UserPrincipalService;
 import com.ithouse.mshop.core.security.service.AuthService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,59 +39,88 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
 
     @Override
-    public void doFilterInternal(HttpServletRequest req, HttpServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain) throws IOException, ServletException {
 
-        String token = resolveToken((HttpServletRequest) req);
-        log.debug("Getting bear toke from httpServletRequest: {}", token);
+        try {
+            String token = resolveToken(request);
+            log.debug("Extracted bearer token from request: {}", token);
 
-        if (!StringUtils.hasLength(token)) {
-            if (req.getRequestURI().contains("/public")) {
-                chain.doFilter(req, response);
-            } else {
-                response.getWriter().write("Access denied. Unauthorized request.");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            // Allow public endpoints without authentication
+            if (!StringUtils.hasText(token)) {
+                if (request.getRequestURI().contains("/public")) {
+                    chain.doFilter(request, response);
+                } else {
+                    sendUnauthorizedResponse(response, "Access denied. Unauthorized request.", HttpServletResponse.SC_BAD_REQUEST);
+                }
+                return;
             }
-            return;
-        }
-        String userAgent = req.getHeader("User-Agent");
 
-        if (!StringUtils.hasText(req.getHeader("appName")) || !req.getHeader("appName").equals("M-SHOP")) {
-            log.warn("Blocked request with app name: {}", req.getHeader("appName"));
-            response.getWriter().write("Access denied. Unauthorized request.");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
-        if (!isBrowser.apply(userAgent)) {
-            log.warn("Blocked request with non-browser User-Agent: {}", userAgent);
-            response.getWriter().write("Access denied. Unauthorized request.");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
-        String username = authService.findUsernameByToken(token);
-        if (username == null) {
-            chain.doFilter(req, response);
-            return;
-        }
-        UserPrincipal userPrincipal = userPrincipalService.loadUserByUsername(username);
-        if (userPrincipal == null) {
-            chain.doFilter(req, response);
-            return;
-        }
+            // Validate required headers
+            String appName = request.getHeader("appName");
+            if (!"M-SHOP".equals(appName)) {
+                log.warn("Blocked request with invalid appName header: {}", appName);
+                sendUnauthorizedResponse(response, "Access denied. Unauthorized request.", HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
 
-        boolean isAuth = authService.validateToken(token, userPrincipal);
-        if (!isAuth) {
-            log.warn("Invalid token: {}", token);
-            response.getWriter().write("Access denied. Unauthorized request.");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+            String userAgent = request.getHeader("User-Agent");
+            if (!isBrowser.apply(userAgent)) {
+                log.warn("Blocked request with non-browser User-Agent: {}", userAgent);
+                sendUnauthorizedResponse(response, "Access denied. Unauthorized request.", HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            // Validate token and load user
+            Claims claims = authService.findUsernameByToken(token);
+
+            String username = claims.getSubject();
+            if (username == null) {
+                chain.doFilter(request, response);
+                return;
+            }
+
+            UserPrincipal userPrincipal = userPrincipalService.loadUserByUsername(username);
+            if (userPrincipal == null) {
+                chain.doFilter(request, response);
+                return;
+            }
+
+            if (!authService.validateToken(claims, userPrincipal)) {
+                log.warn("Invalid token for user {}: {}", username, token);
+                sendUnauthorizedResponse(response, "Access denied. Unauthorized request.", HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            // Build authentication object and set security context
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            userPrincipal,
+                            null,
+                            userPrincipal.getAuthorities()
+                    );
+
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            chain.doFilter(request, response);
+
         }
+        catch (ExpiredJwtException e){
+            log.error("Token expired", e);
+            sendUnauthorizedResponse(response, "Token Expired.", 1001);
+        }
+        catch (Exception e) {
+            log.error("Error in authentication filter", e);
+            sendUnauthorizedResponse(response, "Internal authentication error.", HttpServletResponse.SC_UNAUTHORIZED);
+        }
+    }
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userPrincipal.getUsername(), userPrincipal.getPassword(), userPrincipal.getAuthorities());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        chain.doFilter(req, response);
+    private void sendUnauthorizedResponse(HttpServletResponse response, String message, int status) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(status);
+        response.getWriter().write("{\"error\": \"" + message + "\"}");
     }
 
     Function<String, Boolean> isBrowser = (userAgent) -> {

@@ -53,59 +53,59 @@ public class JwtTokenProvider {
 
 	public AccessTokenResponse createToken(UserPrincipal userPrincipal) {
 		try {
+			// Extract username and authorities
 			String username = userPrincipal.getUsername();
 			Collection<? extends GrantedAuthority> authorities = userPrincipal.getAuthorities();
+
+			// Build base claims
 			ClaimsBuilder claimsBuilder = Jwts.claims().subject(username);
-			if (!authorities.isEmpty()) {
-				claimsBuilder.add(AUTHORITIES_KEY,
-						authorities.stream().map(GrantedAuthority::getAuthority)
-								.collect(joining(",")));
+			claimsBuilder.add("id", userPrincipal.getId());
+
+			if (authorities != null && !authorities.isEmpty()) {
+				String roles = authorities.stream()
+						.map(GrantedAuthority::getAuthority)
+						.collect(joining(","));
+				claimsBuilder.add(AUTHORITIES_KEY, roles);
 			}
 
-			HttpServletRequest request = null;
-			ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            request = requestAttributes.getRequest();
-            claimsBuilder.add("device", CoreUtils.generateDeviceFingerprint(request));
-            Claims claims = claimsBuilder.build();
-			Date now = Date.from(Instant.now());
-			Date validity = Date.from(now.toInstant().plusMillis(jwtProperties.getValidityInMs()));
+			// Add device fingerprint if available (null-safe)
+			ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+			if (attrs != null) {
+				HttpServletRequest request = attrs.getRequest();
+                claimsBuilder.add("device", CoreUtils.generateDeviceFingerprint(request));
+            }
+
+			Claims claims = claimsBuilder.build();
+
+			// Token timing
+			Date now = new Date();
+			Date expiry = new Date(now.getTime() + jwtProperties.getValidityInMs());
+
+			// Build JWT token
 			String token = Jwts.builder()
 					.claims(claims)
 					.issuedAt(now)
-					.expiration(validity)
-//					.signWith(this.secretKey, Jwts.SIG.HS256)
+					.expiration(expiry)
 					.signWith(secretKey)
 					.compact();
-			return new AccessTokenResponse(token, validity, "0000", "Success");
+
+			return new AccessTokenResponse(token, expiry, "0000", "Success");
 
 		} catch (Exception e) {
-			log.error("Error generating auth token {}", e.getMessage());
+			log.error("Error generating auth token", e);
 			return new AccessTokenResponse("0001", "Authentication Failed");
 		}
 	}
 
-	public boolean validateToken(String token, UserPrincipal userPrincipal) {
-		Claims claims = getClaimsFromToken(token);
+	public boolean validateToken(Claims claims, UserPrincipal userPrincipal) {
 		if (!validateUsername(claims, userPrincipal)) {
 			log.info("token is not valid for user {}", userPrincipal.getUsername());
-			throw new IllegalArgumentException("invalid token");
+			throw new JwtException("invalid token");
 		}
 
 		return true;
 	}
 
-	public Authentication getAuthentication(String token) {
-		Claims claims = Jwts.parser().verifyWith(this.secretKey).build().parseSignedClaims(token).getPayload();
-
-		Object authoritiesClaim = claims.get(AUTHORITIES_KEY);
-
-		Collection<? extends GrantedAuthority> authorities = authoritiesClaim == null ? AuthorityUtils.NO_AUTHORITIES
-				: AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim.toString());
-
-		User principal = new User(claims.getSubject(), "", authorities);
-		
-		return new UsernamePasswordAuthenticationToken(principal, token, authorities);
-	}
 
 	private boolean validateUsername(Claims claims, UserPrincipal userPrincipal) {
 		HttpServletRequest request = null;
@@ -113,10 +113,17 @@ public class JwtTokenProvider {
 		if(requestAttributes != null){
 			request = requestAttributes.getRequest();
 		}
+        assert request != null;
+		Long tokenUserId = claims.get("id", Long.class);
+		if (tokenUserId == null || !tokenUserId.equals(userPrincipal.getId())) {
+			return false;
+		}
 		String tokenDeviceFingerprint = claims.get("device", String.class);
-		return claims.getSubject().equals(userPrincipal.getUsername())
-				&& StringUtils.hasLength(tokenDeviceFingerprint) && tokenDeviceFingerprint.equals(CoreUtils.generateDeviceFingerprint(request));
+        if (!claims.getSubject().equals(userPrincipal.getUsername())
+                || !StringUtils.hasLength(tokenDeviceFingerprint)) return false;
+        return tokenDeviceFingerprint.equals(CoreUtils.generateDeviceFingerprint(request));
 	}
+
 	private Claims getClaimsFromToken(String token) {
 		Claims claims = null;
 		try {
@@ -129,7 +136,7 @@ public class JwtTokenProvider {
 
 		} catch (ExpiredJwtException e) {
 			log.error("Token expired: {}", e.getMessage());
-			throw new JwtException("Token expired.");
+			throw e;
 		} catch (SignatureException e) {
 			log.error("Invalid token signature: {}", e.getMessage());
 			throw new JwtException("Invalid token.");
@@ -143,8 +150,8 @@ public class JwtTokenProvider {
 		return claims;
 	}
 
-	public String getUsernameFromToken(String token) {
-		return getClaimsFromToken(token).getSubject();
+	public Claims getUsernameFromToken(String token) {
+		return getClaimsFromToken(token);
 	}
 
 }

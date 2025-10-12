@@ -38,4 +38,7 @@ public record UserPrincipal(User user) implements UserDetails {
         return user.getActive() != null && user.getActive() == 1;
     }
 
+    public Long getId() {
+        return user.getUserId();
+    }
 }

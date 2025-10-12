@@ -3,6 +3,7 @@ package com.ithouse.mshop.core.security.service;
 import com.ithouse.mshop.core.model.AccessTokenResponse;
 import com.ithouse.mshop.core.principal.UserPrincipal;
 import com.ithouse.mshop.core.security.JwtTokenProvider;
+import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,11 +42,11 @@ public class AuthService {
         return jwtTokenProvider.createToken(userPrincipal);
     }
 
-    public String findUsernameByToken(String token) {
+    public Claims findUsernameByToken(String token) {
         return jwtTokenProvider.getUsernameFromToken(token);
     }
 
-    public boolean validateToken(String token, UserPrincipal userPrincipal) {
-        return jwtTokenProvider.validateToken(token, userPrincipal);
+    public boolean validateToken(Claims claims, UserPrincipal userPrincipal) {
+        return jwtTokenProvider.validateToken(claims, userPrincipal);
     }
 }

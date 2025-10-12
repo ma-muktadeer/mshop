@@ -3,30 +3,34 @@ import { PermissioinStoreService } from '../../../services/permissioin-store.ser
 import { NavigationItem } from './navigation-items';
 import { CommonService } from 'src/app/services/common.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NabItemsService {
-  private readonly loginName = inject(CommonService).loadLoginUser()?.loginName || '';
-  constructor(private permissionService: PermissioinStoreService) { }
+  private loginName: string = '';
+  constructor(
+    private permissionService: PermissioinStoreService,
+    private readonly _cs: CommonService
+  ) {
+    this.loginName = this._cs.loadLoginUser()?.loginName ?? '';
+  }
 
   buildNabItems = (items: NavigationItem[]): NavigationItem[] => {
 
     return items.map(item => {
       let newItem: NavigationItem;
 
-      if ( item.permission == 'DEFAULT' || this.permissionService.hasAnyPermission(item.permission)) {
+      if (item.permission == 'DEFAULT' || this.permissionService.hasAnyPermission(item.permission)) {
         newItem = { ...item };
       }
+      debugger
       if (newItem && newItem?.url) {
         newItem.url = /:loginName/.test(newItem.url)
-        ? newItem.url.replace(/:loginName/g, this.loginName)
-        : `/${this.loginName}${newItem.url}`;
+          ? newItem.url.replace(/:loginName/g, this.loginName)
+          : `/${this.loginName}${newItem.url}`;
         // console.log('url', newItem?.url);
         // newItem.url = newItem.url.replace(/:loginName/g, this.loginName);
       }
 
-      if(newItem?.children){
+      if (newItem?.children) {
         newItem.children = this.buildNabItems(newItem.children);
       }
 

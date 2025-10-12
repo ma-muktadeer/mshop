@@ -3,6 +3,7 @@ import { inject } from "@angular/core";
 import { catchError, throwError } from "rxjs";
 import { CommonService } from "./app/services/common.service";
 import { ConfigService } from "./config.service";
+import { Router } from "@angular/router";
 
 export const globalInterceptor: HttpInterceptorFn = (req, next) => {
 
@@ -12,6 +13,7 @@ export const globalInterceptor: HttpInterceptorFn = (req, next) => {
   // const router = inject(Router);
   const cs = inject(CommonService);
   const config = inject(ConfigService);
+  const router = inject(Router);
 
   let xhr = req;
 
@@ -51,11 +53,10 @@ export const globalInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(xhr).pipe(
     catchError((error: any) => {
-
-      // if (error.status === 403) {
-      //     cs.removeSession();
-      //     router.navigate(['/login'], { queryParams: { sessionExpired: true } });
-      // }
+      if (error.status === 1001) {
+          cs.removeUserInfo();
+          router.navigate(['/login'], { queryParams: { sessionExpired: true } });
+      }
       return throwError(() => error);
     })
   )
