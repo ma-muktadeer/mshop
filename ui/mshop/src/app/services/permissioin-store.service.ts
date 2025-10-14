@@ -5,7 +5,7 @@ import { Status } from "./status";
 @Injectable({
   providedIn: "root",
 })
-export class PermissioinStoreService {
+export class PermissionStoreService {
   permissionList = [];
 
   public appPermission = AppPermission;

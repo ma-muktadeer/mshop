@@ -1,1 +1,158 @@
-<p>permission works!</p>
+<div class="row col-md-12">
+  <div class="col-md-4">
+    <div class="row">
+      <div class="col-md-12">
+        <h6>{{'title.allPermission'}}</h6>
+      </div>
+      <div class="col-md-12 row">
+        <input class="col-md-12" style="border-radius: 20px; border: 1px solid #b9c1c0;" placeholder="Search"
+          type="text" (keyup)="onPermissionSearch($event)" />
+      </div>
+      <div style="margin-top: 10px;" class="ul-scrollable">
+        @for (group of filteredPermissionList(); track group) {
+        <!-- *ngFor="let group of filteredPermissionList()" -->
+        <div class="col-12" (click)="onClickPermissionItem($event, group)">
+          <div class="row hover-color {{clickedItem?.displayName == group.displayName? 'select-color':''}}">
+            <div class="col-12 ">
+              <div class="row d-flex align-items-center "
+                style="padding: 2px; font-size: 12px;  border-bottom: solid 1px #ccc;">
+                <div class="col-11">
+                  <a class="list-group-item text-left">
+                    {{group.displayName}}
+                  </a>
+                </div>
+                <div class="col-1">
+                  @if
+                  (permissionStoreService.hasPermission(permissionStoreService.appPermission.SAVE_PERMISSION))
+                  {
+                  <button title="edit" (click)="onEdit($event, group)" class="btn float-right"
+                    style="padding: 2px; font-size: 12px; margin-left: -20px;">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  }
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (clickedItem) {
+
+  <div class="col-md-8">
+    <div class="row">
+      <div class="col-12">
+        <h2 style="background:white;" class="text-center">{{clickedItem ?
+          clickedItem.displayName : ''}}
+        </h2>
+      </div>
+      <div class="col-12" style="text-align: center;">
+        <div class="row" cdkDropListGroup>
+          <div class="example-container col-6">
+            <h6 class="mb-3"><u>{{'title.availableRole'}}</u></h6>
+            <div style="margin-top: 2px;" class="col-md-12">
+              <div class="col-md-12 mb-2">
+                <input class="col-md-12 px-3" style="border-radius: 20px; border: 1px solid #b9c1c0;"
+                  placeholder="Search" type="text" (keyup)="onSearchPermission($event, 'UN')" />
+              </div>
+            </div>
+            <div class="" cdkDropList [cdkDropListData]="unassignRoleList()" class="example-list"
+              (cdkDropListDropped)="drop($event)">
+              @for (role of unassignRoleList() ; track role) {
+              <div class="example-box hover-color" style="cursor: move !important; padding: 2px;" cdkDrag>
+                <div class="px-2">
+                  {{role.displayName}}
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="example-container col-6 m-0">
+            <h6 class="mb-3"><u>{{'title.assignRole'}}</u></h6>
+            <div style="margin-top: 2px;" class="col-md-12">
+              <div class="col-md-12 mb-2">
+                <input class="col-md-12 px-3" style="border-radius: 20px; border: 1px solid #b9c1c0;"
+                  placeholder="Search" type="text" (keyup)="onSearchPermission($event, 'ASSIGN')" />
+              </div>
+            </div>
+            <div cdkDropList [cdkDropListData]="assignRoleList" class="example-list"
+              (cdkDropListDropped)="drop($event)">
+
+              @for (role of assignRoleList; track $index) {
+              <div>
+                <div class="example-box hover-color" style="cursor: move !important; padding: 2px;" cdkDrag>
+                  <div class="px-2">
+                    {{role.displayName}}
+                  </div>
+                </div>
+              </div>
+              }
+
+            </div>
+            <div style="text-align: center;">
+              @if
+              (permissionStoreService.hasPermission(permissionStoreService.appPermission.SAVE_PERMISSION))
+              {
+              <button (click)="onRoleSave()" [disabled]="disableAddSave" class="btn btn-primary"
+                style="margin-top: 10px;">
+                {{'btn.Save'}}
+                @if(spinnerAddSave){
+                <span class="spinner-border spinner-border-sm"></span>
+                }
+
+              </button>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  }
+
+</div>
+
+<div class="modal " tabindex="-1" role="dialog" [style.display]="displayStyle">
+  <div class="modal-dialog modal-dialog-pdf" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class=" text-center">
+          <h5 class=" ">{{'title.permission'}}</h5>
+
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="col-form-label ">{{'title.permissionName'}}</label>
+          <input type="text" [(ngModel)]="displayName" name="displayName" class="form-control" [value]="displayName">
+        </div>
+        <div class="form-group">
+          <label for="message-text" class="col-form-label">{{'title.description'}}</label>
+          <textarea class="form-control" [(ngModel)]="desc" id="message-text"></textarea>
+        </div>
+      </div>
+      <!-- <div class="modal-footer"> -->
+      <div style="text-align: center; " class="mb-3">
+        <button (click)="onSave()" [disabled]="disableAddSave" class="btn btn-primary" style="margin-top: 10px;">
+          {{'btn.Save'}}
+          @if(spinnerAddSave){
+          <span class="spinner-border spinner-border-sm"></span>
+          }
+        </button>
+        &nbsp;
+        <button (click)="closePopup()" class="btn btn-danger" style="margin-top: 10px;">{{'btn.cancel'
+          }}</button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
