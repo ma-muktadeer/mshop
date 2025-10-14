@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { PermissioinStoreService } from '../../../services/permissioin-store.service';
+import { PermissionStoreService } from '../../../services/permissioin-store.service';
 import { NavigationItem } from './navigation-items';
 import { CommonService } from 'src/app/services/common.service';
 
@@ -7,7 +7,7 @@ import { CommonService } from 'src/app/services/common.service';
 export class NabItemsService {
   private loginName: string = '';
   constructor(
-    private permissionService: PermissioinStoreService,
+    private permissionService: PermissionStoreService,
     private readonly _cs: CommonService
   ) {
     this.loginName = this._cs.loadLoginUser()?.loginName ?? '';
