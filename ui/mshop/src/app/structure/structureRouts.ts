@@ -22,7 +22,11 @@ export const structureRouts: Routes = [
     pathMatch: 'full'
   },
   { path: 'profile', loadComponent: () => Profile, pathMatch: 'full' },
-
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('../routs-components/private/admin/admin-routing').then((m) => m.adminRoutes),
+    canActivateChild: [securiedGuard],},
   {
     path: 'page-not-found',
     loadComponent: () => PageNotFound,

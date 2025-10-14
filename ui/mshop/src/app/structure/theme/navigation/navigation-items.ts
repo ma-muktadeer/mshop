@@ -87,7 +87,7 @@ export const NavigationItems: NavigationItem[] = [
               AppPermission.VIEW_PERMISSION,
             ],
             type: 'item',
-            url: '/admin/permission-list'
+            url: '/:loginName/admin/permission'
           },
           {
             id: 'bank-list',
