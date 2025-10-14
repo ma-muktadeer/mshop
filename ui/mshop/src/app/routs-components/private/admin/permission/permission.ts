@@ -7,6 +7,8 @@ import { PermissionStoreService } from 'src/app/services/permissioin-store.servi
 import { Service } from 'src/app/services/service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { Toast } from 'src/app/services/common/Toast';
 
 @Component({
   selector: 'ithouse-permission',
@@ -29,13 +31,20 @@ export class Permission extends Ithouse implements Service {
   permissionBtnDisabled: boolean = false;
   disableAddSave: boolean = false;
   spinnerAddSave: boolean = false;
-
+  user: any;
   constructor(public permissionStoreService: PermissionStoreService,
     private cs: CommonService
   ) {
     super();
   }
+  ngOnInit(): void {
 
+    this.onLoad();
+  }
+
+  onLoad() {
+    this.cs.sendRequestAdmin(this, ActionType.SELECT, ContentType.AppPermission, 'FindAll', {});
+  }
   unassignPermissionListAll = []
   onSearchPermission(e, terget) {
     debugger
@@ -101,7 +110,7 @@ export class Permission extends Ithouse implements Service {
         event.currentIndex);
     }
   }
-    closePopup() {
+  closePopup() {
     this.displayStyle = "none";
   }
 
@@ -128,7 +137,62 @@ export class Permission extends Ithouse implements Service {
   }
 
   onResponse(service: Service, req: any, res: any) {
-    throw new Error('Method not implemented.');
+    this.spinnerAddSave = false
+    this.disableAddSave = false
+    this.spinnerAssignSave = false
+    this.permissionBtnDisabled = false
+    debugger
+    if (res.header.referance == 'FindAll') {
+      this.permissionList = res.payload
+      // this.filteredPermissionList = res.payload
+      this.filteredPermissionList.set(res.payload);
+      console.log(res);
+    }
+    else if (res.header.referance == 'SAVE') {
+      Toast.show("Permission Saved");
+      this.onLoad();
+    }
+    else if (res.header.referance == 'APPROVE') {
+      Toast.show("Permission Approved");
+      this.onLoad();
+    }
+    else if (res.header.referance == 'SELECT_PERMISSION_ROLE') {
+      console.log(res);
+
+      var roleGroup = res.payload
+      this.assignRoleList = roleGroup.roleList;
+      this.unassignRoleList.set(roleGroup.unassignRoleList);
+      // this.unassignRoleList = roleGroup.unassignRoleList;
+      this.unassignPermissionListAll = roleGroup.unassignRoleList;
+
+    } else if (res.header.referance == 'APPROVE_PERMISSION') {
+      if (res.payload.length > 0) {
+        Swal.fire({ title: "Successfully APPROVE PERMISSION", toast: true, timer: 1000 });
+        this.user = res.payload[0];
+        this.assignRoleList = this.user.roleList;
+        this.unassignRoleList.set(this.user.unassignRoleList);
+        // this.unassignRoleList = this.user.unassignRoleList;
+        this.unassignRoleList.set(this.unassignRoleList().filter(x => x.status == 'APPROVED'));
+        // this.unassignRoleList = this.unassignRoleList.filter(x => x.status == 'APPROVED');
+        // this.filteredUnassignRoleList = this.unassignRoleList
+      }
+    } else if (res.header.referance == 'APPROVE_DEASSIGN_PERMISSION') {
+      if (res.payload.length > 0) {
+        Swal.fire({ title: "Successfully De-Assigned Role", toast: true, timer: 1000 });
+        this.user = res.payload[0];
+        this.assignRoleList = this.user.roleList;
+        this.unassignRoleList.set(this.user.unassignRoleList);
+        // this.unassignRoleList = this.user.unassignRoleList;
+        this.unassignRoleList.set(this.unassignRoleList().filter(x => x.status == 'APPROVED'));
+        // this.unassignRoleList = this.unassignRoleList.filter(x => x.status == 'APPROVED');
+        // this.filteredUnassignRoleList = this.unassignRoleList
+      }
+    }
+
+    else if (res.header.referance == 'MANAGE_APP_PERMISSION') {
+      console.log(res)
+      Toast.show("Permission Saved");
+    }
   }
   onError(service: Service, req: any, res: any) {
     throw new Error('Method not implemented.');
