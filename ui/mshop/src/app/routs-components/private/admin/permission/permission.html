@@ -59,19 +59,21 @@
             <div style="margin-top: 2px;" class="col-md-12">
               <div class="col-md-12 mb-2">
                 <input class="col-md-12 px-3" style="border-radius: 20px; border: 1px solid #b9c1c0;"
-                  placeholder="Search" type="text" (keyup)="onSearchPermission($event, 'UN')" />
+                  placeholder="Search" type="text"/>
               </div>
             </div>
-            <div class="" cdkDropList [cdkDropListData]="unassignRoleList()" class="example-list"
-              (cdkDropListDropped)="drop($event)">
-              @for (role of unassignRoleList() ; track role) {
-              <div class="example-box hover-color" style="cursor: move !important; padding: 2px;" cdkDrag>
-                <div class="px-2">
-                  {{role.displayName}}
+            <ng-scrollbar >
+              <div class="" cdkDropList [cdkDropListData]="unassignRoleList()" class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                @for (role of unassignRoleList() ; track role) {
+                <div class="example-box hover-color" style="cursor: move !important; padding: 2px;" cdkDrag>
+                  <div class="px-2">
+                    {{role.displayName}}
+                  </div>
                 </div>
+                }
               </div>
-              }
-            </div>
+            </ng-scrollbar>
           </div>
 
           <div class="example-container col-6 m-0">
@@ -79,23 +81,25 @@
             <div style="margin-top: 2px;" class="col-md-12">
               <div class="col-md-12 mb-2">
                 <input class="col-md-12 px-3" style="border-radius: 20px; border: 1px solid #b9c1c0;"
-                  placeholder="Search" type="text" (keyup)="onSearchPermission($event, 'ASSIGN')" />
+                  placeholder="Search" type="text"/>
               </div>
             </div>
-            <div cdkDropList [cdkDropListData]="assignRoleList" class="example-list"
-              (cdkDropListDropped)="drop($event)">
+            <ng-scrollbar>
+              <div cdkDropList [cdkDropListData]="assignRoleList" class="example-list"
+                (cdkDropListDropped)="drop($event)">
 
-              @for (role of assignRoleList; track $index) {
-              <div>
-                <div class="example-box hover-color" style="cursor: move !important; padding: 2px;" cdkDrag>
-                  <div class="px-2">
-                    {{role.displayName}}
+                @for (role of assignRoleList; track $index) {
+                <div>
+                  <div class="example-box hover-color" style="cursor: move !important; padding: 2px;" cdkDrag>
+                    <div class="px-2">
+                      {{role.displayName}}
+                    </div>
                   </div>
                 </div>
-              </div>
-              }
+                }
 
-            </div>
+              </div>
+            </ng-scrollbar>
             <div style="text-align: center;">
               @if
               (permissionStoreService.hasPermission(permissionStoreService.appPermission.SAVE_PERMISSION))
