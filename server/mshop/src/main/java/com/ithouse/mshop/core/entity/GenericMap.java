@@ -1,15 +1,8 @@
-package com.cds.fms.core.entity;
+package com.ithouse.mshop.core.entity;
+
+import jakarta.persistence.*;
 
 import java.util.List;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name="T_GENERIC_MAP")

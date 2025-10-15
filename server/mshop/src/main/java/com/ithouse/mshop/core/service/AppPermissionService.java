@@ -1,55 +1,51 @@
-package com.cds.fms.core.service;
+package com.ithouse.mshop.core.service;
 
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.ihouse.core.message.AbstractMessageHeader;
+import com.ihouse.core.message.ResponseBuilder;
+import com.ihouse.core.message.interfaces.Message;
+import com.ihouse.core.message.service.IthouseService;
+import com.ithouse.mshop.contants.ActionType;
+import com.ithouse.mshop.core.entity.AppPermission;
+import com.ithouse.mshop.core.entity.Role;
+import com.ithouse.mshop.core.entity.User;
+import com.ithouse.mshop.core.repository.AppPermissionRepo;
+import com.ithouse.mshop.core.utils.AppUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.cds.fms.core.entity.AppPermission;
-import com.cds.fms.core.entity.Role;
-import com.cds.fms.core.entity.User;
-import com.cds.fms.core.enums.ActionType;
-import com.cds.fms.core.repo.AppPermissionRepo;
-import com.cds.fms.core.repo.GenericMapRepo;
-import com.cds.fms.core.utils.AppUtils;
-import com.softcafesolution.core.messaging.AbstractMessageHeader;
-import com.softcafesolution.core.messaging.AbstractMessageService;
-import com.softcafesolution.core.messaging.Message;
-import com.softcafesolution.core.messaging.ResponseBuilder;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
-public class AppPermissionService extends AbstractMessageService<List<AppPermission>> {
+public class AppPermissionService extends IthouseService<List<AppPermission>> {
 
 	private static final Logger log = LogManager.getLogger();
+
 	@Autowired
 	AppPermissionRepo permissionRepo;
 
-	
 	@Autowired
 	SharedGenericMapService sharedGenericMapService;
 	
 	@Autowired
 	RoleService roleService;
-	
-	@Autowired
-	private GenericMapRepo genericMapRepo;
-	
-	
+
 	private static final String APP_PERMISSION = "APP_PERMISSION";
 	private static final String ROLE = "ROLE";
 //    @Autowired
 //    private UserService userService;
 
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Message<?> serviceSingle(Message requestMessage) throws Exception {
+	@SuppressWarnings({"unchecked" })
+	public Message<?> ithouseService(Message requestMessage) throws Exception {
 
 		AbstractMessageHeader header = null;
 		Message<?> msgResponse = null;
@@ -69,7 +65,7 @@ public class AppPermissionService extends AbstractMessageService<List<AppPermiss
 				AppPermission objList = save(requestMessage, actionType);
 				msgResponse = ResponseBuilder.buildResponse(header, objList);
 			} 
-			else if (actionType.equals(ActionType.ACTION_UPDATE.toString())) {
+			else if (actionType.equals(ActionType.UPDATE.toString())) {
 				List<AppPermission> objList = update(requestMessage, actionType);
 				msgResponse = ResponseBuilder.buildResponse(header, objList);
 			} 
@@ -99,7 +95,7 @@ public class AppPermissionService extends AbstractMessageService<List<AppPermiss
 
 		} catch (Exception ex) {
 
-			msgResponse = ResponseBuilder.buildErrorResponsee(header, ex);
+			msgResponse = ResponseBuilder.buildErrorResponse(header, ex);
 
 			log.error("Exception Message **** [{}]", ex.getLocalizedMessage());
 		}
@@ -107,9 +103,7 @@ public class AppPermissionService extends AbstractMessageService<List<AppPermiss
 		return msgResponse;
 	}
 	
-	
-	
-	
+
 	private AppPermission approve(Message<List<AppPermission>> message, String action) {
 		AppPermission ap = message.getPayload().get(0);
 		AppPermission db = permissionRepo.findById(ap.getPermissionId()).get();
@@ -142,8 +136,7 @@ public class AppPermissionService extends AbstractMessageService<List<AppPermiss
 	private AppPermission managePermissionRole(Message<List<AppPermission>> message, String action) {
 		AppPermission rg = message.getPayload().get(0);
 		List<Role> roleList = rg.getRoleList();
-		Long customerId = message.getHeader().getCustomerId();
-		
+
 		sharedGenericMapService.unMapAndMap(rg.getPermissionId(), roleList.stream().mapToLong(Role::getRoleId).boxed().collect(Collectors.toList()), APP_PERMISSION, ROLE, message.getHeader().getUserId());
 
 		return rg;
@@ -161,19 +154,19 @@ public class AppPermissionService extends AbstractMessageService<List<AppPermiss
 	}
 
 	private List<AppPermission> delete(Message<List<AppPermission>> message, String action) {
-		AppPermission pref = message.getPayload().get(0);
+		AppPermission pref = message.getPayload().getFirst();
 		pref.setActive(0);
 		permissionRepo.save(pref);
 		return AppUtils.toList(permissionRepo.findAll());
 	}
 
 	private List<AppPermission> select(Message<List<AppPermission>> message, String action) throws Exception {
-		AppPermission pref = message.getPayload().get(0);
+		AppPermission pref = message.getPayload().getFirst();
 		return permissionRepo.findByActive(1, Sort.by(Sort.Direction.ASC, "displayName"));
 	}
 
 	private List<AppPermission> insert(Message<List<AppPermission>> message, String action) throws Exception {
-		AppPermission pref = message.getPayload().get(0);
+		AppPermission pref = message.getPayload().getFirst();
 		permissionRepo.save(pref);
 		return permissionRepo.findByActive(1, Sort.by(Sort.Direction.ASC, "displayName"));
 	}
@@ -194,7 +187,7 @@ public class AppPermissionService extends AbstractMessageService<List<AppPermiss
 
 
 	private List<AppPermission> update(Message<List<AppPermission>> message, String action) throws Exception {
-		AppPermission pref = message.getPayload().get(0);
+		AppPermission pref = message.getPayload().getFirst();
 		permissionRepo.save(pref);
 		return permissionRepo.findByActive(1, Sort.by(Sort.Direction.ASC, "displayName"));
 	}
@@ -204,7 +197,6 @@ public class AppPermissionService extends AbstractMessageService<List<AppPermiss
 //		User user = userService.findUserById(userId);
 		log.info("Adding role to permission [{}]:[{}]", permissionId, roleId);
 		sharedGenericMapService.mapNew(permissionId, roleId, APP_PERMISSION, ROLE, userId);
-//		return permissionRepo.findById(permissionId).get();
         return permissionRepo.findById(permissionId).get();
 	}
 	
@@ -219,22 +211,17 @@ public class AppPermissionService extends AbstractMessageService<List<AppPermiss
 
 	public AppPermission mapRoleToPermission(String permissionName, String roleName, long userId) {
 		AppPermission p =permissionRepo.findByPermissionName(permissionName);
-		Role r = roleService.roleRepo.findByRoleName(roleName);
-		
-		if(p != null && r != null) {
+		Optional<Set<Role>> sr = roleService.findByRoleName(roleName);
+		if(sr.isPresent()) {
+			Role r = sr.get().stream().findFirst().get();
 			return mapRoleToPermission(p.getPermissionId(), r.getRoleId(), userId);
 		}
-		log.info("Role or permission not found");
+		else{
+			log.info("permission not found [{}]", permissionName);
+		}
 		return null;
 	}
 
-	public List<AppPermission> getPermission(User user) {
-		List<Long> roleIds = user.getRoleList().stream().map(Role::getRoleId).toList();
-		if (roleIds.isEmpty()) {
-			return List.of(new AppPermission());
-		}
-		return findPermissionByRoleIds(roleIds);
-	}
 
 	private List<AppPermission> findPermissionByRoleIds(List<Long> roleIds) {
 		return permissionRepo.findByRoleIds(roleIds);

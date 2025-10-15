@@ -1,12 +1,13 @@
 package com.ithouse.mshop.core.entity;
 
+import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
 
 @MappedSuperclass
-class BaseSoftcafe {
+class BaseIthouse {
 
     @Column(name = "is_active", nullable = false)
     protected int active = 1;

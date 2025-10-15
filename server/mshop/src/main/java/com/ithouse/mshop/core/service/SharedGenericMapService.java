@@ -1,46 +1,32 @@
-package com.cds.fms.core.service;
+package com.ithouse.mshop.core.service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.ithouse.mshop.core.entity.GenericMap;
+import com.ithouse.mshop.core.repository.GenericMapRepo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cds.fms.core.entity.GenericMap;
-import com.cds.fms.core.repo.GenericMapRepo;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SharedGenericMapService {
 	private static final Logger log = LogManager.getLogger(SharedGenericMapService.class);
+
 	@Autowired
 	GenericMapRepo genericMapRepo;
 
-	/**
-	 * 
-	 * @param fromId
-	 * @param fromTypeName
-	 * @param toName
-	 * @param userId
-	 */
 	public void unmapAllByFrom(long fromId, String fromTypeName, String toName, long userId) {
 		log.info("Unmapping all [{}]:[{}]", fromId, fromTypeName);
 		genericMapRepo.unmapAllByFrom(fromId, fromTypeName, toName, userId, new Date());
 	}
-	
 
-	/**
-	 * 
-	 * @param toId
-	 * @param toType
-	 * @param fromName
-	 * @param userId
-	 */
 	public void unmapAllByTo(long toId, String toType, String fromName, long userId) {
-		log.info("Unmapping all by to [{}]:[{}]", toId, toType, fromName);
+		log.info("Unmapping all by to [{}]:[{}]:[{}]", toId, toType, fromName);
 		genericMapRepo.unmapAllByTo(toId, toType, fromName, userId, new Date());
 	}
 	
@@ -62,7 +48,7 @@ public class SharedGenericMapService {
 		if(toIdList == null) {
 			return;
 		}
-		toIdList = toIdList.stream().filter( i -> i != null).collect(Collectors.toList());
+		toIdList = toIdList.stream().filter(Objects::nonNull).collect(Collectors.toList());
 		for (long toId : toIdList) {
 			mapNew(fromId, toId, fromTypeName, toTypeName, userId);
 		}
@@ -70,19 +56,12 @@ public class SharedGenericMapService {
 	
 	public Set<Long> getToIdSet(long fromId, String fromName, String toName){
 		List<GenericMap> list = genericMapRepo.findByFromIdAndFromTypeNameAndToTypeNameAndActive(fromId, fromName, toName, 1);
-		return list.stream().map( i -> i.getToId()).collect(Collectors.toSet());
+		return list.stream().map(GenericMap::getToId).collect(Collectors.toSet());
 	}
-	
-	/**
-	 * 
-	 * @param fromId
-	 * @param fromName
-	 * @param toName
-	 * @return
-	 */
+
 	public List<Long> getToIdList(long fromId, String fromName, String toName){
 		List<GenericMap> list = genericMapRepo.findByFromIdAndFromTypeNameAndToTypeNameAndActive(fromId, fromName, toName, 1);
-		return list.stream().map( i -> i.getToId()).collect(Collectors.toList());
+		return list.stream().map(GenericMap::getToId).collect(Collectors.toList());
 	}
 
 	public void mapNew(long fromId, long toId, String fromTypeName, String toTypeName, long userId) {
@@ -99,13 +78,6 @@ public class SharedGenericMapService {
 		genericMapRepo.save(db);
 	}
 
-	/**
-	 * @param fromId
-	 * @param toIdList
-	 * @param fromTypeName
-	 * @param toTypeName
-	 * @param userId
-	 */
 	public void unMapAndMap(long fromId, List<Long> toIdList, String fromTypeName, String toTypeName, long userId) {
 		unmapAllByFrom(fromId, fromTypeName, toTypeName, userId);
 

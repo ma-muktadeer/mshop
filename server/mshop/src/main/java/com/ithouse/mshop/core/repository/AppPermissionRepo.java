@@ -1,14 +1,13 @@
-package com.cds.fms.core.repo;
+package com.ithouse.mshop.core.repository;
 
-import java.util.List;
-import java.util.Set;
-
+import com.ithouse.mshop.core.entity.AppPermission;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.cds.fms.core.entity.AppPermission;
+import java.util.List;
+import java.util.Set;
 
 
 public interface AppPermissionRepo extends JpaRepository<AppPermission, Long>{
@@ -24,14 +23,16 @@ public interface AppPermissionRepo extends JpaRepository<AppPermission, Long>{
 	@Query("SELECT T FROM AppPermission T WHERE T.permissionId not in :permissionIdList and active = 1")
 	List<AppPermission> findByPermissionIdsNotIn(@Param("permissionIdList")Set<Long> permissionIdList);
 
-	@Query("SELECT AP FROM AppPermission AP WHERE AP.permissionId IN" +
-			"  (" +
-			" SELECT DISTINCT M.fromId FROM GenericMap M" +
-			" WHERE M.toId IN :roleIds" +
-			" AND M.toTypeName = 'ROLE'" +
-			" AND M.fromTypeName = 'APP_PERMISSION'" +
-			" AND M.active = 1" +
-			" )" +
-			" AND AP.active = 1 ")
+	@Query("""
+            SELECT AP FROM AppPermission AP WHERE AP.permissionId IN
+             (
+             SELECT DISTINCT M.fromId FROM GenericMap M
+             WHERE M.toId IN :roleIds
+             AND M.toTypeName = 'ROLE'
+             AND M.fromTypeName = 'APP_PERMISSION'
+             AND M.active = 1
+             )
+             AND AP.active = 1
+            """)
 	List<AppPermission> findByRoleIds(List<Long> roleIds);
 }

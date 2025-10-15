@@ -1,15 +1,10 @@
-package com.cds.fms.core.entity;
+package com.ithouse.mshop.core.entity;
 
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @MappedSuperclass
-@Data
-public class BaseEntity  extends BaseSoftcafe{
-
+public class BaseEntity extends BaseIthouse{
 
 	@Transient
 	private Integer pageNumber = 1;
