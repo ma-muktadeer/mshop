@@ -18,7 +18,7 @@ import { AsyncDetection, NgScrollbar } from "ngx-scrollbar";
   styleUrl: './permission.scss'
 })
 export class Permission extends Ithouse implements Service {
-  filteredPermissionList = signal<any[]>([]);
+
   permissionList: any[] = [];
   clickedItem: any;
   displayName: string;
@@ -32,17 +32,16 @@ export class Permission extends Ithouse implements Service {
   spinnerAddSave: boolean = false;
   user: any;
   searchRoleText = signal<string>('');
+  searchPermissionText = signal<string>('');
 
   unassignPermissionListAll = []
 
   unassignRoleList = computed(() => {
-    const searchText = this.searchRoleText();
-    if (!searchText) {
-      return this.unassignPermissionListAll;
-    }
-    return this.unassignPermissionListAll.filter(x =>
-      x.displayName.toUpperCase().includes(searchText.toUpperCase())
-    );
+    return this.filterValue(this.unassignPermissionListAll, this.searchRoleText(), 'displayName');
+  });
+
+  filteredPermissionList = computed(() => {
+    return this.filterValue(this.permissionList, this.searchPermissionText(), 'permissionName');
   });
 
   constructor(public permissionStoreService: PermissionStoreService,
@@ -59,6 +58,14 @@ export class Permission extends Ithouse implements Service {
     this.cs.sendRequestAdmin(this, ActionType.SELECT, ContentType.AppPermission, 'FindAll', {});
   }
 
+  filterValue(list: any[], searchText: string, key: string): any[]{
+    if(!searchText){
+      return list;
+    }
+    return list.filter(x =>
+      x[key].toUpperCase().includes(searchText.toUpperCase())
+    );
+  }
   onEdit(e, group) {
     debugger
     this.permissionId = group.permissionId
@@ -82,18 +89,6 @@ export class Permission extends Ithouse implements Service {
     this.disableAddSave = true
     return this.cs.sendRequestAdmin(this, ActionType.SAVE, ContentType.AppPermission, 'SAVE', payload)
 
-  }
-
-  onPermissionSearch(e) {
-    console.log(e)
-    if (!e.target.value) {
-      // this.filteredPermissionList = this.permissionList
-      this.filteredPermissionList.update(() => this.permissionList);
-    }
-    else {
-      // this.filteredPermissionList = this.permissionList.filter(x => x.permissionName.indexOf(e.target.value.toUpperCase()) > -1)
-      this.filteredPermissionList.update(() => this.permissionList.filter(x => x.permissionName.indexOf(e.target.value.toUpperCase()) > -1));
-    }
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -141,8 +136,7 @@ export class Permission extends Ithouse implements Service {
     debugger
     if (res.header.referance == 'FindAll') {
       this.permissionList = res.payload
-      // this.filteredPermissionList = res.payload
-      this.filteredPermissionList.set(res.payload);
+      // this.filteredPermissionList.set(res.payload);
       console.log(res);
     }
     else if (res.header.referance == 'SAVE') {

@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-12 row">
         <input class="col-md-12" style="border-radius: 20px; border: 1px solid #b9c1c0;" placeholder="Search"
-          type="text" (keyup)="onPermissionSearch($event)" />
+          type="text" [(ngModel)]="searchPermissionText" />
       </div>
       <div style="margin-top: 10px;" class="ul-scrollable">
         @for (group of filteredPermissionList(); track group) {
@@ -59,7 +59,7 @@
             <div style="margin-top: 2px;" class="col-md-12">
               <div class="col-md-12 mb-2">
                 <input class="col-md-12 px-3" style="border-radius: 20px; border: 1px solid #b9c1c0;"
-                  placeholder="Search" type="text"/>
+                  placeholder="Search" [(ngModel)]="searchRoleText" type="text"/>
               </div>
             </div>
             <ng-scrollbar >
