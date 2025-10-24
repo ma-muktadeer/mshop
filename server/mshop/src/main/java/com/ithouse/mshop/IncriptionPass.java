@@ -1,15 +1,11 @@
 package com.ithouse.mshop;
 
-import com.ihouse.core.security.AbstractSecurity;
+import com.ithouse.core.security.EncryptDecryptService;
 
 public class IncriptionPass {
 
-    public static void main(String[] args) {
-        AbstractSecurity abstractSecurity = new AbstractSecurity() {
-            @Override
-            public String encrypt(String arg0) throws Exception {
-                return super.encrypt("esig-123");
-            }
-        };
+    public static void main(String[] args) throws Exception {
+        var s = EncryptDecryptService.encrypt("esig-123");
+        IO.println("Encrypt data: " + s);
     }
 }
