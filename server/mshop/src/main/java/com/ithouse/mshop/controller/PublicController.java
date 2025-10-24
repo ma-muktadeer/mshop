@@ -1,6 +1,6 @@
 package com.ithouse.mshop.controller;
 
-import com.ihouse.core.constants.Constants;
+import com.ithouse.core.constants.Constants;
 import com.ithouse.core.message.AbstractMessageHeader;
 import com.ithouse.core.message.GenericMessage;
 import com.ithouse.core.message.interfaces.Message;

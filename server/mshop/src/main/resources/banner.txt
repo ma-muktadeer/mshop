@@ -5,6 +5,6 @@ ${AnsiColor.BRIGHT_BLUE}
    | |    | |    |  __  | |  | | |  | |\___ \|  __|  
   _| |_   | |    | |  | | |__| | |__| |____) | |____ 
  |_____|  |_|    |_|  |_|\____/ \____/|_____/|______|
-${application.title}: ${application.version} | Author: ${application.author}
-Powered by Spring Boot ${spring-boot.version}
+${application.title}: ${application.version} | Author: ${AnsiColor.BRIGHT_YELLOW}${application.author}
+${AnsiColor.BRIGHT_GREEN}Powered by Spring Boot :${AnsiColor.BRIGHT_RED}${spring-boot.version}
 ${AnsiColor.DEFAULT}

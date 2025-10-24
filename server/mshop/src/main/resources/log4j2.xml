@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<Configuration status="WARN">
+    <Properties>
+        <Property name="LOG_PATH">D:/my git/logs/mshop</Property>
+        <Property name="LOG_FILE">mshop</Property>
+        <Property name="MAX_HISTORY">10</Property>
+        <Property name="MAX_FILE_SIZE">1MB</Property>
+        <Property name="TOTAL_SIZE_CAP">10MB</Property>
+        <Property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %t %logger{36} : %m%n</Property>
+    </Properties>
 
-</beans>
+    <Appenders>
+        <!-- Console Appender with colors -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{[%-5level]}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=white} %style{%t}{cyan} %style{[%logger{36}:%line]}{blue} : %msg%n"
+                           disableAnsi="false" noConsoleNoAnsi="false"/>
+        </Console>
+
+        <!-- Rolling File Appender -->
+        <RollingFile name="File"
+                     fileName="${LOG_PATH}/${LOG_FILE}.log"
+                     filePattern="${LOG_PATH}/${LOG_FILE}.%d{yyyy-MM-dd}-%i.gz">
+            <PatternLayout pattern="${PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}"/>
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${LOG_PATH}" maxDepth="1">
+                    <IfFileName glob="${LOG_FILE}*.gz">
+                        <IfLastModified age="${MAX_HISTORY}d">
+                            <IfAny>
+                                <IfAccumulatedFileSize exceeds="${TOTAL_SIZE_CAP}" />
+                                <IfAccumulatedFileCount exceeds="${MAX_HISTORY}" />
+                            </IfAny>
+                        </IfLastModified>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <!-- Async File Appender -->
+        <Async name="AsyncFile" bufferSize="5000">
+            <AppenderRef ref="File"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.ithouse" level="INFO"/>
+        <Logger name="org.springframework" level="INFO"/>
+        <Logger name="org.hibernate" level="WARN"/>
+
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="AsyncFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

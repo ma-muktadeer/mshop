@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.google.gson.Gson;
 import com.ithouse.mshop.core.entity.DocumentFiles;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.repository.DocumentFilesRepo;
@@ -31,11 +29,6 @@ public class DocumentFilesService {
 
 	@Autowired
 	private UserService userService;
-
-	Gson json;
-	{
-		json = new Gson();
-	}
 
 	public void saveFile(List<MultipartFile> files, FileType fileType, Long userId, String appName, String objectName) {
 		User loginUser = userService.findUser(userId, appName);
