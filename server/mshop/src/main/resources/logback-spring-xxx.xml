@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" debug="false">
+
+	<!-- ===============================
+         Properties / Defaults
+         =============================== -->
+	<property resource="logback.properties" />
+	<property name="LOG_PATH" value="${logging.file.path}"/>
+	<property name="LOG_FILE" value="${logging.file.name}"/>
+	<property name="MAX_HISTORY" value="${logging.file.max.history}"/>
+	<property name="MAX_FILE_SIZE" value="${logging.file.max.size}"/>
+	<property name="TOTAL_SIZE_CAP" value="${logging.file.total.cap}"/>
+
+	<!-- ===============================
+         Console Appender (with color)
+         =============================== -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} %clr([%-5level]){faint} %clr(%t){cyan} %clr(%logger{36}){blue} : %msg%n
+<!--				%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %thread [%logger{36}:%line] %msg%n)-->
+			</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- ===============================
+         Rolling File Appender (async)
+         =============================== -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/${LOG_FILE}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover, compressed -->
+			<fileNamePattern>${LOG_PATH}/${LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %thread [%logger{36}:%line] %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- ===============================
+         Async Appender for FILE (optional)
+         =============================== -->
+	<appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="FILE"/>
+		<queueSize>5000</queueSize>
+		<discardingThreshold>0</discardingThreshold>
+		<includeCallerData>false</includeCallerData>
+	</appender>
+
+	<!-- ===============================
+         Loggers
+         =============================== -->
+	<logger name="com.ithouse" level="INFO"/>
+	<logger name="org.springframework" level="INFO"/>
+	<logger name="org.hibernate" level="WARN"/>
+
+	<!-- ===============================
+         Root Logger
+         =============================== -->
+	<root level="INFO">
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="ASYNC_FILE"/>
+	</root>
+
+</configuration>
