@@ -1,14 +1,14 @@
 package com.ithouse.mshop.shop.service;
 
-import com.ihouse.core.message.AbstractMessageHeader;
-import com.ihouse.core.message.ResponseBuilder;
-import com.ihouse.core.message.interfaces.Message;
-import com.ihouse.core.message.service.IthouseService;
+import com.ithouse.core.message.AbstractMessageHeader;
+import com.ithouse.core.message.ResponseBuilder;
+import com.ithouse.core.message.interfaces.Message;
+import com.ithouse.core.message.services.ItHouseService;
 import com.ithouse.mshop.contants.ActionType;
+import com.ithouse.mshop.core.utils.DtoMapper;
 import com.ithouse.mshop.shop.entity.Product;
 import com.ithouse.mshop.shop.projection.ProductProjection;
 import com.ithouse.mshop.shop.repo.ProductRepo;
-import com.ithouse.mshop.core.utils.DtoMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductService extends IthouseService<List<Product>> {
+public class ProductService extends ItHouseService<List<Product>> {
 
     private static final Logger log = LogManager.getLogger(ProductService.class);
 
@@ -25,8 +25,8 @@ public class ProductService extends IthouseService<List<Product>> {
     private ProductRepo productRepo;
 
     @Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public Message<?> ithouseService(Message requestMessage) throws Exception {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public Message<?> itHouseService(Message requestMessage) throws Exception {
         AbstractMessageHeader header = null;
         Message<?> msgResponse = null;
 
@@ -37,15 +37,13 @@ public class ProductService extends IthouseService<List<Product>> {
             if (actionType.equals(ActionType.SELECT_ALL_BY_USER.toString())) {
                 List<Product> products = selectAll4User(requestMessage);
                 msgResponse = ResponseBuilder.buildResponse(header, products);
-            }else if (actionType.equals(ActionType.ACTION_SELECT_ALL.toString())) {
+            } else if (actionType.equals(ActionType.ACTION_SELECT_ALL.toString())) {
                 List<Product> products = selectAll(requestMessage);
                 msgResponse = ResponseBuilder.buildResponse(header, products);
+            } else {
+                log.info("No ActionType found for actionType: {}", actionType);
             }
-
-            else {
-                log.info("No ActionType found for actionType: {}",actionType);
-            }
-        }catch (Exception e) {
+        } catch (Exception e) {
             assert header != null;
             msgResponse = ResponseBuilder.buildErrorResponse(header, e);
             msgResponse.getHeader().setExtraInfoMap(null);
@@ -62,6 +60,7 @@ public class ProductService extends IthouseService<List<Product>> {
         List<ProductProjection> products = productRepo.findAllByIsActive(1);
         return buildProjection2DTO(products);
     }
+
     public List<ProductProjection> findAllActiveProductP() {
         return productRepo.findAllByIsActive(1);
     }
@@ -70,21 +69,23 @@ public class ProductService extends IthouseService<List<Product>> {
         long userId = requestMessage.getPayload().getFirst().getUserId();
         return findProductByUserId(userId);
     }
-    public List<Product> findProductByUserId(Long userId){
+
+    public List<Product> findProductByUserId(Long userId) {
 //        List<ProductProjection> productProjections= productRepo.findAllByUsers_UserIdAndIsActive(userId, 1);
-        List<ProductProjection> productProjections= productRepo.findAllByIsActive( 1);
+        List<ProductProjection> productProjections = productRepo.findAllByIsActive(1);
         return buildProjection2DTO(productProjections);
     }
 
-    private List<Product> buildProjection2DTO(List<ProductProjection> productProjections){
-        if(productProjections == null){
+    private List<Product> buildProjection2DTO(List<ProductProjection> productProjections) {
+        if (productProjections == null) {
             return null;
         }
         return productProjections.stream().parallel()
                 .map(this::buildSingle).toList();
     }
-//    private ProductDTO buildSingle(ProductProjection productProjection){
-    private Product buildSingle(ProductProjection productProjection){
+
+    //    private ProductDTO buildSingle(ProductProjection productProjection){
+    private Product buildSingle(ProductProjection productProjection) {
         if (productProjection == null) {
             return null;
         }

@@ -1,18 +1,18 @@
 package com.ithouse.mshop.core.service;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import com.ihouse.core.message.AbstractMessageHeader;
-import com.ihouse.core.message.ResponseBuilder;
-import com.ihouse.core.message.interfaces.Message;
-import com.ihouse.core.message.service.IthouseService;
+import com.ithouse.core.message.AbstractMessageHeader;
+import com.ithouse.core.message.ResponseBuilder;
+import com.ithouse.core.message.interfaces.Message;
+import com.ithouse.core.message.services.ItHouseService;
+import com.ithouse.mshop.contants.ActionType;
+import com.ithouse.mshop.core.entity.Login;
+import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.principal.UserPrincipal;
 import com.ithouse.mshop.core.principal.UserPrincipalService;
+import com.ithouse.mshop.core.repository.LoginRepo;
+import com.ithouse.mshop.core.repository.UserRepo;
 import com.ithouse.mshop.core.security.service.AuthService;
+import com.ithouse.mshop.core.utils.DocumentFileUtils;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,24 +23,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.ithouse.mshop.contants.ActionType;
-import com.ithouse.mshop.core.entity.Login;
-import com.ithouse.mshop.core.entity.User;
-import com.ithouse.mshop.core.repository.LoginRepo;
-import com.ithouse.mshop.core.repository.UserRepo;
-import com.ithouse.mshop.core.utils.DocumentFileUtils;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Service
-public class UserService extends IthouseService<List<User>> {
+public class UserService extends ItHouseService<List<User>> {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepo userRepo;
@@ -61,7 +57,7 @@ public class UserService extends IthouseService<List<User>> {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public Message<?> ithouseService(Message requestMessage) throws Exception {
+    public Message<?> itHouseService(Message requestMessage) throws Exception {
 
         AbstractMessageHeader header = null;
         Message<?> msgResponse = null;

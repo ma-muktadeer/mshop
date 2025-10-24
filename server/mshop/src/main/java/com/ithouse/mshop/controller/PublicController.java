@@ -1,12 +1,11 @@
 package com.ithouse.mshop.controller;
 
-import com.google.gson.Gson;
 import com.ihouse.core.constants.Constants;
-import com.ihouse.core.message.AbstractMessageHeader;
-import com.ihouse.core.message.GenericMessage;
-import com.ihouse.core.message.interfaces.Message;
-import com.ihouse.core.message.processor.service.ProcessorService;
-import com.ihouse.core.message.service.ServiceCoordinator;
+import com.ithouse.core.message.AbstractMessageHeader;
+import com.ithouse.core.message.GenericMessage;
+import com.ithouse.core.message.interfaces.Message;
+import com.ithouse.core.message.processor.services.ProcessorService;
+import com.ithouse.core.message.services.ServiceCoordinator;
 import com.ithouse.mshop.contants.ActionType;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.model.AccessTokenResponse;
@@ -38,19 +37,9 @@ public class PublicController {
 
     private final ServiceCoordinator serviceCoordinator;
 
-
-    // @Autowired
-    // SecurityService securityService;
-
     private final UserService userService;
 
     private final AuthService authService;
-
-    Gson gson = null;
-
-    {
-        gson = new Gson();
-    }
 
     public PublicController(ProcessorService processorService, ServiceCoordinator serviceCoordinator, UserService userService, AuthService authService) {
         this.processorService = processorService;
@@ -96,7 +85,7 @@ public class PublicController {
     private LoginRes handleLogin(Message<List<User>> requestMessage, HttpSession session) throws Exception {
         LoginRes login = new LoginRes();
         String reqPass = requestMessage.getPayload().getFirst().getPassword();
-        Message<?> res = userService.ithouseService(requestMessage);
+        Message<?> res = userService.itHouseService(requestMessage);
         log.info("Login");
 
         session.setAttribute("user", res.getPayload());
@@ -175,7 +164,8 @@ public class PublicController {
 //
 //	@GetMapping("/users")
 //    public CompletableFuture<List<User>> getAll() throws InterruptedException {
-////        Thread.sleep(1000); // Simulate delay
+
+    /// /        Thread.sleep(1000); // Simulate delay
 //        log.info("my thread is [{}]", Thread.currentThread().getName());
 //        return CompletableFuture.supplyAsync(() -> {
 //            List<User> users = userService.getAllUsers();
@@ -199,7 +189,6 @@ public class PublicController {
 //
 //        return "Session ID: " + session.getId();
 //    }
-
     @RequestMapping(path = "/check", method = RequestMethod.POST)
     public ResponseEntity<?> checkValid(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {

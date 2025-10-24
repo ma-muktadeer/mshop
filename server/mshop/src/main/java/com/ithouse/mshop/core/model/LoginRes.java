@@ -1,9 +1,9 @@
 package com.ithouse.mshop.core.model;
 
-import java.util.Date;
-
-import com.ihouse.core.message.interfaces.Message;
+import com.ithouse.core.message.interfaces.Message;
 import com.ithouse.mshop.core.entity.User;
+
+import java.util.Date;
 
 public class LoginRes {
     

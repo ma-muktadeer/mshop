@@ -2,9 +2,9 @@ package com.ithouse.mshop.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ihouse.core.message.interfaces.Message;
-import com.ihouse.core.message.processor.service.ProcessorService;
-import com.ihouse.core.message.service.ServiceCoordinator;
+import com.ithouse.core.message.interfaces.Message;
+import com.ithouse.core.message.processor.services.ProcessorService;
+import com.ithouse.core.message.services.ServiceCoordinator;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.repository.UserRepo;
 import com.ithouse.mshop.core.service.DocumentFilesService;
@@ -28,7 +28,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 
-//@CrossOrigin(origins = {"http://localhost:4200"}, allowCredentials = "true", allowedHeaders = {"Authorization", "Content-Type"})
 @RestController
 @RequestMapping(value = "/secure")
 public class AppController {
