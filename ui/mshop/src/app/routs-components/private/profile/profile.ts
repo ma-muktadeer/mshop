@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
 import { EditProfile } from './edit-profile/edit-profile';
 import { Spinner } from "src/app/structure/shared/components/spinner/spinner";
+import { RequestBody } from 'src/app/services/common/constants/RequestBody';
 
 
 @Component({
@@ -146,12 +147,12 @@ export class Profile extends Ithouse implements Service{
     }
   }
 
-  onResponse(service: Service, req: any, res: any) {
+  onResponse(service: Service, req: RequestBody<any>, res: any) {
     this.loading.update(() => false);
     if (!super.isOK(res)) {
       Swal.fire(super.getErrorMsg(res));
       return;
-    } else if (res.header.referance === 'LOAD_DETAILS') {
+    } else if (req.header.reference === 'LOAD_DETAILS') {
       this.userDetails = res.payload;
       this.profileImage.update(()=> this.userDetails?.profileImagePath ?? this.profileImage());
       this.coverImage.update(()=>this.userDetails?.profileBannerPath ?? this.coverImage());

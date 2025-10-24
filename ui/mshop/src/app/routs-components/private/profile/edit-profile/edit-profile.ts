@@ -9,6 +9,7 @@ import { Ithouse } from 'src/app/services/common/Ithouse';
 import { Service } from 'src/app/services/service';
 import Swal from 'sweetalert2';
 import { DynamicForm } from "src/app/ithouse/common/components/dynamic-form/dynamic-form";
+import { RequestBody } from 'src/app/services/common/constants/RequestBody';
 
 @Component({
   selector: 'app-edit-profile',
@@ -59,12 +60,12 @@ export class EditProfile extends Ithouse implements Service{
     }
   }
 
-  onResponse(service: Service, req: any, res: any) {
+  onResponse(service: Service, req: RequestBody<any>, res: any) {
     this.loading = false;
     if (!super.isOK(res)) {
       Swal.fire(super.getErrorMsg(res));
       return;
-    } else if (res.header.referance === 'UPDATE') {
+    } else if (req.header.reference === 'UPDATE') {
       const user = res.payload;
       if (user) {
         this.userDetails = user;
