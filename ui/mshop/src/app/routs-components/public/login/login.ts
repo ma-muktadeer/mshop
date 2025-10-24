@@ -9,7 +9,7 @@ import { Ithouse } from 'src/app/services/common/Ithouse';
 import { Service } from 'src/app/services/service';
 import { AlertService } from 'src/app/services/alert.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RequestBody } from 'src/app/services/common/constants/Body';
+import { RequestBody } from 'src/app/services/common/constants/RequestBody';
 
 @Component({
   selector: 'ithouse-login',

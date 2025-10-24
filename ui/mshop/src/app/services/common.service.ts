@@ -13,7 +13,7 @@ import { FileAction, FileType } from './file.service';
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Header } from './common/Header';
-import { RequestBody } from './common/constants/Body';
+import { RequestBody } from './common/constants/RequestBody';
 
 @Injectable({
   providedIn: 'root'

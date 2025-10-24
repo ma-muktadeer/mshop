@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Toast } from 'src/app/services/common/Toast';
 import { NgScrollbar } from "ngx-scrollbar";
-import { RequestBody } from 'src/app/services/common/constants/Body';
+import { RequestBody } from 'src/app/services/common/constants/RequestBody';
 
 @Component({
   selector: 'ithouse-permission',
