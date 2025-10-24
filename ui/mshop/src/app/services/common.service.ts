@@ -12,6 +12,8 @@ import { ContentType } from './common/constants/content-type.enum';
 import { FileAction, FileType } from './file.service';
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Header } from './common/Header';
+import { RequestBody } from './common/constants/Body';
 
 @Injectable({
   providedIn: 'root'
@@ -143,25 +145,24 @@ export class CommonService {
     return this.http.post(url, req);
   }
 
+  public generateReqJson(actionType: ActionType, contentType: ContentType, reference: string, payload: any) {
 
-  public generateReqJson(actionType: ActionType, contentType: ContentType, referance: string, payload: any) {
-
-    var loginUser = this.loadLoginUser();
-    var userId = null;
+    const loginUser = this.loadLoginUser();
+    let userId = null;
     if (loginUser && loginUser.userId) {
       userId = loginUser.userId;
     }
-    var header = {
+    const header: Header = {
       actionType: actionType.toString(),
       contentType: contentType.toString(),
-      referance: referance,
+      reference: reference,
       userId: userId,
       extraInfoMap: {
         appName: this._config.config.app.constantAppName
       }
     };
 
-    var data = {
+    const data: RequestBody<typeof payload> = {
       header: header,
       payload: payload instanceof Object ? [payload] : payload
     }

@@ -9,11 +9,12 @@ import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from 
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Toast } from 'src/app/services/common/Toast';
-import { AsyncDetection, NgScrollbar } from "ngx-scrollbar";
+import { NgScrollbar } from "ngx-scrollbar";
+import { RequestBody } from 'src/app/services/common/constants/Body';
 
 @Component({
   selector: 'ithouse-permission',
-  imports: [DragDropModule, FormsModule, AsyncDetection, NgScrollbar],
+  imports: [DragDropModule, FormsModule, NgScrollbar],
   templateUrl: './permission.html',
   styleUrl: './permission.scss'
 })
@@ -128,26 +129,26 @@ export class Permission extends Ithouse implements Service {
     return this.cs.sendRequestAdmin(this, ActionType.SELECT_PERMISSION_ROLE, ContentType.AppPermission, 'SELECT_PERMISSION_ROLE', group);
   }
 
-  onResponse(service: Service, req: any, res: any) {
+  onResponse(service: Service, req: RequestBody<any>, res: any) {
     this.spinnerAddSave = false
     this.disableAddSave = false
     this.spinnerAssignSave = false
     this.permissionBtnDisabled = false
     debugger
-    if (res.header.referance == 'FindAll') {
+    if (req.header.reference == 'FindAll') {
       this.permissionList = res.payload
       // this.filteredPermissionList.set(res.payload);
       console.log(res);
     }
-    else if (res.header.referance == 'SAVE') {
+    else if (req.header.reference == 'SAVE') {
       Toast.show("Permission Saved");
       this.onLoad();
     }
-    else if (res.header.referance == 'APPROVE') {
+    else if (req.header.reference == 'APPROVE') {
       Toast.show("Permission Approved");
       this.onLoad();
     }
-    else if (res.header.referance == 'SELECT_PERMISSION_ROLE') {
+    else if (req.header.reference == 'SELECT_PERMISSION_ROLE') {
       console.log(res);
 
       var roleGroup = res.payload

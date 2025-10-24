@@ -9,6 +9,7 @@ import { Ithouse } from 'src/app/services/common/Ithouse';
 import { Service } from 'src/app/services/service';
 import { AlertService } from 'src/app/services/alert.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RequestBody } from 'src/app/services/common/constants/Body';
 
 @Component({
   selector: 'ithouse-login',
@@ -80,13 +81,7 @@ export class Login extends Ithouse implements Service {
     this.cs.sendRequestPublic(this, ActionType.LOGIN, ContentType.User, 'LOGIN', payload, '/login');
   }
 
-  loadUser() {
-    const p = {};
-    this.cs.sendRequest(this, ActionType.SELECT, ContentType.User, 'user', p);
-  }
-
-
-  onResponse(service: Service, req: any, res: any) {
+  onResponse(service: Service, req: RequestBody<any>, res: any) {
     const response = res?.res ?? res;
     this.loading.update(() => false);
     debugger
@@ -94,18 +89,14 @@ export class Login extends Ithouse implements Service {
       alert(super.getErrorMsg(response));
       return;
     }
-    else if (response.header.referance === 'REGISTER') {
+    else if (req.header.reference === 'REGISTER') {
       const user = response.payload[0];
       console.log(response.payload);
       alert(`${user.loginName} is created successful.`);
       this.isSignDivVisiable = false;
 
     }
-    else if (response.header.referance === 'user') {
-      console.log(response.payload);
-
-    }
-    else if (response.header.referance === 'LOGIN') {
+    else if (req.header.reference === 'LOGIN') {
       console.log(response.payload);
 
       if (response.payload.length > 0) {
