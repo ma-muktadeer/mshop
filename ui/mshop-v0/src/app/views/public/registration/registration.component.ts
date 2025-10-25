@@ -93,7 +93,7 @@ export class RegistrationComponent extends Ithouse implements Service, OnInit {
       alert(super.getErrorMsg(response));
       return;
     }
-    else if (response.header.referance === 'REGISTER') {
+    else if (req.header.referance === 'REGISTER') {
       const user = response.payload[0];
       console.log(response.payload);
       alert(`${user.loginName} is created successful.`);
@@ -104,7 +104,7 @@ export class RegistrationComponent extends Ithouse implements Service, OnInit {
       console.log(response.payload);
 
     }
-    else if (response.header.referance === 'LOGIN') {
+    else if (req.header.referance === 'LOGIN') {
       console.log(response.payload);
 
       if (response.payload.length > 0) {

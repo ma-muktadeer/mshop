@@ -1,42 +1,36 @@
-import { ApplicationConfig, importProvidersFrom, inject, PLATFORM_ID, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
+import { ApplicationConfig, importProvidersFrom, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { AngularSlickgridModule } from 'angular-slickgrid';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay, withHttpTransferCacheOptions } from '@angular/platform-browser';
-import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { AngularSlickgridModule } from 'angular-slickgrid';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { ConfigService, initializeApplication } from '../config.service';
 import { ithouseInterceptor } from '../XhrInterceptor';
+import { DatePipe } from '@angular/common';
 import { CommonService } from './ithouse/common/common.service';
+import { TabManagerService } from './ithouse/common/tab-manager.service';
 import { ToggleFullScreenDirective } from './layout/theme/pages/shared/full-screen/toggle-full-screen';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { PermissionStoreService } from './ithouse/servies/PermissionStoreService';
-
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    // provideRouter(routes),
-    // provideClientHydration(withEventReplay()),
-    // ConfigService,\
-    // // HttpClient,
-    provideRouter(routes, withEnabledBlockingInitialNavigation()),
-    provideClientHydration(
-      withEventReplay(),
+    provideRouter(routes),
+    provideHttpClient(withFetch(), withInterceptors([ithouseInterceptor])),
+    importProvidersFrom(AngularSlickgridModule.forRoot()),
+    provideAppInitializer(() => initializeApplication(inject(ConfigService))),
+    // {
+    //   provide: RxStompService,
+    //   useFactory: rxStompServiceFactory,
+    // },
+    provideClientHydration(withEventReplay(),
       withHttpTransferCacheOptions({ includePostRequests: true })
     ),
-    provideAnimationsAsync(),
-    provideHttpClient(
-      withFetch(),
-      withInterceptors([ithouseInterceptor])
-    ),
-    provideAppInitializer(() => initializeApplication(inject(ConfigService))),
-    importProvidersFrom(AngularSlickgridModule.forRoot()),
     ToggleFullScreenDirective,
-    DatePipe,
     CommonService,
-    // PermissionStoreService,
+    DatePipe,
+    // NabItemsService,
+    TabManagerService,
   ]
 };

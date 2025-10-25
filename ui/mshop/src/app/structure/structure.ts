@@ -7,7 +7,7 @@ import { NavBarModule } from './theme/nav-bar/nav-bar-module';
 
 @Component({
   selector: 'app-structure',
-  imports: [Breadcrumb, RouterOutlet, NavigationModule, NgClass, NavBarModule],
+  imports: [Breadcrumb, RouterOutlet, NavigationModule, NavBarModule],
   templateUrl: './structure.html',
   styleUrl: './structure.scss',
 })
@@ -17,7 +17,6 @@ export class Structure {
   windowWidth: number;
   document: any;
 
-  // constructor
   constructor(@Inject(PLATFORM_ID) private platformId: any) {
     if (isPlatformBrowser(this.platformId)) {
       this.windowWidth = window.innerWidth;
