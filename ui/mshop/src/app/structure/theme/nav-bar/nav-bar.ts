@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, EventEmitter, HostListener, Inject, Output, PLATFORM_ID } from '@angular/core';
+import { Component, EventEmitter, HostListener, Inject, Output, PLATFORM_ID, signal } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -11,9 +11,8 @@ import { environment } from 'src/environments/environment';
 export class NavBar {
   currentApplicationVersion = environment.appVersion;
 
-  // public props
   menuClass = false;
-  collapseStyle = 'none';
+  collapseStyle = signal<string>('none');
   windowWidth: number;
   @Output() NavCollapse = new EventEmitter();
   @Output() NavCollapsedMob = new EventEmitter();
@@ -23,10 +22,10 @@ export class NavBar {
       this.windowWidth = window.innerWidth;
     }
   }
-  // public method
+
   toggleMobOption() {
     this.menuClass = !this.menuClass;
-    this.collapseStyle = this.menuClass ? 'block' : 'none';
+    this.collapseStyle.update(() => this.menuClass ? 'block' : 'none');
   }
 
   navCollapse() {
@@ -36,7 +35,6 @@ export class NavBar {
   }
 
   @HostListener('window:resize', ['$event'])
-  // eslint-disable-next-line
   onResize(event: any): void {
     this.windowWidth = event.target.innerWidth;
   }

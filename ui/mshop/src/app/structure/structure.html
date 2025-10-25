@@ -1,8 +1,8 @@
 <app-navigation
   class="pcoded-navbar menupos-fixed menu-light"
   [ngClass]="{
-    'navbar-collapsed': navCollapsed,
-    'mob-open': navCollapsedMob
+    'navbar-collapsed': navCollapsed(),
+    'mob-open': navCollapsedMob()
   }"
   (NavCollapsedMob)="navMobClick()"
 ></app-navigation>
@@ -13,7 +13,7 @@
 ></app-nav-bar> -->
 <app-nav-bar
   class="navbar pcoded-header navbar-expand-lg navbar-light header-blue headerPos-fixed py-0"
-  (NavCollapse)="this.navCollapsed = !this.navCollapsed"
+  (NavCollapse)="navCollapse()"
   (NavCollapsedMob)="navMobClick()"
 ></app-nav-bar>
 
