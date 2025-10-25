@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, EventEmitter, HostListener, Inject, Output, PLATFORM_ID, signal } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { ConfigService } from 'src/config.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
   styleUrl: './nav-bar.scss'
 })
 export class NavBar {
-  currentApplicationVersion = environment.appVersion;
+  app!: any;
 
   menuClass = false;
   collapseStyle = signal<string>('none');
@@ -17,10 +17,14 @@ export class NavBar {
   @Output() NavCollapse = new EventEmitter();
   @Output() NavCollapsedMob = new EventEmitter();
 
-  constructor(@Inject(PLATFORM_ID) private platformId: any) {
+  constructor(@Inject(PLATFORM_ID) private platformId: any,
+    private configService: ConfigService) {
+    this.app = this.configService.app;
     if (isPlatformBrowser(this.platformId)) {
       this.windowWidth = window.innerWidth;
     }
+    console.log(this.app);
+
   }
 
   toggleMobOption() {

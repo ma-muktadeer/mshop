@@ -11,12 +11,18 @@
     "SERVER_URL": "http://127.0.0.1:8081",
     "SERVER_BASE_URL": "http://127.0.0.1:8081/secure",
     "SERVER_BASE_URL_PUBLIC": "http://127.0.0.1:8081/public",
-    "SERVER_BASE_URL_ADMIN": "http://127.0.0.1:8081/secure"
+    "SERVER_BASE_URL_ADMIN": "http://127.0.0.1:8081/secure",
+    "HTTP_REQUEST_TIMEOUT": 1800000,
+    "HTTP_REQUEST_RETRY_COUNT": 0,
+    "HTTP_REQUEST_RETRY_DELAY": 2000
   },
   "env.prod": {
     "SERVER_URL": "http://172.25.204.232:8080/rbs-server",
     "SERVER_BASE_URL": "http://172.25.204.232:8080/rbs-server/secure",
     "SERVER_BASE_URL_PUBLIC": "http://172.25.204.232:8080/rbs-server/public",
-    "SERVER_BASE_URL_ADMIN": "http://172.25.204.232:8080/rbs-server/secure"
+    "SERVER_BASE_URL_ADMIN": "http://172.25.204.232:8080/rbs-server/secure",
+    "HTTP_REQUEST_TIMEOUT": 10000,
+    "HTTP_REQUEST_RETRY_COUNT": 1,
+    "HTTP_REQUEST_RETRY_DELAY": 2000
   }
 }

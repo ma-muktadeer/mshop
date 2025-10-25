@@ -34,6 +34,9 @@ export class ConfigService {
     }
   }
 
+  get app(): any {
+    return this.config.app;
+  }
   get appName(): string{
     return this.config.app.constantAppName
   }

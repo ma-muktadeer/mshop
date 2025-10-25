@@ -1,7 +1,6 @@
-import { environment } from './../../environments/environment';
-import { HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
-import { DestroyRef, DOCUMENT, Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { DOCUMENT, Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { catchError, firstValueFrom, map, Observable, retry, throwError, timeout } from 'rxjs';
 import { environment as ENV } from './../../environments/environment';
 import { ConfigService } from '../../config.service';
 import { Constants } from './common/Constants';
@@ -11,7 +10,6 @@ import { Service } from './service';
 import { ContentType } from './common/constants/content-type.enum';
 import { FileAction, FileType } from './file.service';
 import { isPlatformBrowser } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Header } from './common/Header';
 import { RequestBody } from './common/constants/RequestBody';
 
@@ -20,10 +18,7 @@ import { RequestBody } from './common/constants/RequestBody';
 })
 export class CommonService {
 
-
   private readonly _config = inject(ConfigService);
-  private readonly _destroyRef = inject(DestroyRef);
-  // app = app;
   sessionStorage: any;
   localStorage: any;
   constructor(
@@ -54,17 +49,6 @@ export class CommonService {
     }
   }
 
-  // /**
-  //  * This method responsible for communicating with server.
-  //  * All request pass to server and return to sender [onResponse] if success.
-  //  * if not access to server response will return to sender [onError] method
-  //  *
-  //  * @param service Service
-  //  * @param actionType ActionType
-  //  * @param contentType ContentType
-  //  * @param referance string
-  //  * @param payload any
-  //  */
   public sendRequest(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
     this.doSendRequest(service, actionType, contentType, referance, payload, path);
   }
@@ -73,57 +57,98 @@ export class CommonService {
     this.doSendRequestPublic(service, actionType, contentType, referance, payload, path);
   }
 
+  public sendRequestAdmin(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
+    this.doSendRequestAdmin(service, actionType, contentType, referance, payload, path);
+  }
 
-
-  private doSendRequestPublic(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
+  private async doSendRequestPublic<T>(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
 
     var req = this.generateReqJson(actionType, contentType, referance, payload);
 
     var url = path ? this.environment.SERVER_BASE_URL_PUBLIC + path : this.environment.SERVER_BASE_URL_PUBLIC + "/jsonRequest"
 
-    this._postRequest(url, req, service);
+    await this._postRequest<T, any>(url, req, service);
   }
 
-  public sendRequestAdmin(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
-    this.doSendRequestAdmin(service, actionType, contentType, referance, payload, path);
-  }
-
-  private doSendRequestAdmin(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
+  private async doSendRequestAdmin<T>(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
 
     var req = this.generateReqJson(actionType, contentType, referance, payload);
 
     var url = path ? this.environment.SERVER_BASE_URL_ADMIN + path : this.environment.SERVER_BASE_URL_ADMIN + "/jsonRequest"
 
-    this._postRequest(url, req, service);
+    await this._postRequest<T, any>(url, req, service);
   }
 
-
-  private doSendRequest(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
+  private async doSendRequest<T>(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: T | T[], path: string = null) {
 
     let req = this.generateReqJson(actionType, contentType, referance, payload);
     let url = path ? this.environment.SERVER_BASE_URL + path : this.environment.SERVER_BASE_URL + "/jsonRequest"
 
-    this._postRequest(url, req, service);
+    await this._postRequest<T, any>(url, req, service);
   }
 
-  private _postRequest(url: string, req: any, service: Service) {
-    this.http.post(url, req)
-      .pipe(
-        takeUntilDestroyed(this._destroyRef),
-        catchError((error: any) => {
-          service.onError(service, req, error);
-          return throwError(() => error);
-        })
-      )
-      .subscribe({
-      next: (res) => {
-        service.onResponse(service, req, res);
-      }
-    });
+  private async _postRequest<T, R>(url: string, req: RequestBody<T>, service: Service):Promise<R> {
+
+    try {
+      const res = await firstValueFrom(
+        this.http.post<R>(url, req).pipe(
+          timeout(this.environment.HTTP_REQUEST_TIMEOUT),
+          retry(
+            {
+              count: this.environment.HTTP_REQUEST_RETRY_COUNT || 0,
+              delay: this.environment.HTTP_REQUEST_RETRY_DELAY || 1000
+            }
+          ),
+          catchError((error) => {
+            let message = 'An unexpected error occurred.';
+            if (error.name === 'TimeoutError') {
+              message = 'The server took too long to respond. Please try again later.';
+            } else if (error.status === 0) {
+              message = 'Unable to connect to the server. Check your internet connection.';
+            } else if (error.status >= 500) {
+              message = 'The server is temporarily unavailable. Please try again later.';
+            } else if (error.status === 404) {
+              message = 'The requested service could not be found.';
+            } else if (error.status === 400) {
+              message = error.error?.message || 'Bad request — please check your input.';
+            } else if (error.error?.message) {
+              message = error.error.message;
+            }
+            console.error('HTTP error:', { url, request: req, status: error.status, error });
+
+            return throwError(() => ({
+              message,
+              raw: error
+            }));
+          }),
+        )
+      ) as R;
+      service.onResponse(service, req, res);
+      return res;
+    } catch (error) {
+      console.error('HTTP request failed', { url, req, error });
+      const message = error?.message || 'Something went wrong.';
+      service.onError(service, req, message);
+      throw error;
+    }
+
+    // this.http.post(url, req)
+    //   .pipe(
+    //     takeUntilDestroyed(this._destroyRef),
+    //     catchError((error: any) => {
+    //       service.onError(service, req, error);
+    //       return throwError(() => error);
+    //     })
+    //   )
+    //   .subscribe({
+    //     next: (res) => {
+    //       service.onResponse(service, req, res);
+    //     }
+    //   });
   }
 
 
-  public execute(actionType: ActionType, contentType: ContentType, payload: any) {
+  public async execute<T>(actionType: ActionType, contentType: ContentType, payload: T | T[]) {
 
     var req = this.generateReqJson(actionType, contentType, '', payload);
 
@@ -131,7 +156,7 @@ export class CommonService {
 
   }
 
-  public executePublic(actionType: ActionType, contentType: ContentType, payload: any, path = null) {
+  public async executePublic<T>(actionType: ActionType, contentType: ContentType, payload: T | T[], path = null) {
 
     var req = this.generateReqJson(actionType, contentType, '', payload);
     var url = path ? this.environment.SERVER_BASE_URL_PUBLIC + path : this.environment.SERVER_BASE_URL_PUBLIC + "/jsonRequest"
@@ -139,13 +164,17 @@ export class CommonService {
 
   }
 
-  public executeAdmin(actionType: ActionType, contentType: ContentType, payload: any, path = null) {
+  public async executeAdmin<T>(actionType: ActionType, contentType: ContentType, payload: T | T[], path = null) {
     var req = this.generateReqJson(actionType, contentType, '', payload);
     var url = path ? this.environment.SERVER_BASE_URL_ADMIN + path : this.environment.SERVER_BASE_URL_ADMIN + "/jsonRequest"
     return this.http.post(url, req);
   }
 
-  public generateReqJson(actionType: ActionType, contentType: ContentType, reference: string, payload: any) {
+  private generateReqJson<T>(
+    actionType: ActionType,
+    contentType: ContentType,
+    reference: string,
+    payload: T | T[]): RequestBody<T> {
 
     const loginUser = this.loadLoginUser();
     let userId = null;
@@ -162,9 +191,9 @@ export class CommonService {
       }
     };
 
-    const data: RequestBody<typeof payload> = {
+    const data: RequestBody<T> = {
       header: header,
-      payload: payload instanceof Object ? [payload] : payload
+      payload: Array.isArray(payload) ? payload : [payload]
     }
     return data;
   }
