@@ -1,6 +1,6 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, Inject, inject, PLATFORM_ID, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgClass } from '@angular/common';
+import { isPlatformBrowser, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { CommonService } from 'src/app/services/common.service';
@@ -10,6 +10,7 @@ import { Service } from 'src/app/services/service';
 import { AlertService } from 'src/app/services/alert.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RequestBody } from 'src/app/services/common/constants/RequestBody';
+import { Platform } from '@angular/cdk/platform';
 
 @Component({
   selector: 'ithouse-login',
@@ -21,8 +22,8 @@ export class Login extends Ithouse implements Service {
   protected cs = inject(CommonService);
   protected _destroyRef = inject(DestroyRef);
   private alert = inject(AlertService);
-
-  isSignDivVisiable: boolean = false;
+  isSignDivVisiable = signal<boolean>(false);
+  isMobile = signal<boolean>(false);
   loginName: any;
   email: any;
   password: any;
@@ -33,16 +34,20 @@ export class Login extends Ithouse implements Service {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private platform: Platform,
   ) {
     super();
+    this.isMobile.update(() => this.platform.ANDROID || this.platform.IOS);
+    console.log('Platform is mobile:', this.isMobile());
+
   }
 
   ngOnInit() {
     this.route.queryParams
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(params => {
-      this.sessionExpired = params['sessionExpired'] === 'true';
-    });
+        this.sessionExpired = params['sessionExpired'] === 'true';
+      });
     if (this.sessionExpired) {
       // this.cs.logout(this);
       this.alert.showAlert('Session Expriered.', 'Your session is expriered. Please login again.', 'error');
@@ -51,6 +56,9 @@ export class Login extends Ithouse implements Service {
     }
   }
 
+  setIsSignDivVisiable(res: boolean) {
+    this.isSignDivVisiable.update(() => res);
+  }
   onRegister() {
     if (this.loading()) {
       return;
@@ -93,7 +101,7 @@ export class Login extends Ithouse implements Service {
       const user = response.payload[0];
       console.log(response.payload);
       alert(`${user.loginName} is created successful.`);
-      this.isSignDivVisiable = false;
+      this.isSignDivVisiable.update(() => false);
 
     }
     else if (req.header.reference === 'LOGIN') {

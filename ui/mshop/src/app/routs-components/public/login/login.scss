@@ -27,6 +27,26 @@
   min-height: 480px;
 }
 
+/* mobile segmented control - hidden on desktop */
+.mobile-switcher {
+  display: none;
+}
+
+.ms-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 8px 14px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.ms-btn.active {
+  color: #fff;
+  background: #512da8;
+}
+
 .container p {
   font-size: 14px;
   line-height: 20px;
@@ -67,6 +87,15 @@
 .container button.hidden {
   background-color: transparent;
   border-color: #fff;
+}
+
+.container button.primary {
+  background-color: #512da8;
+  color: #fff;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border-radius: 10px;
 }
 
 .container form {
@@ -222,4 +251,83 @@
 
 .container.active .toggle-right {
   transform: translateX(200%);
+}
+
+/* Mobile-specific styles */
+@media (max-width: 600px) {
+  .parent {
+    height: auto;
+    padding: 40px 0;
+  }
+
+  .container {
+    width: 92%;
+    min-height: auto;
+    border-radius: 16px;
+    margin: 20px auto;
+    padding: 18px 12px;
+  }
+
+  /* show mobile switcher on small screens */
+  .mobile-switcher {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .container h1 {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .container p, .container span {
+    font-size: 13px;
+  }
+
+  /* Stack forms and show only active via aria-hidden */
+  .form-container {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    transition: none;
+    padding: 6px 6px 12px 6px;
+  }
+
+  .form-container[aria-hidden="true"] {
+    display: none;
+  }
+
+  .form-container[aria-hidden="false"] {
+    display: block;
+  }
+
+  .container form {
+    padding: 6px 8px;
+    align-items: stretch;
+  }
+
+  .container input {
+    padding: 14px 12px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .container button {
+    padding: 12px 16px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .container button.primary {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+
+  /* hide desktop overlay */
+  .toggle-container {
+    display: none;
+  }
 }
