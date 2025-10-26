@@ -68,7 +68,7 @@ public class AppController {
             requestMessage = processorService.fromJson(json);
             requestMessage.getHeader().setSenderSourceIPAddress(req.getRemoteAddr());
             requestMessage.getHeader().setSenderGatewayIPAddress(req.getHeader(VIA));
-            processedMessage = serviceCoordinator.service(requestMessage);
+            processedMessage = serviceCoordinator.service(requestMessage, false);
             serverResponse = processorService.toJson(processedMessage);
         } catch (Exception e) {
             log.error("Exception processig message [{}]", e);

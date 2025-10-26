@@ -147,7 +147,7 @@ public class PublicController {
             requestMessage.getHeader().setSenderSourceIPAddress(req.getRemoteAddr());
             requestMessage.getHeader().setSenderGatewayIPAddress(req.getHeader(VIA));
             log.info(requestMessage.getPayload().getClass().getSimpleName());
-            processedMessage = serviceCoordinator.service(requestMessage);
+            processedMessage = serviceCoordinator.service(requestMessage, true);
             serverResponse = processorService.toJson(processedMessage);
         } catch (Exception e) {
             log.error("Exception processing message [{}]", e);

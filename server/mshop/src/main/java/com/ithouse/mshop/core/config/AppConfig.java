@@ -2,8 +2,10 @@ package com.ithouse.mshop.core.config;
 
 import com.ithouse.core.message.interfaces.Service;
 import com.ithouse.core.message.processor.services.ProcessorService;
+import com.ithouse.core.message.services.PublicMapService;
 import com.ithouse.core.message.services.ServiceCoordinator;
 import com.ithouse.core.message.services.ServiceMap;
+import com.ithouse.mshop.contants.ActionType;
 import com.ithouse.mshop.core.entity.Regex;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.repository.RegexRepo;
@@ -48,7 +50,7 @@ public class AppConfig {
     public ServiceCoordinator ServiceCoordinator() {
         ServiceCoordinator sc = new ServiceCoordinator();
         sc.setServiceMap(serviceMap());
-
+        sc.setPublicMapService(publicMapService());
         return sc;
     }
 
@@ -72,7 +74,6 @@ public class AppConfig {
 //		rm.setRegexMap(patterns);
 //		return rm;
 //	}
-    @Bean
     public ServiceMap serviceMap() {
         ServiceMap serviceMap = new ServiceMap();
         Map<String, Service<?>> map = new LinkedHashMap<>();
@@ -86,6 +87,22 @@ public class AppConfig {
 
         serviceMap.setServiceMap(map);
         return serviceMap;
+    }
+
+
+    public PublicMapService publicMapService() {
+        PublicMapService service = new PublicMapService();
+        addPublicMapping(service, ActionType.ACTION_LOGIN, User.class.getSimpleName(), userService);
+        addPublicMapping(service, ActionType.ACTION_LOGOUT, User.class.getSimpleName(), userService);
+
+        return service;
+    }
+
+    private void addPublicMapping(PublicMapService pService, ActionType actionType, String contentType, Service<?> service) {
+        if (actionType == null || service == null || contentType == null) {
+            throw new IllegalArgumentException("ActionType and Service must not be null");
+        }
+        pService.setMap(actionType.toString(), contentType, service);
     }
 
     @Bean
