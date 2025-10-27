@@ -4,6 +4,7 @@ import com.ithouse.mshop.core.entity.AppPermission;
 import com.ithouse.mshop.core.entity.Role;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.repository.UserRepo;
+import com.ithouse.mshop.core.service.AppPermissionService;
 import com.ithouse.mshop.core.service.UserService;
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
@@ -15,14 +16,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserPrincipalService implements UserDetailsService {
 
     private final UserRepo userRepo;
+    private final AppPermissionService appPermissionService;
 
-    public UserPrincipalService( UserRepo userRepo) {
+    public UserPrincipalService(UserRepo userRepo, AppPermissionService appPermissionService) {
         this.userRepo = userRepo;
+        this.appPermissionService = appPermissionService;
     }
 
     @Override
@@ -40,20 +44,9 @@ public class UserPrincipalService implements UserDetailsService {
 
         Hibernate.initialize(user.getRoles());
 
-        for (Role role : user.getRoles()) {
-            // Example: manually adding permissions
-            role.setPermissions(List.of(
-                    new AppPermission("USER_CREATE"),
-                    new AppPermission("USER_DELETE"),
-                    new AppPermission("PRODUCT_VIEW")
-            ));
+        List<Long> roleIds = user.getRoles().stream().map(Role::getRoleId).toList();
 
-//            if (role.getRoleName().equals("ADMIN")) {
-//                role.setPermissions(Set.of("USER_CREATE", "USER_DELETE", "PRODUCT_VIEW"));
-//            } else if (role.getRoleName().equals("MANAGER")) {
-//                role.setPermissions(Set.of("PRODUCT_VIEW", "PRODUCT_EDIT"));
-//            }
-        }
+        user.setPermissions(appPermissionService.findPermissionByRoleIds(roleIds));
 
         return new UserPrincipal(user);
     }

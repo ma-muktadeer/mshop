@@ -1,5 +1,6 @@
 package com.ithouse.mshop.core.principal;
 
+import com.ithouse.mshop.core.entity.AppPermission;
 import com.ithouse.mshop.core.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,5 +40,13 @@ public record UserPrincipal(User user) implements UserDetails {
 
     public Long getId() {
         return user.getUserId();
+    }
+
+    public String getLoginName() {
+        return user.getLoginName();
+    }
+
+    public List<AppPermission> getPermissions() {
+        return user.getPermissions();
     }
 }

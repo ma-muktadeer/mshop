@@ -213,8 +213,7 @@ public class AppPermissionService extends ItHouseService<List<AppPermission>> {
         return null;
     }
 
-
-    private List<AppPermission> findPermissionByRoleIds(List<Long> roleIds) {
+    public List<AppPermission> findPermissionByRoleIds(List<Long> roleIds) {
         return permissionRepo.findByRoleIds(roleIds);
     }
 }

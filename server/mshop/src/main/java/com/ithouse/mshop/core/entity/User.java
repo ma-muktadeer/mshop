@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -121,6 +122,9 @@ public class User extends BaseEntity {
 //
 //    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
 //    private Set<Product> products = new HashSet<>();
+
+    @Transient
+    private List<AppPermission> permissions;
 
     @Transient
     private int pageNumber = 10;
@@ -369,7 +373,6 @@ public class User extends BaseEntity {
     }
 
 
-
     public int getPageNumber() {
         return pageNumber;
     }
@@ -410,4 +413,12 @@ public class User extends BaseEntity {
 //        this.products = products;
 //    }
 
+
+    public List<AppPermission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<AppPermission> permissions) {
+        this.permissions = permissions;
+    }
 }

@@ -1,10 +1,9 @@
 package com.ithouse.mshop.core.entity;
 
 import com.ithouse.mshop.core.model.BaseEntity;
-
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "T_ROLE")
@@ -19,9 +18,6 @@ public class Role extends BaseEntity {
 
     @Column(name = "TX_ROLE_NAME", nullable = false, unique = true)
     private String roleName;
-
-    @Transient
-    private List<AppPermission> permissions;
 
     public String getRoleName() {
         return roleName;
@@ -39,11 +35,4 @@ public class Role extends BaseEntity {
         this.roleId = roleId;
     }
 
-    public List<AppPermission> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<AppPermission> permissions) {
-        this.permissions = permissions;
-    }
 }

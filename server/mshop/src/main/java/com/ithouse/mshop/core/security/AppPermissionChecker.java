@@ -5,13 +5,18 @@ import com.ithouse.mshop.core.entity.AppPermission;
 import com.ithouse.mshop.core.principal.UserPrincipal;
 import com.ithouse.mshop.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class AppPermissionChecker implements PermissionChecker {
+    @Value("${permission.ignore.for:ithousebd,ithouse}")
+    private Set<String> ignoreFor;
+
     @Autowired
     private UserService userService;
 
@@ -21,9 +26,12 @@ public class AppPermissionChecker implements PermissionChecker {
         if (auth == null || !(auth.getPrincipal() instanceof UserPrincipal user)) {
             return false;
         }
-        Long userId = user.getId();
-        List<String> permissionNameList = userService.findPermissionByUserId(userId);
-        return allRequired ? hasAllPermission(permissionNameList, permissions) : hasAnyPermission(permissionNameList, permissions);
+
+        if (ignoreFor.contains(user.getLoginName())) {
+            return true;
+        }
+        List<String> permissionList = user.getPermissions().stream().map(AppPermission::getPermissionName).toList();
+        return allRequired ? hasAllPermission(permissionList, permissions) : hasAnyPermission(permissionList, permissions);
     }
 
 
