@@ -1,5 +1,7 @@
 package com.ithouse.mshop.core.principal;
 
+import com.ithouse.mshop.core.entity.AppPermission;
+import com.ithouse.mshop.core.entity.Role;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.repository.UserRepo;
 import com.ithouse.mshop.core.service.UserService;
@@ -10,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserPrincipalService implements UserDetailsService {
@@ -33,9 +38,22 @@ public class UserPrincipalService implements UserDetailsService {
                     .orElseThrow(() -> new UsernameNotFoundException("User not found."));
         }
 
-//        Hibernate.initialize(user.getRoles());
         Hibernate.initialize(user.getRoles());
 
+        for (Role role : user.getRoles()) {
+            // Example: manually adding permissions
+            role.setPermissions(List.of(
+                    new AppPermission("USER_CREATE"),
+                    new AppPermission("USER_DELETE"),
+                    new AppPermission("PRODUCT_VIEW")
+            ));
+
+//            if (role.getRoleName().equals("ADMIN")) {
+//                role.setPermissions(Set.of("USER_CREATE", "USER_DELETE", "PRODUCT_VIEW"));
+//            } else if (role.getRoleName().equals("MANAGER")) {
+//                role.setPermissions(Set.of("PRODUCT_VIEW", "PRODUCT_EDIT"));
+//            }
+        }
 
         return new UserPrincipal(user);
     }

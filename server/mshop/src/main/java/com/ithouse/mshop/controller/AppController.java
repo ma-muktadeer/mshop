@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ithouse.core.message.interfaces.Message;
 import com.ithouse.core.message.processor.services.ProcessorService;
 import com.ithouse.core.message.services.ServiceCoordinator;
+import com.ithouse.core.security.permission.annotations.RequirePermissions;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.repository.UserRepo;
 import com.ithouse.mshop.core.service.DocumentFilesService;
@@ -117,6 +118,7 @@ public class AppController {
         }
     }
 
+    @RequirePermissions(value = {"ADMIN_VIEW", "MANAGER_VIEW", "USER_CREATE"}, allRequired = false)
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader(name = "appName") String appName, HttpServletRequest req) throws Exception {
         Long userId = Long.valueOf(req.getHeader("UserId"));

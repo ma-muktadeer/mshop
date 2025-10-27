@@ -31,20 +31,20 @@ public class AppConfig {
 
     private final ProductService productService;
 
-    private final RegexRepo regexRepo;
+//    private final RegexRepo regexRepo;
+//
+//    List<Regex> regexList;
 
-    List<Regex> regexList;
-
-    public AppConfig(UserService userService, ProductService productService, RegexRepo regexRepo) {
+    public AppConfig(UserService userService, ProductService productService) {
         this.userService = userService;
         this.productService = productService;
-        this.regexRepo = regexRepo;
+//        this.regexRepo = regexRepo;
     }
 
-    @PostConstruct
-    public void init() {
-        regexList = regexRepo.findAll();
-    }
+//    @PostConstruct
+//    public void init() {
+//        regexList = regexRepo.findAll();
+//    }
 
     @Bean
     public ServiceCoordinator ServiceCoordinator() {

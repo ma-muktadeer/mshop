@@ -2,12 +2,9 @@ package com.ithouse.mshop.core.entity;
 
 import com.ithouse.mshop.core.model.BaseEntity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "T_ROLE")
@@ -23,18 +20,8 @@ public class Role extends BaseEntity {
     @Column(name = "TX_ROLE_NAME", nullable = false, unique = true)
     private String roleName;
 
-    // @ManyToMany(mappedBy = "roles")
-    // private List<User> users;
-
-
-
-    // public Role() {
-    // }
-
-    // public Role(Long roleId, String roleName) {
-    //     this.roleId = roleId;
-    //     this.roleName = roleName;
-    // }
+    @Transient
+    private List<AppPermission> permissions;
 
     public String getRoleName() {
         return roleName;
@@ -52,12 +39,11 @@ public class Role extends BaseEntity {
         this.roleId = roleId;
     }
 
-    // public List<User> getUsers() {
-    //     return users;
-    // }
+    public List<AppPermission> getPermissions() {
+        return permissions;
+    }
 
-    // public void setUsers(List<User> users) {
-    //     this.users = users;
-    // }
-
+    public void setPermissions(List<AppPermission> permissions) {
+        this.permissions = permissions;
+    }
 }

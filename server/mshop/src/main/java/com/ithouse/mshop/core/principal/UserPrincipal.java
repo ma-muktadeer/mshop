@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public record UserPrincipal(User user) implements UserDetails {
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream().map(m -> new SimpleGrantedAuthority(m.getRoleName()))

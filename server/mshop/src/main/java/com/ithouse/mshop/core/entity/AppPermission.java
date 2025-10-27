@@ -45,6 +45,13 @@ public class AppPermission {
     @Transient
     private List<Role> unassignRoleList;
 
+    public AppPermission() {
+    }
+
+    public AppPermission(String permissionName) {
+        this.permissionName = permissionName;
+    }
+
     public Long getPermissionId() {
         return permissionId;
     }

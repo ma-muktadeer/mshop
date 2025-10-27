@@ -4,7 +4,9 @@ import com.ithouse.core.message.AbstractMessageHeader;
 import com.ithouse.core.message.ResponseBuilder;
 import com.ithouse.core.message.interfaces.Message;
 import com.ithouse.core.message.services.ItHouseService;
+import com.ithouse.core.security.permission.annotations.RequirePermissions;
 import com.ithouse.mshop.contants.ActionType;
+import com.ithouse.mshop.core.entity.AppPermission;
 import com.ithouse.mshop.core.entity.Login;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.principal.UserPrincipal;
@@ -15,8 +17,9 @@ import com.ithouse.mshop.core.security.service.AuthService;
 import com.ithouse.mshop.core.utils.DocumentFileUtils;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +40,7 @@ import java.util.List;
 
 @Service
 public class UserService extends ItHouseService<List<User>> {
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private static final Logger log = LogManager.getLogger(UserService.class);
 
     private final UserRepo userRepo;
     private final LoginRepo loginRepo;
@@ -45,15 +48,17 @@ public class UserService extends ItHouseService<List<User>> {
     private final AuthService authService;
     private final UserPrincipalService userPrincipalService;
     private final RoleService roleService;
+    private final UserService self;
 
 
-    public UserService(UserRepo userRepo, LoginRepo loginRepo, PasswordEncoder passwordEncoder, AuthService authService, UserPrincipalService userPrincipalService, RoleService roleService) {
+    public UserService(UserRepo userRepo, LoginRepo loginRepo, PasswordEncoder passwordEncoder, AuthService authService, UserPrincipalService userPrincipalService, RoleService roleService,@Lazy UserService self) {
         this.userRepo = userRepo;
         this.loginRepo = loginRepo;
         this.passwordEncoder = passwordEncoder;
         this.authService = authService;
         this.userPrincipalService = userPrincipalService;
         this.roleService = roleService;
+        this.self = self;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -77,7 +82,7 @@ public class UserService extends ItHouseService<List<User>> {
                 Page<User> userList = select(requestMessage, actionType);
                 msgResponse = ResponseBuilder.buildResponse(header, userList);
             } else if (actionType.equals(ActionType.ACTION_LOGOUT.toString())) {
-                User user = logout(requestMessage, actionType);
+                User user = self.logout(requestMessage, actionType);
                 msgResponse = ResponseBuilder.buildResponse(header, user);
             } else if (actionType.equals(ActionType.LOAD_DETAILS.toString())) {
                 User user = loadDetails(requestMessage, actionType);
@@ -220,7 +225,8 @@ public class UserService extends ItHouseService<List<User>> {
 
     }
 
-    private User logout(Message<List<User>> message, String actionType) throws Exception {
+    @RequirePermissions(value = {"ADMIN_VIEW", "MANAGER_VIEW", "USER_CREATE"}, allRequired = false)
+    public User logout(Message<List<User>> message, String actionType) throws Exception {
         User user = null;
         String appName = (String) message.getHeader().getExtraInfoMap().get("appName");
 
@@ -353,5 +359,9 @@ public class UserService extends ItHouseService<List<User>> {
             throw new UsernameNotFoundException("User not found.");
         }
         return logOutUser(usr, appName, senderSourceIPAddress, senderGatewayIPAddress);
+    }
+
+    public List<String > findPermissionByUserId(Long userId) {
+        return List.of("ABC");
     }
 }
