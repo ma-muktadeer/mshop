@@ -118,7 +118,6 @@ public class AppController {
         }
     }
 
-    @RequirePermissions(value = {"ADMIN_VIEW", "MANAGER_VIEW", "USER_CREATE"}, allRequired = false)
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader(name = "appName") String appName, HttpServletRequest req) throws Exception {
         Long userId = Long.valueOf(req.getHeader("UserId"));
@@ -128,7 +127,6 @@ public class AppController {
         return ResponseEntity.ok(userService.userLogOut(userId, appName, senderSourceIPAddress, senderGatewayIPAddress));
     }
 
-    @CrossOrigin(origins = "http://localhost:4200", exposedHeaders = "Content-Disposition")
     @PostMapping(value = "/file/handle", produces = "multipart/form-data")
     public ResponseEntity<?> handleWithFile(
             @RequestParam(name = "file", required = false) List<MultipartFile> files,

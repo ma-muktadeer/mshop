@@ -189,6 +189,7 @@ export class Permission extends Ithouse implements Service {
     }
   }
   onError(service: Service, req: any, res: any) {
+    this.errorMsg.update(() => res);
     throw new Error('Method not implemented.');
   }
 }
