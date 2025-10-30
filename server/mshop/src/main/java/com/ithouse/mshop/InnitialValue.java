@@ -44,7 +44,7 @@ public class InnitialValue implements CommandLineRunner {
 
                 Role rl = new Role();
                 // rl.setRoleId(1L);
-                rl.setRoleName("ADMIN");
+                rl.setRoleName("ROLE_ADMIN");
                 roleService.saveRole(new HashSet<>(Collections.singletonList(rl)));
                 // usr.setRoles(Collections.singletonList(rl));
                 usr.setRoles(new HashSet<>(Collections.singletonList(rl)));

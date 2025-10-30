@@ -25,10 +25,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -110,25 +107,7 @@ public class SecurityConfig {
                         .requestMatchers("/secure/admin/**").hasAuthority("ROLE_ADMIN") // always use ROLE_ prefix
 
                         // POST requests for secure endpoints
-                        .requestMatchers(HttpMethod.POST, "/secure/**")
-                        .access((authentication, context) -> {
-                            // Fetch authorities safely
-                            Collection<? extends GrantedAuthority> authorities = authentication.get().getAuthorities();
-                            if (authorities == null || authorities.isEmpty()) {
-                                // Deny access if user has no roles
-                                return new AuthorizationDecision(false);
-                            }
-                            // Otherwise, check against allowed roles from DB
-                            Set<String> allowedRoles = Arrays.stream(roleService.findAllRoleNameList()).toList()
-                                    .stream().map(r -> r.startsWith("ROLE_") ? r : "ROLE_" + r)
-                                    .collect(Collectors.toSet());
-
-                            boolean hasRole = authorities.stream()
-                                    .map(GrantedAuthority::getAuthority)
-                                    .anyMatch(allowedRoles::contains);
-
-                            return new AuthorizationDecision(hasRole);
-                        })
+                        .requestMatchers(HttpMethod.POST, "/secure/**").hasAnyAuthority(roleService.findAllRoleNameList())
 
                         // Deny everything else
                         .anyRequest().denyAll()

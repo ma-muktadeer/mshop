@@ -6,13 +6,16 @@ import com.ithouse.core.message.services.PublicMapService;
 import com.ithouse.core.message.services.ServiceCoordinator;
 import com.ithouse.core.message.services.ServiceMap;
 import com.ithouse.mshop.contants.ActionType;
+import com.ithouse.mshop.core.entity.AppPermission;
 import com.ithouse.mshop.core.entity.Regex;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.repository.RegexRepo;
+import com.ithouse.mshop.core.service.AppPermissionService;
 import com.ithouse.mshop.core.service.UserService;
 import com.ithouse.mshop.shop.entity.Product;
 import com.ithouse.mshop.shop.service.ProductService;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +33,9 @@ public class AppConfig {
     private final UserService userService;
 
     private final ProductService productService;
+
+    @Autowired
+    private AppPermissionService appPermissionService;
 
 //    private final RegexRepo regexRepo;
 //
@@ -84,6 +90,7 @@ public class AppConfig {
          */
         map.put(UserService.class.getSimpleName(), userService);
         map.put(ProductService.class.getSimpleName(), productService);
+        map.put(AppPermissionService.class.getSimpleName(), appPermissionService);
 
         serviceMap.setServiceMap(map);
         return serviceMap;
@@ -117,6 +124,8 @@ public class AppConfig {
          */
         mapClass(classMap, User.class);
         mapClass(classMap, Product.class);
+        mapClass(classMap, AppPermission.class);
+
         processorService.setClassMap(classMap);
         return processorService;
     }

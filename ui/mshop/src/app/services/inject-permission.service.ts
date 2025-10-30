@@ -21,7 +21,17 @@ export class InjectPermissionService {
   }
 
   isAuthUrl(url: string): boolean {
-    debugger
+    // const items = this.nabItemService.findNabItems(NavigationItems, url);
+    // this.urlPermission = items && items.length ? items[0].permission : null;
+    // if (this.urlPermission && this.urlPermission == 'DEFAULT') {
+    //   return true;
+    // }
+    // if (this.urlPermission == null) {
+    //   return false;
+    // }
+
+    // return Array.isArray(this.urlPermission) ?
+    //   this.permissionService.hasAnyPermission(this.urlPermission) : true;
     if(this.urlPermission && this.urlPermission == 'DEFAULT'){
       return true;
     }
