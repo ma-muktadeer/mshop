@@ -10,9 +10,9 @@ import java.util.List;
 public class AppPermission {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "APP_PERMISSION_SEQ")
-    @SequenceGenerator(sequenceName = "APP_PERMISSION_SEQ", allocationSize = 1, name = "APP_PERMISSION_SEQ")
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "APP_PERMISSION_SEQ")
+//    @SequenceGenerator(sequenceName = "APP_PERMISSION_SEQ", allocationSize = 1, name = "APP_PERMISSION_SEQ")
     @Column(name = "id_permission_key")
     private Long permissionId;
 
