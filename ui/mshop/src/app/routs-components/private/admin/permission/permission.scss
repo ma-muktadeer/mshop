@@ -1,0 +1,16 @@
+@import '../../../../../scss/variables';
+
+
+.list-group-item {
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba(nth($color-menu-color, 1), 0.2);
+    cursor: pointer;
+  }
+}
+
+.select-color {
+  transition: background-color 0.3s ease;
+  background-color: rgba(nth($color-menu-color, 1), 0.2);
+}

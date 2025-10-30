@@ -20,7 +20,8 @@ import { RequestBody } from 'src/app/services/common/constants/RequestBody';
 })
 export class Permission extends Ithouse implements Service {
 
-  permissionList: any[] = [];
+  permissionList = signal<any[]>([]);
+  errorMsg = signal<string>('');
   clickedItem: any;
   displayName: string;
   desc: string;
@@ -42,7 +43,7 @@ export class Permission extends Ithouse implements Service {
   });
 
   filteredPermissionList = computed(() => {
-    return this.filterValue(this.permissionList, this.searchPermissionText(), 'permissionName');
+    return this.filterValue(this.permissionList(), this.searchPermissionText(), 'permissionName');
   });
 
   constructor(public permissionStoreService: PermissionStoreService,
@@ -59,8 +60,8 @@ export class Permission extends Ithouse implements Service {
     this.cs.sendRequestAdmin(this, ActionType.SELECT, ContentType.AppPermission, 'FindAll', {});
   }
 
-  filterValue(list: any[], searchText: string, key: string): any[]{
-    if(!searchText){
+  filterValue(list: any[], searchText: string, key: string): any[] {
+    if (!searchText) {
       return list;
     }
     return list.filter(x =>
@@ -135,8 +136,13 @@ export class Permission extends Ithouse implements Service {
     this.spinnerAssignSave = false
     this.permissionBtnDisabled = false
     debugger
+    if (!super.isOK(res)) {
+      this.errorMsg.update(() => super.getErrorMsg(res));
+      return;
+    }
+    this.errorMsg.update(() => null);
     if (req.header.reference == 'FindAll') {
-      this.permissionList = res.payload
+      this.permissionList.update(() => res.payload);
       // this.filteredPermissionList.set(res.payload);
       console.log(res);
     }

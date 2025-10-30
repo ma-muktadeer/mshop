@@ -1,45 +1,75 @@
 <div class="row col-md-12">
+  @if(errorMsg()){
+  <div class="alert alert-danger" role="alert">
+    {{errorMsg()}}
+  </div>
+  }
   <div class="col-md-4">
     <div class="row">
       <div class="col-md-12">
-        <h6>{{'title.allPermission'}}</h6>
+        <h6>{{'Permission'}}</h6>
       </div>
-      <div class="col-md-12 row">
+      <div class="col-md-12 row mb-2">
         <input class="col-md-12" style="border-radius: 20px; border: 1px solid #b9c1c0;" placeholder="Search"
           type="text" [(ngModel)]="searchPermissionText" />
       </div>
-      <div style="margin-top: 10px;" class="ul-scrollable">
-        @for (group of filteredPermissionList(); track group) {
-        <!-- *ngFor="let group of filteredPermissionList()" -->
-        <div class="col-12" (click)="onClickPermissionItem($event, group)">
-          <div class="row hover-color {{clickedItem?.displayName == group.displayName? 'select-color':''}}">
-            <div class="col-12 ">
-              <div class="row d-flex align-items-center "
-                style="padding: 2px; font-size: 12px;  border-bottom: solid 1px #ccc;">
-                <div class="col-11">
-                  <a class="list-group-item text-left">
-                    {{group.displayName}}
-                  </a>
-                </div>
-                <div class="col-1">
-                  @if
-                  (permissionStoreService.hasPermission(permissionStoreService.appPermission.SAVE_PERMISSION))
-                  {
-                  <button title="edit" (click)="onEdit($event, group)" class="btn float-right"
-                    style="padding: 2px; font-size: 12px; margin-left: -20px;">
-                    <i class="fa fa-edit"></i>
-                  </button>
-                  }
+      <!-- <div class="mx-0 px-0">
+        <ng-scrollbar class="card shadow-sm scl-bg" visibility="hover" style="height: calc(80vh - 10px);">
+          <div>
+            @for (group of filteredPermissionList(); track group) {
+            <div class="col-12" (click)="onClickPermissionItem($event, group)">
+              <div class="row hover-color {{clickedItem?.displayName == group.displayName? 'select-color':''}}">
+                <div class="col-12 ">
+                  <div class="row d-flex align-items-center "
+                    style="padding: 2px; font-size: 12px;  border-bottom: solid 1px #ccc;">
+                    <div class="col-11">
+                      <a class="list-group-item text-left">
+                        {{group.displayName}}
+                      </a>
+                    </div>
+                    <div class="col-1">
+                      @if
+                      (permissionStoreService.hasPermission(permissionStoreService.appPermission.SAVE_PERMISSION))
+                      {
+                      <button title="edit" (click)="onEdit($event, group)" class="btn float-right"
+                        style="padding: 2px; font-size: 12px; margin-left: -20px;">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      }
 
+                    </div>
+                  </div>
                 </div>
+
               </div>
             </div>
 
+            }
           </div>
-        </div>
+        </ng-scrollbar>
 
-        }
+      </div> -->
+
+      <div class="mx-0 px-0">
+        <ng-scrollbar class="card shadow-sm" visibility="hover" style="height: calc(80vh - 10px); overflow-y: auto;">
+          @for (group of filteredPermissionList(); track group)
+          {
+          <div
+            class="list-group-item list-group-item-action {{clickedItem?.displayName == group.displayName? 'select-color':''}}"
+            style="cursor: pointer;" (click)="onClickPermissionItem($event, group)">
+            <div class="d-flex justify-content-between p-2 align-items-center border-bottom" style="font-size: 14px;">
+              <span>{{group.displayName}}</span>
+              @if (permissionStoreService.hasPermission(permissionStoreService.appPermission.SAVE_PERMISSION))
+              {
+                <i (click)="onEdit($event, group)" class="fa fa-edit"></i>
+              }
+            </div>
+          </div>
+          }
+        </ng-scrollbar>
       </div>
+
+      <!-- lklk -->
     </div>
   </div>
 
@@ -59,10 +89,10 @@
             <div style="margin-top: 2px;" class="col-md-12">
               <div class="col-md-12 mb-2">
                 <input class="col-md-12 px-3" style="border-radius: 20px; border: 1px solid #b9c1c0;"
-                  placeholder="Search" [(ngModel)]="searchRoleText" type="text"/>
+                  placeholder="Search" [(ngModel)]="searchRoleText" type="text" />
               </div>
             </div>
-            <ng-scrollbar >
+            <ng-scrollbar>
               <div class="" cdkDropList [cdkDropListData]="unassignRoleList()" class="example-list"
                 (cdkDropListDropped)="drop($event)">
                 @for (role of unassignRoleList() ; track role) {
@@ -81,7 +111,7 @@
             <div style="margin-top: 2px;" class="col-md-12">
               <div class="col-md-12 mb-2">
                 <input class="col-md-12 px-3" style="border-radius: 20px; border: 1px solid #b9c1c0;"
-                  placeholder="Search" type="text"/>
+                  placeholder="Search" type="text" />
               </div>
             </div>
             <ng-scrollbar>
