@@ -33,12 +33,15 @@ public class InnitialValue implements CommandLineRunner {
         try {
             if (userService.isEmptyUser()) {
                 User usr = new User();
-                usr.setEmail("ithousebd.admin.com");
+                usr.setEmail("ithousebd@admin.com");
                 usr.setLoginName("ithousebd");
                 usr.setPhoneNumber("01763070997");
                 usr.setFirstName("IT house");
+                usr.setAppName("M-SHOP");
+                usr.setAllowLogin(1);
                 // usr.setUserId(1L);
                 usr.setPassword(passwordEncoder.encode("123"));
+
                 Role rl = new Role();
                 // rl.setRoleId(1L);
                 rl.setRoleName("ADMIN");

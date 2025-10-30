@@ -8,11 +8,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -23,7 +25,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -41,7 +47,7 @@ public class SecurityConfig {
     private List<String> allowedHeaders;
 
     @Value("${security.allowed-credentials}")
-    private boolean allowedCredentials=false;
+    private boolean allowedCredentials = false;
 
     @Value("${security.allowed.exposed-headers}")
     private List<String> exposedHeaders;
@@ -66,39 +72,80 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain springWebFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain springWebFilterChain(HttpSecurity http) throws Exception {
+
+        // Force HTTPS in production
         if (env.acceptsProfiles(Profiles.of("prod"))) {
-            http.requiresChannel(rc -> rc.anyRequest().requiresSecure()
-            );
+            http.requiresChannel(channel -> channel.anyRequest().requiresSecure());
         }
+
         return http
+                // Custom headers filter
                 .headers(this::headersFilter)
+
+                // Disable default HTTP Basic Auth
                 .httpBasic(AbstractHttpConfigurer::disable)
+
+                // CSRF configuration
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/**"))
-                .addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .sessionManagement(c -> c.sessionFixation()
-//                                .migrateSession()
-//                                .invalidSessionUrl("/public/login?invalid-session=true")
-//                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-//                                .maximumSessions(1)
-//                                .maxSessionsPreventsLogin(true)
-//                        )
-                .exceptionHandling(e ->
-                        e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .authorizeHttpRequests(r -> r.requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/secure/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/secure/**").hasAnyAuthority(roleService.findAllRoleNameList())
-                        .anyRequest().denyAll())
-//				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .cors(cors -> cors.configurationSource(request -> corsRequestFilter()))
-                .requiresChannel(channel -> channel
-                        .requestMatchers(new RequestHeaderRequestMatcher("X-Forwarded-Proto", "http")).requiresSecure()
+                        .ignoringRequestMatchers("/**") // Disable CSRF for API endpoints
                 )
+
+                // JWT filter before username/password auth filter
+                .addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+
+                // Stateless session management
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // Exception handling
+                .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+
+                // Authorization rules
+                .authorizeHttpRequests(auth -> auth
+                        // Public endpoints
+                        .requestMatchers("/public/**").permitAll()
+
+                        // Admin endpoints
+                        .requestMatchers("/secure/admin/**").hasAuthority("ROLE_ADMIN") // always use ROLE_ prefix
+
+                        // POST requests for secure endpoints
+                        .requestMatchers(HttpMethod.POST, "/secure/**")
+                        .access((authentication, context) -> {
+                            // Fetch authorities safely
+                            Collection<? extends GrantedAuthority> authorities = authentication.get().getAuthorities();
+                            if (authorities == null || authorities.isEmpty()) {
+                                // Deny access if user has no roles
+                                return new AuthorizationDecision(false);
+                            }
+                            // Otherwise, check against allowed roles from DB
+                            Set<String> allowedRoles = Arrays.stream(roleService.findAllRoleNameList()).toList()
+                                    .stream().map(r -> r.startsWith("ROLE_") ? r : "ROLE_" + r)
+                                    .collect(Collectors.toSet());
+
+                            boolean hasRole = authorities.stream()
+                                    .map(GrantedAuthority::getAuthority)
+                                    .anyMatch(allowedRoles::contains);
+
+                            return new AuthorizationDecision(hasRole);
+                        })
+
+                        // Deny everything else
+                        .anyRequest().denyAll()
+                )
+
+                // CORS configuration
+                .cors(cors -> cors.configurationSource(request -> corsRequestFilter()))
+
+                // Handle forwarded headers (for reverse proxy setups)
+                .requiresChannel(channel -> channel
+                        .requestMatchers(new RequestHeaderRequestMatcher("X-Forwarded-Proto", "http"))
+                        .requiresSecure()
+                )
+
                 .build();
     }
+
 
     private void headersFilter(HeadersConfigurer<HttpSecurity> header) {
 
@@ -161,7 +208,7 @@ public class SecurityConfig {
         CorsConfiguration config = corsRequestFilter();
         source.registerCorsConfiguration("/**", config);
 //        return new CorsFilter(source);
-        return  source;
+        return source;
     }
 
 //    @Bean
