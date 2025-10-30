@@ -107,9 +107,12 @@ export class CommonService {
               message = 'Unable to connect to the server. Check your internet connection.';
             } else if (error.status >= 500) {
               message = 'The server is temporarily unavailable. Please try again later.';
-            } else if (error.status === 404) {
+            } else if (error.status === 401) {
+              message = 'Un-authorized request.';
+            }else if (error.status === 404) {
               message = 'The requested service could not be found.';
-            } else if (error.status === 400) {
+            }
+            else if (error.status === 400) {
               message = error.error?.message || 'Bad request — please check your input.';
             } else if (error.error?.message) {
               message = error.error.message;
