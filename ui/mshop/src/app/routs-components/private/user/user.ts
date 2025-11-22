@@ -1,7 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { Formatter, FieldType } from 'angular-slickgrid';
 import { IthouseGridModule } from 'src/app/ithouse/common/ithouse-grid/ithouse-grid-module';
-import { IthouseGrid } from 'src/app/ithouse/common/ithouse-grid/ithouse-grid/ithouse-grid';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { ContentType } from 'src/app/services/common/constants/content-type.enum';
@@ -15,13 +14,12 @@ import { Service } from 'src/app/services/service';
   templateUrl: './user.html',
   styleUrl: './user.scss'
 })
-export class User extends Ithouse implements Service{
-pageNumber: number = 1;
+export class User extends Ithouse implements Service {
+  pageNumber: number = 1;
   pageSize: number = 1;
   dataset = signal<any[]>([]);
   constructor(
     private cs: CommonService,
-    // private model: NgbModal
   ) {
     super();
   }
