@@ -1,0 +1,18 @@
+{
+    "app": {
+        "name": "MSHOP",
+        "version": "1.0.0",
+        "desc": "IT-House initial app",
+        "loginRequired": true,
+        "constantAppName": "M-SHOP",
+        "blockMultiTab": true
+    },
+    "baseUrl": "http://172.25.204.232:8080/rbs-server/secure",
+    "SERVER_URL": "http://172.25.204.232:8080/rbs-server",
+    "SERVER_BASE_URL": "http://172.25.204.232:8080/rbs-server/secure",
+    "SERVER_BASE_URL_PUBLIC": "http://172.25.204.232:8080/rbs-server/public",
+    "SERVER_BASE_URL_ADMIN": "http://172.25.204.232:8080/rbs-server/secure",
+    "HTTP_REQUEST_TIMEOUT": 10000,
+    "HTTP_REQUEST_RETRY_COUNT": 1,
+    "HTTP_REQUEST_RETRY_DELAY": 2000
+}

@@ -41,12 +41,13 @@ export class CommonService {
     if (!this._config.config) {
       throw new Error("Config not loaded yet");
     }
-    if (ENV.production) {
-      return this._config.config['env.prod'];
-    }
-    else {
-      return this._config.config['env.local'];
-    }
+    // if (ENV.production) {
+    //   return this._config.config['env.prod'];
+    // }
+    // else {
+    //   return this._config.config['env.local'];
+    // }
+    return this._config.config;
   }
 
   public sendRequest(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
@@ -87,7 +88,7 @@ export class CommonService {
     await this._postRequest<T, any>(url, req, service);
   }
 
-  private async _postRequest<T, R>(url: string, req: RequestBody<T>, service: Service):Promise<R> {
+  private async _postRequest<T, R>(url: string, req: RequestBody<T>, service: Service): Promise<R> {
 
     try {
       const res = await firstValueFrom(
@@ -109,7 +110,7 @@ export class CommonService {
               message = 'The server is temporarily unavailable. Please try again later.';
             } else if (error.status === 401) {
               message = 'Un-authorized request.';
-            }else if (error.status === 404) {
+            } else if (error.status === 404) {
               message = 'The requested service could not be found.';
             }
             else if (error.status === 400) {
