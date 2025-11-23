@@ -1,0 +1,23 @@
+<div class="warning-container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg border-0 rounded-4 p-4 text-center" style="max-width: 450px; width: 90%;">
+        <div class="card-body">
+            <div class="mb-4 text-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="bi bi-exclamation-circle">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h2 class="card-title fw-bold mb-3 text-dark">Active in Another Tab</h2>
+            <p class="card-text lead text-muted mb-4">
+                You have this application open in another tab. <br>
+                Please use that tab or refresh this page to continue here.
+            </p>
+            <button class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm" (click)="refreshPage()">
+                Refresh Page
+            </button>
+        </div>
+    </div>
+</div>
