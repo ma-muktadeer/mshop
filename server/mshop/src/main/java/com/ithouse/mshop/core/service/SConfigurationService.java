@@ -15,7 +15,7 @@ public class SConfigurationService {
         this.sConfigurationRepo = sConfigurationRepo;
     }
 
-    public List<SConfiguration> findAllByConfigGroupAndConfigSubGroupAndActive(String appConfigGroup, String appConfigSubgroup, int i) {
-        return sConfigurationRepo.findAllByConfigGroupAndConfigSubGroupAndActive(appConfigGroup, appConfigSubgroup, i);
+    public List<SConfiguration> findAllByConfigGroupAndActive(String appConfigGroup, int i) {
+        return sConfigurationRepo.findAllByConfigGroupAndActive(appConfigGroup, i);
     }
 }

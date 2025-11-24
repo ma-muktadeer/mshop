@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SConfigurationRepo extends JpaRepository<SConfiguration,Integer> {
-    List<SConfiguration> findAllByConfigGroupAndConfigSubGroupAndActive(String configGroup, String configGroup1, int active);
+    List<SConfiguration> findAllByConfigGroupAndActive(String configGroup, int active);
 }

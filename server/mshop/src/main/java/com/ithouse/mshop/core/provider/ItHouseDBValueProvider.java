@@ -4,7 +4,6 @@ import com.ithouse.core.anotations.injectors.ItHouseDBValueInjector;
 import com.ithouse.core.anotations.provider.ItHouseConfigProvider;
 import com.ithouse.core.anotations.services.ItHouseDBValueService;
 import com.ithouse.mshop.core.entity.SConfiguration;
-import com.ithouse.mshop.core.repository.SConfigurationRepo;
 import com.ithouse.mshop.core.service.SConfigurationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Configuration
 public class ItHouseDBValueProvider {
@@ -24,15 +24,19 @@ public class ItHouseDBValueProvider {
     }
 
     public void setsConfigurations() {
-        List<SConfiguration> configurations = sConfigurationService.findAllByConfigGroupAndConfigSubGroupAndActive("APP_CONFIG_GROUP", "APP_CONFIG_SUBGROUP", 1);
-        for (SConfiguration c : configurations) {
-            configMap.put(c.getConfigGroup() + "::" + c.getConfigSubGroup(), c);
-        }
+        List<SConfiguration> configurations = sConfigurationService.findAllByConfigGroupAndActive("APP_CONFIG_GROUP", 1);
+        configMap = configurations.stream()
+                .collect(Collectors.toMap(
+                        m -> m.getConfigGroup() + "::" + m.getConfigSubGroup(),
+                        m -> m,
+                        (a, b) -> b
+                ));
+
     }
 
     @Bean
     public ItHouseConfigProvider itHouseConfigProvider() {
-        if(configMap==null || configMap.isEmpty()){
+        if (configMap == null || configMap.isEmpty()) {
             setsConfigurations();
         }
 
