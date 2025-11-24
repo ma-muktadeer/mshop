@@ -1,5 +1,6 @@
 package com.ithouse.mshop.core.service;
 
+import com.ithouse.core.anotations.ItHouseDBValue;
 import com.ithouse.core.message.AbstractMessageHeader;
 import com.ithouse.core.message.ResponseBuilder;
 import com.ithouse.core.message.interfaces.Message;
@@ -41,6 +42,11 @@ import java.util.List;
 @Service
 public class UserService extends ItHouseService<List<User>> {
     private static final Logger log = LogManager.getLogger(UserService.class);
+
+    @ItHouseDBValue(defaultValue = "default-value", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP")
+    private String value;
+    @ItHouseDBValue(defaultValue = "test-value", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
+    private String testValue;
 
     private final UserRepo userRepo;
     private final LoginRepo loginRepo;
