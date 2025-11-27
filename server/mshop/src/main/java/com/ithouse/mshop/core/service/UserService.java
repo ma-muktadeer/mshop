@@ -34,10 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserService extends ItHouseService<List<User>> {
@@ -47,6 +44,11 @@ public class UserService extends ItHouseService<List<User>> {
     private String value;
     @ItHouseDBValue(defaultValue = "test-value", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
     private String testValue;
+
+    @ItHouseDBValue(defaultValue = "test-value,check", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
+    private List<String> testList;
+    @ItHouseDBValue(defaultValue = "fst:test-value,2nd:check", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
+    private Map<String, String > testMap;
 
     private final UserRepo userRepo;
     private final LoginRepo loginRepo;
