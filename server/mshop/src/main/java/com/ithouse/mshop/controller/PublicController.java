@@ -59,7 +59,7 @@ public class PublicController {
             throw new SessionAuthenticationException("Your session has expired. Please log in again.");
         }
         log.trace("UI request \n{}", json);
-        log.info("request: {}", json);
+//        log.info("request: {}", json);
 
         Message requestMessage = null;
 
