@@ -44,7 +44,8 @@ public class UserService extends ItHouseService<List<User>> {
     private String value;
     @ItHouseDBValue(defaultValue = "test-value", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
     private String testValue;
-
+    @ItHouseDBValue(defaultValue = "4", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
+    private int testInt;
     @ItHouseDBValue(defaultValue = "test-value,check", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
     private List<String> testList;
     @ItHouseDBValue(defaultValue = "fst:test-value,2nd:check", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
