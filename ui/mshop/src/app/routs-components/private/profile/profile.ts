@@ -2,7 +2,7 @@ import { Component, Input, signal } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { AlertService } from 'src/app/ithouse/services/alert.service';
-import { CommonService } from 'src/app/services/common.service';
+import { CommonService } from 'src/app/ithouse/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { DateConvertService } from 'src/app/ithouse/services/date-convert.service';

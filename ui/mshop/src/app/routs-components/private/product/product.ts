@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { AlertService } from 'src/app/ithouse/services/alert.service';
-import { CommonService } from 'src/app/services/common.service';
+import { CommonService } from 'src/app/ithouse/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { FileService } from 'src/app/ithouse/services/file.service';
 import { Service } from 'src/app/ithouse/services/service';

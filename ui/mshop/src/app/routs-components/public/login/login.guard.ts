@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { CommonService } from 'src/app/services/common.service';
+import { CommonService } from 'src/app/ithouse/services/common.service';
 
 export const loginGuard: CanActivateFn = (route, state) => {
   const cs = inject(CommonService);

@@ -5,7 +5,7 @@ import { AngularSlickgridModule } from 'angular-slickgrid';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay, withHttpTransferCacheOptions } from '@angular/platform-browser';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { CommonService } from './services/common.service';
+import { CommonService } from './ithouse/services/common.service';
 import { globalInterceptor } from '../global.interceptor';
 import { ConfigService, initializeApplication } from '../config.service';
 import { ToggleFullScreenDirective } from './structure/shared/full-screen/toggle-full-screen';

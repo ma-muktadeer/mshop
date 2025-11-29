@@ -1,9 +1,8 @@
-import { Component, DestroyRef, Inject, inject, PLATFORM_ID, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { isPlatformBrowser, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
-import { CommonService } from 'src/app/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { Service } from 'src/app/ithouse/services/service';
@@ -11,6 +10,7 @@ import { AlertService } from 'src/app/ithouse/services/alert.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RequestBody } from 'src/app/ithouse/constants/RequestBody';
 import { Platform } from '@angular/cdk/platform';
+import { CommonService } from 'src/app/ithouse/services/common.service';
 
 @Component({
   selector: 'ithouse-login',

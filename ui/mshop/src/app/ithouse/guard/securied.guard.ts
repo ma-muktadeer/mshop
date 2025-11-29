@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { CommonService } from '../../services/common.service';
 import { InjectPermissionService } from '../services/inject-permission.service';
 
 export const securiedGuard: CanActivateFn = (route, state) => {

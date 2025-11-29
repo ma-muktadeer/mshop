@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { CommonService } from '../../services/common.service';
+import { CommonService } from '../services/common.service';
 export const layoutGuard: CanActivateFn = (route, state) => {
   const cs = inject(CommonService);
   const router = inject(Router);

@@ -1,17 +1,16 @@
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { DOCUMENT, Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { catchError, firstValueFrom, map, Observable, retry, throwError, timeout } from 'rxjs';
-import { environment as ENV } from './../../environments/environment';
-import { ConfigService } from '../../config.service';
-import { Constants } from '../ithouse/services/Constants';
-import { AppRole } from '../ithouse/constants/AppRole';
-import { ActionType } from '../ithouse/constants/action-type.enum';
-import { Service } from './service';
-import { ContentType } from '../ithouse/constants/content-type.enum';
-import { FileAction, FileType } from './file.service';
 import { isPlatformBrowser } from '@angular/common';
-import { Header } from '../ithouse/constants/Header';
-import { RequestBody } from '../ithouse/constants/RequestBody';
+import { ConfigService } from 'src/config.service';
+import { Service } from './service';
+import { ActionType } from '../constants/action-type.enum';
+import { ContentType } from '../constants/content-type.enum';
+import { RequestBody } from '../constants/RequestBody';
+import { Header } from '../constants/Header';
+import { Constants } from '../constants/Constants';
+import { AppRole } from '../constants/AppRole';
+import { FileAction, FileType } from './file.service';
 
 @Injectable({
   providedIn: 'root'
@@ -346,7 +345,6 @@ export class CommonService {
   }
 
   public filePostBySecure(path: string, formData: FormData, fileType: FileType, action: FileAction = 'OTHERS', header?: HttpHeaders) {
-
 
     formData.append('fileType', fileType);
     formData.append('action', action);

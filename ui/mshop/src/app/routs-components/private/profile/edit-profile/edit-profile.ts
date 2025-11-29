@@ -3,7 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormValue } from 'src/app/ithouse/classes/FormValue';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { AlertService } from 'src/app/ithouse/services/alert.service';
-import { CommonService } from 'src/app/services/common.service';
+import { CommonService } from 'src/app/ithouse/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { Service } from 'src/app/ithouse/services/service';
