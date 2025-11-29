@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { IthouseGridModule } from '../../../ithouse/common/ithouse-grid/ithouse-grid-module';
 import { Column, FieldType, Filters } from 'angular-slickgrid';
-import { CustomGridData } from '../../../services/common/CustomGridData';
+import { CustomGridData } from '../../../ithouse/constants/CustomGridData';
 
 @Component({
   selector: 'app-check',

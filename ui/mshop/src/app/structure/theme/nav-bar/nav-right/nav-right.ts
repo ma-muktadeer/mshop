@@ -1,10 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { NgbDropdownConfig, NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { CommonService } from 'src/app/services/common.service';
-import { Ithouse } from 'src/app/services/common/Ithouse';
+import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { Service } from 'src/app/services/service';
 import { Router } from '@angular/router';
 import { Profile } from 'src/app/routs-components/private/profile/profile';
+import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
+import { CommonService } from 'src/app/ithouse/services/common.service';
+import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 
 @Component({
   selector: 'app-nav-right',
@@ -37,6 +39,18 @@ export class NavRight extends Ithouse implements OnInit, Service {
 
   ngOnInit(): void {
     this.user = this.cs.loadLoginUser();
+    if (this.user?.profileImagePath) {
+      this.loadProfileImage(this.user?.profileImagePath);
+    }
+  }
+
+
+  loadProfileImage(path: string) {
+    const payload = {
+      profileImagePath: path,
+    }
+
+    this.cs.sendRequest(this, ActionType.BUILD_IMAGE, ContentType.User, 'BUILD_IMAGE', payload);
   }
 
   openProfile() {
@@ -69,7 +83,7 @@ export class NavRight extends Ithouse implements OnInit, Service {
 
   onResponse(service: Service, req: any, res: any) {
     debugger
-    if(!super.isOK(res)){
+    if (!super.isOK(res)) {
       alert(super.getErrorMsg(res));
       return;
     }

@@ -1,4 +1,5 @@
 export enum ActionType {
+
   NEW = "NEW",
   REGISTER = "REGISTER",
   UPDATE = "UPDATE",

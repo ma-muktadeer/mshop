@@ -4,12 +4,12 @@ import { FormValue } from 'src/app/ithouse/classes/FormValue';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { AlertService } from 'src/app/services/alert.service';
 import { CommonService } from 'src/app/services/common.service';
-import { ContentType } from 'src/app/services/common/constants/content-type.enum';
-import { Ithouse } from 'src/app/services/common/Ithouse';
+import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
+import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { Service } from 'src/app/services/service';
 import Swal from 'sweetalert2';
 import { DynamicForm } from "src/app/ithouse/common/components/dynamic-form/dynamic-form";
-import { RequestBody } from 'src/app/services/common/constants/RequestBody';
+import { RequestBody } from 'src/app/ithouse/constants/RequestBody';
 
 @Component({
   selector: 'app-edit-profile',
@@ -17,7 +17,7 @@ import { RequestBody } from 'src/app/services/common/constants/RequestBody';
   templateUrl: './edit-profile.html',
   styleUrl: './edit-profile.scss'
 })
-export class EditProfile extends Ithouse implements Service{
+export class EditProfile extends Ithouse implements Service {
   @Input() userDetails: any;
   loading: boolean;
   // profileForm: FormGroup;
@@ -42,10 +42,12 @@ export class EditProfile extends Ithouse implements Service{
     { id: 'email', name: 'email', label: 'Email', placeholder: 'Enter Your Email', faIcon: 'fa-beat-fade fa-envelope-open', type: 'email', validations: { required: true, email: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$' }, validationMessages: { required: 'Email is required.', email: 'Invalid email' } },
     { id: 'phoneNumber', name: 'phoneNumber', label: 'Phone', placeholder: 'Enter Your Phone', faIcon: 'fa-beat-fade fa-phone-square', type: 'text', validations: { required: true, minLength: 11 }, validationMessages: { required: 'Phone is required.', minLength: 'Length musb be 11 characters long.' } },
     { id: 'address', name: 'address', label: 'Address', placeholder: 'Enter Your Address', faIcon: 'fa-beat-fade fa-address-card', type: 'textarea', validations: { required: true }, validationMessages: { required: 'Address is required.' } },
-    { id: 'country', name: 'country', label: 'Country', placeholder: 'Enter Your Country', faIcon: 'fa-beat-fade fa-globe', type: 'select', validations: { required: true }, validationMessages: { required: 'Address is required.' }, selectOption:[
-      {id: 1, name:'Bangladesh', value: 'Bangladesh'},
-      {id: 2, name:'Chaina', value: 'Chaina'},
-    ]},
+    {
+      id: 'country', name: 'country', label: 'Country', placeholder: 'Enter Your Country', faIcon: 'fa-beat-fade fa-globe', type: 'select', validations: { required: true }, validationMessages: { required: 'Address is required.' }, selectOption: [
+        { id: 1, name: 'Bangladesh', value: 'Bangladesh' },
+        { id: 2, name: 'Chaina', value: 'Chaina' },
+      ]
+    },
   ]
 
   onButtonClick(event: any) {

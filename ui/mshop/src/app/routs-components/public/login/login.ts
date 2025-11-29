@@ -4,12 +4,12 @@ import { isPlatformBrowser, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { CommonService } from 'src/app/services/common.service';
-import { ContentType } from 'src/app/services/common/constants/content-type.enum';
-import { Ithouse } from 'src/app/services/common/Ithouse';
+import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
+import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { Service } from 'src/app/services/service';
 import { AlertService } from 'src/app/services/alert.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RequestBody } from 'src/app/services/common/constants/RequestBody';
+import { RequestBody } from 'src/app/ithouse/constants/RequestBody';
 import { Platform } from '@angular/cdk/platform';
 
 @Component({

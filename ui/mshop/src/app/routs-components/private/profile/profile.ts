@@ -3,8 +3,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { AlertService } from 'src/app/services/alert.service';
 import { CommonService } from 'src/app/services/common.service';
-import { ContentType } from 'src/app/services/common/constants/content-type.enum';
-import { Ithouse } from 'src/app/services/common/Ithouse';
+import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
+import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { DateConvertService } from 'src/app/services/date-convert.service';
 import { FileService } from 'src/app/services/file.service';
 import { Service } from 'src/app/services/service';
@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
 import { EditProfile } from './edit-profile/edit-profile';
 import { Spinner } from "src/app/structure/shared/components/spinner/spinner";
-import { RequestBody } from 'src/app/services/common/constants/RequestBody';
+import { RequestBody } from 'src/app/ithouse/constants/RequestBody';
 
 
 @Component({
@@ -21,7 +21,7 @@ import { RequestBody } from 'src/app/services/common/constants/RequestBody';
   templateUrl: './profile.html',
   styleUrl: './profile.scss'
 })
-export class Profile extends Ithouse implements Service{
+export class Profile extends Ithouse implements Service {
 
   imgFile: string[] = ['.jpg', '.jpeg', '.png', '.gif'];
 
@@ -154,8 +154,8 @@ export class Profile extends Ithouse implements Service{
       return;
     } else if (req.header.reference === 'LOAD_DETAILS') {
       this.userDetails = res.payload;
-      this.profileImage.update(()=> this.userDetails?.profileImagePath ?? this.profileImage());
-      this.coverImage.update(()=>this.userDetails?.profileBannerPath ?? this.coverImage());
+      this.profileImage.update(() => this.userDetails?.profileImagePath ?? this.profileImage());
+      this.coverImage.update(() => this.userDetails?.profileBannerPath ?? this.coverImage());
     }
   }
   onError(service: Service, req: any, res: any) {

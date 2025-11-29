@@ -3,15 +3,15 @@ import { DOCUMENT, Inject, inject, Injectable, PLATFORM_ID } from '@angular/core
 import { catchError, firstValueFrom, map, Observable, retry, throwError, timeout } from 'rxjs';
 import { environment as ENV } from './../../environments/environment';
 import { ConfigService } from '../../config.service';
-import { Constants } from './common/Constants';
+import { Constants } from '../ithouse/services/Constants';
 import { AppRole } from '../ithouse/constants/AppRole';
 import { ActionType } from '../ithouse/constants/action-type.enum';
 import { Service } from './service';
-import { ContentType } from './common/constants/content-type.enum';
+import { ContentType } from '../ithouse/constants/content-type.enum';
 import { FileAction, FileType } from './file.service';
 import { isPlatformBrowser } from '@angular/common';
-import { Header } from './common/Header';
-import { RequestBody } from './common/constants/RequestBody';
+import { Header } from '../ithouse/constants/Header';
+import { RequestBody } from '../ithouse/constants/RequestBody';
 
 @Injectable({
   providedIn: 'root'

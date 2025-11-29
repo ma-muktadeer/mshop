@@ -1,6 +1,6 @@
 import { Component, effect, EventEmitter, Input, Output, Signal, ViewChild } from '@angular/core';
 import { Column, ContextMenu, Pagination } from 'angular-slickgrid';
-import { CustomGridData } from '../../../../services/common/CustomGridData';
+import { CustomGridData } from '../../../constants/CustomGridData';
 import { IthouseGridBody } from '../ithouse-grid-body/ithouse-grid-body';
 import { IthouseGridPagination } from '../ithouse-grid-pagination/ithouse-grid-pagination';
 
@@ -22,7 +22,7 @@ export class IthouseGrid {
   @Input() customPagination?: Pagination;
   // if you need to context menu then enableContextMenu = true
   @Input() enableContextMenu?: boolean = false;
-    // if enableContextMenu = true then need to pass contextMenu. default is {}
+  // if enableContextMenu = true then need to pass contextMenu. default is {}
   @Input() contextMenu?: ContextMenu = {};
 
   @Output() onPaginationChanged: EventEmitter<any> = new EventEmitter<any>();
@@ -68,7 +68,7 @@ export class IthouseGrid {
       // this.currentUrl.update(() => this.testurl + '&currentPage=1');
 
       this.commonGrid.gridData = { row: this.datasetObs().content };
-      if(this.enableContextMenu){
+      if (this.enableContextMenu) {
         // this.commonGrid.contextManue = this.contextMenu;
       }
       this.commonGridPag.pageCount = this.datasetObs().totalPages;

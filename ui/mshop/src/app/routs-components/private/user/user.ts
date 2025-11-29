@@ -3,9 +3,9 @@ import { Formatter, FieldType } from 'angular-slickgrid';
 import { IthouseGridModule } from 'src/app/ithouse/common/ithouse-grid/ithouse-grid-module';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { CommonService } from 'src/app/services/common.service';
-import { ContentType } from 'src/app/services/common/constants/content-type.enum';
-import { CustomGridData } from 'src/app/services/common/CustomGridData';
-import { Ithouse } from 'src/app/services/common/Ithouse';
+import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
+import { CustomGridData } from 'src/app/ithouse/constants/CustomGridData';
+import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { Service } from 'src/app/services/service';
 
 @Component({

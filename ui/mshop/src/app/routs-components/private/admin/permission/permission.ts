@@ -1,16 +1,16 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
-import { CommonService } from 'src/app/services/common.service';
-import { ContentType } from 'src/app/services/common/constants/content-type.enum';
-import { Ithouse } from 'src/app/services/common/Ithouse';
+import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
+import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { PermissionStoreService } from 'src/app/services/permissioin-store.service';
 import { Service } from 'src/app/services/service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Toast } from 'src/app/services/common/Toast';
+import { Toast } from 'src/app/ithouse/services/Toast';
 import { NgScrollbar } from "ngx-scrollbar";
-import { RequestBody } from 'src/app/services/common/constants/RequestBody';
+import { RequestBody } from 'src/app/ithouse/constants/RequestBody';
+import { CommonService } from 'src/app/ithouse/services/common.service';
 
 @Component({
   selector: 'ithouse-permission',
