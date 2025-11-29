@@ -29,23 +29,24 @@ public class SharedGenericMapService {
 		log.info("Unmapping all by to [{}]:[{}]:[{}]", toId, toType, fromName);
 		genericMapRepo.unmapAllByTo(toId, toType, fromName, userId, new Date());
 	}
-	
+
 	public void unMapOne(long fromId, String fromTypeName, long toId, String toTypeName, long userId) {
-		log.info("Unmapping one [{}]:[{}]:[{}]:[{}]", fromId, fromTypeName, toId, toTypeName );
-		
-		GenericMap gen = genericMapRepo.findByFromIdAndFromTypeNameAndToIdAndToTypeNameAndActive(fromId, fromTypeName, toId, toTypeName, 1);
-		if(gen == null) {
+		log.info("Unmapping one [{}]:[{}]:[{}]:[{}]", fromId, fromTypeName, toId, toTypeName);
+
+		GenericMap gen = genericMapRepo.findByFromIdAndFromTypeNameAndToIdAndToTypeNameAndActive(fromId, fromTypeName,
+				toId, toTypeName, 1);
+		if (gen == null) {
 			return;
 		}
 		gen.setModTime(new Date());
 		gen.setUserModId(userId);
-		
+
 		gen.setActive(0);
 		genericMapRepo.save(gen);
 	}
 
 	public void mapNew(long fromId, List<Long> toIdList, String fromTypeName, String toTypeName, long userId) {
-		if(toIdList == null) {
+		if (toIdList == null) {
 			return;
 		}
 		toIdList = toIdList.stream().filter(Objects::nonNull).collect(Collectors.toList());
@@ -53,14 +54,16 @@ public class SharedGenericMapService {
 			mapNew(fromId, toId, fromTypeName, toTypeName, userId);
 		}
 	}
-	
-	public Set<Long> getToIdSet(long fromId, String fromName, String toName){
-		List<GenericMap> list = genericMapRepo.findByFromIdAndFromTypeNameAndToTypeNameAndActive(fromId, fromName, toName, 1);
+
+	public Set<Long> getToIdSet(long fromId, String fromName, String toName) {
+		List<GenericMap> list = genericMapRepo.findByFromIdAndFromTypeNameAndToTypeNameAndActive(fromId, fromName,
+				toName, 1);
 		return list.stream().map(GenericMap::getToId).collect(Collectors.toSet());
 	}
 
-	public List<Long> getToIdList(long fromId, String fromName, String toName){
-		List<GenericMap> list = genericMapRepo.findByFromIdAndFromTypeNameAndToTypeNameAndActive(fromId, fromName, toName, 1);
+	public List<Long> getToIdList(long fromId, String fromName, String toName) {
+		List<GenericMap> list = genericMapRepo.findByFromIdAndFromTypeNameAndToTypeNameAndActive(fromId, fromName,
+				toName, 1);
 		return list.stream().map(GenericMap::getToId).collect(Collectors.toList());
 	}
 

@@ -1,6 +1,5 @@
 package com.ithouse.mshop.core.service;
 
-
 import com.ithouse.core.message.AbstractMessageHeader;
 import com.ithouse.core.message.ResponseBuilder;
 import com.ithouse.core.message.interfaces.Message;
@@ -22,7 +21,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 @Service
 public class AppPermissionService extends ItHouseService<List<AppPermission>> {
 
@@ -39,11 +37,10 @@ public class AppPermissionService extends ItHouseService<List<AppPermission>> {
 
     private static final String APP_PERMISSION = "APP_PERMISSION";
     private static final String ROLE = "ROLE";
-//    @Autowired
-//    private UserService userService;
+    // @Autowired
+    // private UserService userService;
 
-
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({ "unchecked" })
     public Message<?> itHouseService(Message requestMessage) throws Exception {
 
         AbstractMessageHeader header = null;
@@ -94,18 +91,15 @@ public class AppPermissionService extends ItHouseService<List<AppPermission>> {
         return msgResponse;
     }
 
-
     private AppPermission approve(Message<List<AppPermission>> message, String action) {
         AppPermission ap = message.getPayload().get(0);
         AppPermission db = permissionRepo.findById(ap.getPermissionId()).get();
-
 
         return permissionRepo.save(db);
     }
 
     private AppPermission save(Message<List<AppPermission>> message, String action) {
         AppPermission st = message.getPayload().get(0);
-
 
         AppPermission db = permissionRepo.findById(st.getPermissionId()).get();
         db.setDisplayName(st.getDisplayName());
@@ -128,11 +122,12 @@ public class AppPermissionService extends ItHouseService<List<AppPermission>> {
         AppPermission rg = message.getPayload().get(0);
         List<Role> roleList = rg.getRoleList();
 
-        sharedGenericMapService.unMapAndMap(rg.getPermissionId(), roleList.stream().mapToLong(Role::getRoleId).boxed().collect(Collectors.toList()), APP_PERMISSION, ROLE, message.getHeader().getUserId());
+        sharedGenericMapService.unMapAndMap(rg.getPermissionId(),
+                roleList.stream().mapToLong(Role::getRoleId).boxed().collect(Collectors.toList()), APP_PERMISSION, ROLE,
+                message.getHeader().getUserId());
 
         return rg;
     }
-
 
     private List<AppPermission> loadPermission(Message<List<AppPermission>> message, String action) {
         AppPermission pref = message.getPayload().get(0);
@@ -177,7 +172,6 @@ public class AppPermissionService extends ItHouseService<List<AppPermission>> {
         return AppUtils.toList(permissionRepo.findAll());
     }
 
-
     private List<AppPermission> update(Message<List<AppPermission>> message, String action) throws Exception {
         AppPermission pref = message.getPayload().getFirst();
         permissionRepo.save(pref);
@@ -186,14 +180,14 @@ public class AppPermissionService extends ItHouseService<List<AppPermission>> {
 
     public AppPermission mapRoleToPermission(long permissionId, long roleId, long userId) {
 
-//		User user = userService.findUserById(userId);
+        // User user = userService.findUserById(userId);
         log.info("Adding role to permission [{}]:[{}]", permissionId, roleId);
         sharedGenericMapService.mapNew(permissionId, roleId, APP_PERMISSION, ROLE, userId);
         return permissionRepo.findById(permissionId).get();
     }
 
     public AppPermission mapRoleToPermission(long permissionId, String roleId, long userId) {
-//		User user = userService.findUserById(userId);
+        // User user = userService.findUserById(userId);
 
         log.info("Adding role to permission [{}]:[{}]", permissionId, roleId);
         List<Long> ids = Arrays.stream(roleId.split(",")).map(Long::valueOf).collect(Collectors.toList());

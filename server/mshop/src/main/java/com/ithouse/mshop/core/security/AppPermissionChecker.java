@@ -3,8 +3,6 @@ package com.ithouse.mshop.core.security;
 import com.ithouse.core.security.permission.PermissionChecker;
 import com.ithouse.mshop.core.entity.AppPermission;
 import com.ithouse.mshop.core.principal.UserPrincipal;
-import com.ithouse.mshop.core.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -16,9 +14,6 @@ import java.util.Set;
 public class AppPermissionChecker implements PermissionChecker {
     @Value("${permission.ignore.for:ithousebd,ithouse}")
     private Set<String> ignoreFor;
-
-    @Autowired
-    private UserService userService;
 
     @Override
     public boolean hasPermission(String[] permissions, boolean allRequired) {

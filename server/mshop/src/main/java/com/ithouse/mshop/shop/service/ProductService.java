@@ -25,7 +25,7 @@ public class ProductService extends ItHouseService<List<Product>> {
     private ProductRepo productRepo;
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Message<?> itHouseService(Message requestMessage) throws Exception {
         AbstractMessageHeader header = null;
         Message<?> msgResponse = null;
@@ -71,7 +71,8 @@ public class ProductService extends ItHouseService<List<Product>> {
     }
 
     public List<Product> findProductByUserId(Long userId) {
-//        List<ProductProjection> productProjections= productRepo.findAllByUsers_UserIdAndIsActive(userId, 1);
+        // List<ProductProjection> productProjections=
+        // productRepo.findAllByUsers_UserIdAndIsActive(userId, 1);
         List<ProductProjection> productProjections = productRepo.findAllByIsActive(1);
         return buildProjection2DTO(productProjections);
     }
@@ -84,15 +85,17 @@ public class ProductService extends ItHouseService<List<Product>> {
                 .map(this::buildSingle).toList();
     }
 
-    //    private ProductDTO buildSingle(ProductProjection productProjection){
+    // private ProductDTO buildSingle(ProductProjection productProjection){
     private Product buildSingle(ProductProjection productProjection) {
         if (productProjection == null) {
             return null;
         }
-//        return new ProductDTO(productProjection.getProductId(), productProjection.getIsActive(),
-//                productProjection.getProductName(), productProjection.getProductDescription(),
-//                productProjection.getCreateDate(), productProjection.getProductSellBy(),
-//                productProjection.getProductCategories());
+        // return new ProductDTO(productProjection.getProductId(),
+        // productProjection.getIsActive(),
+        // productProjection.getProductName(),
+        // productProjection.getProductDescription(),
+        // productProjection.getCreateDate(), productProjection.getProductSellBy(),
+        // productProjection.getProductCategories());
 
         return DtoMapper.map(productProjection, Product.class);
     }

@@ -62,8 +62,8 @@ public class UserService extends ItHouseService<List<User>> {
     private final RoleService roleService;
     private final UserService self;
 
-
-    public UserService(UserRepo userRepo, LoginRepo loginRepo, PasswordEncoder passwordEncoder, AuthService authService, UserPrincipalService userPrincipalService, RoleService roleService, @Lazy UserService self) {
+    public UserService(UserRepo userRepo, LoginRepo loginRepo, PasswordEncoder passwordEncoder, AuthService authService,
+            UserPrincipalService userPrincipalService, RoleService roleService, @Lazy UserService self) {
         this.userRepo = userRepo;
         this.loginRepo = loginRepo;
         this.passwordEncoder = passwordEncoder;
@@ -73,7 +73,7 @@ public class UserService extends ItHouseService<List<User>> {
         this.self = self;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Message<?> itHouseService(Message requestMessage) throws Exception {
 
         AbstractMessageHeader header = null;
@@ -188,12 +188,10 @@ public class UserService extends ItHouseService<List<User>> {
 
         doAuthenticate(user);
 
-
         User dbUser = userPrincipalService.loadUserByUsername(user.getLoginName()).user();
 
-
         if (dbUser != null) {
-//            sessionService.expireUserSessions(dbUser.getEmail());
+            // sessionService.expireUserSessions(dbUser.getEmail());
             log.info("dbuser is found for user:[{}]", user.getLoginName());
             if (dbUser.getAllowLogin() != 1) {
                 log.info("User is not allow to login: [{}]", dbUser.getUserId());
@@ -210,53 +208,58 @@ public class UserService extends ItHouseService<List<User>> {
             }
 
             userList = new ArrayList<>();
-            updateLogin(message.getHeader().getSenderSourceIPAddress(), message.getHeader().getSenderGatewayIPAddress(), dbUser, 1, dbUser.getLoginName(), appName);
-//                dbUser.setPassword(null);
+            updateLogin(message.getHeader().getSenderSourceIPAddress(), message.getHeader().getSenderGatewayIPAddress(),
+                    dbUser, 1, dbUser.getLoginName(), appName);
+            // dbUser.setPassword(null);
             userList.add(dbUser);
             return userList;
 
-//            if (isPasswordMatch(dbUser.getPassword(), user.getPassword())) {
-//                log.info("Password is mathched");
-//                userList = new ArrayList<>();
-//                updateLogin(message.getHeader().getSenderSourceIPAddress(), message.getHeader().getSenderGatewayIPAddress(), dbUser, 1, dbUser.getLoginName(), appName);
-////                dbUser.setPassword(null);
-//                userList.add(dbUser);
-//                return userList;
-//
-//                // lk?
-//            } else {
-//                log.info("Password not matched.");
-//                throw new Exception("Password not matched.");
-//            }
+            // if (isPasswordMatch(dbUser.getPassword(), user.getPassword())) {
+            // log.info("Password is mathched");
+            // userList = new ArrayList<>();
+            // updateLogin(message.getHeader().getSenderSourceIPAddress(),
+            // message.getHeader().getSenderGatewayIPAddress(), dbUser, 1,
+            // dbUser.getLoginName(), appName);
+            ////                dbUser.setPassword(null);
+            // userList.add(dbUser);
+            // return userList;
+            //
+            // // lk?
+            // } else {
+            // log.info("Password not matched.");
+            // throw new Exception("Password not matched.");
+            // }
 
         } else {
             log.info("User not found.");
             throw new Exception("User not found.");
         }
 
-
     }
 
-    @RequirePermissions(value = {"ADMIN_VIEW", "MANAGER_VIEW", "USER_CREATE"}, allRequired = false)
+    @RequirePermissions(value = { "ADMIN_VIEW", "MANAGER_VIEW", "USER_CREATE" }, allRequired = false)
     public User logout(Message<List<User>> message, String actionType) throws Exception {
         User user = null;
         String appName = (String) message.getHeader().getExtraInfoMap().get("appName");
 
         user = message.getPayload().getFirst();
 
-        return logOutUser(user, appName, message.getHeader().getSenderSourceIPAddress(), message.getHeader().getSenderGatewayIPAddress());
+        return logOutUser(user, appName, message.getHeader().getSenderSourceIPAddress(),
+                message.getHeader().getSenderGatewayIPAddress());
 
     }
 
-    public User logOutUser(User user, String appName, String senderSourceIPAddress, String senderGatewayIPAddress) throws Exception {
-//		Long userId = user.getUserId();
+    public User logOutUser(User user, String appName, String senderSourceIPAddress, String senderGatewayIPAddress)
+            throws Exception {
+        // Long userId = user.getUserId();
         user = userRepo.findById(user.getUserId()).orElse(user);
         updateLogin(senderSourceIPAddress, senderGatewayIPAddress, user, 0, user.getLoginName(), appName);
 
         return user;
     }
 
-    private void updateLogin(String senderSourceIPAddress, String senderGatewayIPAddress, User user, int loginLogout, String loginName, String appName)
+    private void updateLogin(String senderSourceIPAddress, String senderGatewayIPAddress, User user, int loginLogout,
+            String loginName, String appName)
             throws Exception {
         Login login = new Login();
         login.setUserId(user.getUserId());
@@ -362,7 +365,8 @@ public class UserService extends ItHouseService<List<User>> {
         return userRepo.findAllByUserIdAndActive(userId, 1);
     }
 
-    public User userLogOut(Long userId, String appName, String senderSourceIPAddress, String senderGatewayIPAddress) throws Exception {
+    public User userLogOut(Long userId, String appName, String senderSourceIPAddress, String senderGatewayIPAddress)
+            throws Exception {
         if (userId == null) {
             throw new UsernameNotFoundException("Logout failed.");
         }

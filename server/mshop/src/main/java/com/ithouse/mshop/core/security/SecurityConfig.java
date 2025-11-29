@@ -117,10 +117,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(request -> corsRequestFilter()))
 
                 // Handle forwarded headers (for reverse proxy setups)
-                .requiresChannel(channel -> channel
-                        .requestMatchers(new RequestHeaderRequestMatcher("X-Forwarded-Proto", "http"))
-                        .requiresSecure()
-                )
+//                .requiresChannel(channel -> channel
+//                        .requestMatchers(new RequestHeaderRequestMatcher("X-Forwarded-Proto", "http"))
+//                        .requiresSecure()
+//                )
 
                 .build();
     }

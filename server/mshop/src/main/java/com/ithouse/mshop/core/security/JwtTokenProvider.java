@@ -1,34 +1,28 @@
 package com.ithouse.mshop.core.security;
 
-import static java.util.stream.Collectors.joining;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.time.Instant;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.Date;
-import javax.crypto.SecretKey;
-
+import com.ithouse.mshop.core.model.AccessTokenResponse;
 import com.ithouse.mshop.core.principal.UserPrincipal;
 import com.ithouse.mshop.core.utils.CoreUtils;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-import com.ithouse.mshop.core.model.AccessTokenResponse;
-import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Date;
+
+import static java.util.stream.Collectors.joining;
 
 @Component
 public class JwtTokenProvider {
@@ -72,8 +66,8 @@ public class JwtTokenProvider {
 			ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 			if (attrs != null) {
 				HttpServletRequest request = attrs.getRequest();
-                claimsBuilder.add("device", CoreUtils.generateDeviceFingerprint(request));
-            }
+				claimsBuilder.add("device", CoreUtils.generateDeviceFingerprint(request));
+			}
 
 			Claims claims = claimsBuilder.build();
 
@@ -106,22 +100,23 @@ public class JwtTokenProvider {
 		return true;
 	}
 
-
 	private boolean validateUsername(Claims claims, UserPrincipal userPrincipal) {
 		HttpServletRequest request = null;
-		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-		if(requestAttributes != null){
+		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
+				.getRequestAttributes();
+		if (requestAttributes != null) {
 			request = requestAttributes.getRequest();
 		}
-        assert request != null;
+		assert request != null;
 		Long tokenUserId = claims.get("id", Long.class);
 		if (tokenUserId == null || !tokenUserId.equals(userPrincipal.getId())) {
 			return false;
 		}
 		String tokenDeviceFingerprint = claims.get("device", String.class);
-        if (!claims.getSubject().equals(userPrincipal.getUsername())
-                || !StringUtils.hasLength(tokenDeviceFingerprint)) return false;
-        return tokenDeviceFingerprint.equals(CoreUtils.generateDeviceFingerprint(request));
+		if (!claims.getSubject().equals(userPrincipal.getUsername())
+				|| !StringUtils.hasLength(tokenDeviceFingerprint))
+			return false;
+		return tokenDeviceFingerprint.equals(CoreUtils.generateDeviceFingerprint(request));
 	}
 
 	private Claims getClaimsFromToken(String token) {
