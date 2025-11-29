@@ -7,18 +7,20 @@ import { Profile } from 'src/app/routs-components/private/profile/profile';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { CommonService } from 'src/app/ithouse/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
+import { SessionManagment } from 'src/app/ithouse/services/session-managment';
 
 @Component({
   selector: 'app-nav-right',
   standalone: false,
   templateUrl: './nav-right.html',
   styleUrl: './nav-right.scss',
-  providers: [NgbDropdownConfig],
+  providers: [NgbDropdownConfig, SessionManagment],
 })
 export class NavRight extends Ithouse implements OnInit, Service {
 
   protected cs = inject(CommonService);
   protected router = inject(Router);
+  private readonly sessionManagment = inject(SessionManagment);
   profileImage = signal<string>('assets/images/user/avater.png');
   // public props
   visibleUserList: boolean;
@@ -42,8 +44,12 @@ export class NavRight extends Ithouse implements OnInit, Service {
     if (this.user?.profileImagePath) {
       this.loadProfileImage(this.user?.profileImagePath);
     }
+    // this.sessionManagment.startSession(this.appTimeOutMin, this);
   }
 
+  // ngOnDestroy(): void {
+  //   this.sessionManagment.ngOnDestroy();
+  // }
 
   loadProfileImage(path: string) {
     const payload = {
@@ -90,6 +96,9 @@ export class NavRight extends Ithouse implements OnInit, Service {
     if (req.header.reference === 'logout') {
       this.cs.removeUserInfo();
       this.router.navigate(['/login']);
+    }
+    else if (req.header.reference === 'BUILD_IMAGE') {
+      this.profileImage.update((val) => res.payload || val);
     }
 
   }
