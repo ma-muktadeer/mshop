@@ -7,7 +7,6 @@ import com.ithouse.core.message.interfaces.Message;
 import com.ithouse.core.message.services.ItHouseService;
 import com.ithouse.core.security.permission.annotations.RequirePermissions;
 import com.ithouse.mshop.contants.ActionType;
-import com.ithouse.mshop.core.entity.AppPermission;
 import com.ithouse.mshop.core.entity.Login;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.principal.UserPrincipal;
@@ -49,7 +48,11 @@ public class UserService extends ItHouseService<List<User>> {
     @ItHouseDBValue(defaultValue = "test-value,check", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
     private List<String> testList;
     @ItHouseDBValue(defaultValue = "fst:test-value,2nd:check", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
-    private Map<String, String > testMap;
+    private Map<String, String> testMap;
+    @ItHouseDBValue(defaultValue = "${test.map.for.properties.default:fst:test-value,2nd:check,3rd:default}", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
+    private Map<String, String> testMap4PropertiesDefault;
+    @ItHouseDBValue(defaultValue = "${test.map.for.properties}", configGroup = "APP_CONFIG_GROUP", configSubGroup = "APP_CONFIG_SUBGROUP_TEST")
+    private Map<String, String> testMap4Properties;
 
     private final UserRepo userRepo;
     private final LoginRepo loginRepo;
@@ -60,7 +63,7 @@ public class UserService extends ItHouseService<List<User>> {
     private final UserService self;
 
 
-    public UserService(UserRepo userRepo, LoginRepo loginRepo, PasswordEncoder passwordEncoder, AuthService authService, UserPrincipalService userPrincipalService, RoleService roleService,@Lazy UserService self) {
+    public UserService(UserRepo userRepo, LoginRepo loginRepo, PasswordEncoder passwordEncoder, AuthService authService, UserPrincipalService userPrincipalService, RoleService roleService, @Lazy UserService self) {
         this.userRepo = userRepo;
         this.loginRepo = loginRepo;
         this.passwordEncoder = passwordEncoder;
@@ -338,7 +341,7 @@ public class UserService extends ItHouseService<List<User>> {
     // }
 
     public void doAuthenticate(User user) {
-        authService.authenticate(user.getLoginName(),  user.getPassword());
+        authService.authenticate(user.getLoginName(), user.getPassword());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -370,7 +373,7 @@ public class UserService extends ItHouseService<List<User>> {
         return logOutUser(usr, appName, senderSourceIPAddress, senderGatewayIPAddress);
     }
 
-    public List<String > findPermissionByUserId(Long userId) {
+    public List<String> findPermissionByUserId(Long userId) {
         return List.of("ABC");
     }
 }
