@@ -1,4 +1,4 @@
-import { AppPermission } from "../../../services/permissioin-store.service";
+import { AppPermission } from "../../../ithouse/services/permissioin-store.service";
 
 export interface NavigationItem {
   id: string;
@@ -98,7 +98,7 @@ export const NavigationItems: NavigationItem[] = [
             type: 'item',
             url: '/admin/banks'
           },
-           {
+          {
             id: 'branch',
             title: 'Branch',
             permission: [
@@ -180,16 +180,16 @@ export const NavigationItems: NavigationItem[] = [
           {
             id: 'document_list',
             title: 'Document Config',
-             permission: [
+            permission: [
               AppPermission.VIEW_DOCUMENT,
             ],
             type: 'item',
             url: '/admin/document-configuration'
           },
-            {
+          {
             id: 'profit-margin',
             title: 'Profit-Margin',
-            permission:[
+            permission: [
               AppPermission.VIEW_PROFIT_MARGIN,
             ],
             type: 'item',
@@ -216,7 +216,7 @@ export const NavigationItems: NavigationItem[] = [
         permission: 'DEFAULT',
         icon: 'feather icon-clock',
         children: [
-        {
+          {
             id: 'creat-ln',
             title: 'Creat Loan',
             permission: [

@@ -11,7 +11,7 @@ import { ConfigService, initializeApplication } from '../config.service';
 import { ToggleFullScreenDirective } from './structure/shared/full-screen/toggle-full-screen';
 import { DatePipe } from '@angular/common';
 import { NabItemsService } from './structure/theme/navigation/nab-items.service';
-import { TabManagerService } from './services/tab-manager.service';
+import { TabManagerService } from './ithouse/services/tab-manager.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { NgbDropdownConfig, NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
-import { Service } from 'src/app/services/service';
+import { Service } from 'src/app/ithouse/services/service';
 import { Router } from '@angular/router';
 import { Profile } from 'src/app/routs-components/private/profile/profile';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';

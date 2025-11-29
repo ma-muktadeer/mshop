@@ -6,7 +6,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { CustomGridData } from 'src/app/ithouse/constants/CustomGridData';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
-import { Service } from 'src/app/services/service';
+import { Service } from 'src/app/ithouse/services/service';
 
 @Component({
   selector: 'ithouse-user',

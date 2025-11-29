@@ -1,13 +1,13 @@
 import { Component, Input, signal } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
-import { AlertService } from 'src/app/services/alert.service';
+import { AlertService } from 'src/app/ithouse/services/alert.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
-import { DateConvertService } from 'src/app/services/date-convert.service';
-import { FileService } from 'src/app/services/file.service';
-import { Service } from 'src/app/services/service';
+import { DateConvertService } from 'src/app/ithouse/services/date-convert.service';
+import { FileService } from 'src/app/ithouse/services/file.service';
+import { Service } from 'src/app/ithouse/services/service';
 import Swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
 import { EditProfile } from './edit-profile/edit-profile';

@@ -70,30 +70,30 @@ export class FileService {
     // Remove the data URL scheme if present
     const cleanedBase64 = this.cleanBase64(base64);
     console.log('converting bs', cleanedBase64);
-    
+
     const blob = this.base64ToBlob(cleanedBase64, contentType);
     return new File([blob], fileName, { type: contentType });
   }
-  
+
   public base64ToBlob(base64: string, contentType: string): Blob {
     const byteCharacters = atob(base64);
     const byteNumbers = new Array(byteCharacters.length);
-  
+
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
-  
+
     const byteArray = new Uint8Array(byteNumbers);
     return new Blob([byteArray], { type: contentType });
   }
-  
+
   private cleanBase64(base64: string): string {
     const base64Pattern = /(?:data:[^;]+;base64,|base64,)?(.*)$/;
     const match = base64.match(base64Pattern);
     if (match) {
-      return match[1]; 
+      return match[1];
     }
-    return base64; 
+    return base64;
   }
 }
 

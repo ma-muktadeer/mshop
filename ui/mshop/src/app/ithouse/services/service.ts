@@ -1,4 +1,4 @@
-import { RequestBody } from "../ithouse/constants/RequestBody";
+import { RequestBody } from "../constants/RequestBody";
 
 export interface Service {
 

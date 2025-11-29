@@ -4,7 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Spinner } from "./structure/shared/components/spinner/spinner";
 import { ConfigService } from 'src/config.service';
-import { TabManagerService } from './services/tab-manager.service';
+import { TabManagerService } from './ithouse/services/tab-manager.service';
 import { Spinkit } from './structure/shared/components/spinner/spinkits';
 
 import { MultiTabWarning } from './components/multi-tab-warning/multi-tab-warning';

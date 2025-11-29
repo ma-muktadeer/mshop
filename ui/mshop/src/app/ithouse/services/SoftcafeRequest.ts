@@ -1,5 +1,5 @@
 import { ActionType } from "src/app/ithouse/constants/action-type.enum";
-import { Service } from "../../services/service";
+import { Service } from "./service";
 import { ContentType } from "src/app/ithouse/constants/content-type.enum";
 
 export class SoftcafeRequest {

@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
-import { InjectPermissionService } from 'src/app/services/inject-permission.service';
-import { AppPermission } from 'src/app/services/permissioin-store.service';
+import { InjectPermissionService } from 'src/app/ithouse/services/inject-permission.service';
+import { AppPermission } from 'src/app/ithouse/services/permissioin-store.service';
 import { NavigationItem } from '../../navigation-items';
 
 @Component({

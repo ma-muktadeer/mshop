@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateChildFn, Router } from '@angular/router';
-import { InjectPermissionService } from '../../services/inject-permission.service';
+import { InjectPermissionService } from '../services/inject-permission.service';
 
 export const securiedChildGuard: CanActivateChildFn = (childRoute, state) => {
   const injectPermission = inject(InjectPermissionService);

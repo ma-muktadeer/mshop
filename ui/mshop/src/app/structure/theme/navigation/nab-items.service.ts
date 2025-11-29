@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { PermissionStoreService } from '../../../services/permissioin-store.service';
+import { PermissionStoreService } from '../../../ithouse/services/permissioin-store.service';
 import { NavigationItem } from './navigation-items';
 import { CommonService } from 'src/app/services/common.service';
 

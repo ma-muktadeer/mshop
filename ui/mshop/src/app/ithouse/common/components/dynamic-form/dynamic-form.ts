@@ -2,7 +2,7 @@ import { NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormValue } from 'src/app/ithouse/classes/FormValue';
-import { DateConvertService } from 'src/app/services/date-convert.service';
+import { DateConvertService } from 'src/app/ithouse/services/date-convert.service';
 
 @Component({
   selector: 'ithouse-dynamic-form',

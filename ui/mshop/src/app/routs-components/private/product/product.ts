@@ -7,11 +7,11 @@ import { SubCategory } from '../../../ithouse/classes/product-info/sub-category'
 import _ from 'lodash';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
-import { AlertService } from 'src/app/services/alert.service';
+import { AlertService } from 'src/app/ithouse/services/alert.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
-import { FileService } from 'src/app/services/file.service';
-import { Service } from 'src/app/services/service';
+import { FileService } from 'src/app/ithouse/services/file.service';
+import { Service } from 'src/app/ithouse/services/service';
 
 @Component({
   selector: 'ithouse-product',

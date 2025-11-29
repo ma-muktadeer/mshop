@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 })
 export class AlertService {
 
-
   constructor() { }
 
   showAlert(title: string, message: string, type: 'success' | 'error' | 'warning' | 'info' = 'success', animation: boolean = false, customClass?: any) {
