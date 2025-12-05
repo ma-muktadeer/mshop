@@ -57,11 +57,9 @@ public class DocumentFilesService {
 		String path = DocumentFileUtils.saveFile2Dir(multipartFile, profileImagePath, false);
 		documentFiles.setFilePath(path);
 		documentFiles.setFileName(multipartFile.getOriginalFilename());
-		documentFiles.setCreateDate(new Date());
 		documentFiles.setFileType(fileType);
 		documentFiles.setObjectId(userId);
 		documentFiles.setObjectType(objectName);
-		documentFiles.setCreateDate(new Date());
 		documentFiles.setCreatorId(userId);
 
 		return documentFilesRepo.save(documentFiles);

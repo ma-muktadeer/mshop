@@ -7,14 +7,11 @@ import com.ithouse.core.message.services.ServiceCoordinator;
 import com.ithouse.core.message.services.ServiceMap;
 import com.ithouse.mshop.contants.ActionType;
 import com.ithouse.mshop.core.entity.AppPermission;
-import com.ithouse.mshop.core.entity.Regex;
 import com.ithouse.mshop.core.entity.User;
-import com.ithouse.mshop.core.repository.RegexRepo;
 import com.ithouse.mshop.core.service.AppPermissionService;
 import com.ithouse.mshop.core.service.UserService;
 import com.ithouse.mshop.shop.entity.Product;
 import com.ithouse.mshop.shop.service.ProductService;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,7 +19,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @Configuration

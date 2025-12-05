@@ -298,7 +298,7 @@ public class UserService extends ItHouseService<List<User>> {
     private User saveNewUser(User usr) {
 
         usr.setAllowLogin(1);
-        usr.setCreateDate(new Date());
+        usr.setEntryTime(new Date());
         usr.setLoginName(StringUtils.isEmpty(usr.getLoginName()) ? usr.getEmail() : usr.getLoginName());
         if (usr.getRoles().isEmpty()) {
             usr.setRoles(roleService.findRoleByRoleName("USER"));
