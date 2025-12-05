@@ -41,7 +41,7 @@ public record UserPrincipal(User user) implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.getActive() != null && user.getActive() == 1;
+        return user.getActive() == 1;
     }
 
     public Long getId() {

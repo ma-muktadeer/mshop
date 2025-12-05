@@ -1,9 +1,6 @@
 package com.ithouse.mshop.core.entity;
 
-import com.ithouse.mshop.core.model.BaseEntity;
 import jakarta.persistence.*;
-
-import java.util.Set;
 
 @Entity
 @Table(name = "T_ROLE")

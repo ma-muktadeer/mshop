@@ -1,6 +1,5 @@
 package com.ithouse.mshop.core.entity;
 
-import com.ithouse.mshop.core.model.BaseEntity;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -125,12 +124,6 @@ public class User extends BaseEntity {
 
     @Transient
     private List<AppPermission> permissions;
-
-    @Transient
-    private int pageNumber = 10;
-
-    @Transient
-    private int pageSize = 20;
 
     public Long getUserId() {
         return userId;
@@ -370,23 +363,6 @@ public class User extends BaseEntity {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
-    }
-
-
-    public int getPageNumber() {
-        return pageNumber;
-    }
-
-    public void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
     }
 
     public String getProfileImagePath() {

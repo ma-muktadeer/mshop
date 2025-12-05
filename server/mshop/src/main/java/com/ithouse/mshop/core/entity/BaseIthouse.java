@@ -12,7 +12,7 @@ class BaseIthouse {
     @Column(name = "is_active", nullable = false)
     protected int active = 1;
 
-    //	@Version
+    // @Version
     @Column(name = "item_version", nullable = false)
     protected int version = 0;
 
@@ -28,12 +28,10 @@ class BaseIthouse {
     @Column(name = "checker_time")
     protected Date checkerTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "mod_time", nullable = false)
     @LastModifiedDate
     protected Date modTime = new Date();
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "entry_time", nullable = true, updatable = false)
     @CreatedDate
     protected Date entryTime = new Date();
@@ -52,7 +50,6 @@ class BaseIthouse {
 
     @Transient
     protected Date toDate;
-
 
     @PrePersist
     void prePersist() {

@@ -9,14 +9,14 @@ import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 
-@Configuration
+//@Configuration
 public class DataSourceConfig {
 
     @Primary
     @Bean(name = "primaryDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.primary")
     public DataSource primaryDataSource() {
-        return DataSourceBuilder.create().build();
+        return DataSourceBuilder.create().create().build();
     }
 
     @Bean(name = "secondaryDataSource")

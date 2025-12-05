@@ -1,6 +1,5 @@
 package com.ithouse.mshop.core.entity;
 
-import com.ithouse.mshop.core.model.BaseEntity;
 import com.ithouse.mshop.core.utils.FileType;
 
 import jakarta.persistence.Column;

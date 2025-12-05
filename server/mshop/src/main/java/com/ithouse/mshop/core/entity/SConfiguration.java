@@ -7,17 +7,18 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="T_CONFIGURATION")
+@Table(name = "T_CONFIGURATION")
 @DynamicUpdate
-public class SConfiguration extends BaseEntity{
+public class SConfiguration extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CONFIGURATION_SEQ") //for oracle
-//    @SequenceGenerator(sequenceName = "CONFIGURATION_SEQ", allocationSize = 1, name = "CONFIGURATION_SEQ") //for oracle
+    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =
+    // "CONFIGURATION_SEQ") //for oracle
+    // @SequenceGenerator(sequenceName = "CONFIGURATION_SEQ", allocationSize = 1,
+    // name = "CONFIGURATION_SEQ") //for oracle
     @Column(name = "id_config_key")
     private Long configId;
-
 
     @Column(name = "tx_config_group", length = 32)
     private String configGroup;
@@ -36,7 +37,6 @@ public class SConfiguration extends BaseEntity{
     @Column(name = "tx_value5", length = 32)
     private String value5;
 
-
     @Column(name = "tx_comments", length = 64)
     private String comments;
 
@@ -46,7 +46,6 @@ public class SConfiguration extends BaseEntity{
     @Column(name = "id_approved_by_id")
     protected Long approveById;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "dtt_approve")
     protected Date approveTime;
 
@@ -184,6 +183,5 @@ public class SConfiguration extends BaseEntity{
     public void setConfigSubGroups(List<String> configSubGroups) {
         this.configSubGroups = configSubGroups;
     }
-
 
 }
