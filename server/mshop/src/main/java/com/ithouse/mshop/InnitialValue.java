@@ -2,6 +2,7 @@ package com.ithouse.mshop;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,13 +42,18 @@ public class InnitialValue implements CommandLineRunner {
                 usr.setAllowLogin(1);
                 // usr.setUserId(1L);
                 usr.setPassword(passwordEncoder.encode("123"));
+                usr.setCreatorId(1L);
+                usr.setUserModId(1L);
 
                 Role rl = new Role();
                 // rl.setRoleId(1L);
                 rl.setRoleName("ROLE_ADMIN");
-                roleService.saveRole(new HashSet<>(Collections.singletonList(rl)));
+                rl.setCreatorId(1L);
+                rl.setUserModId(1L);
+//                roleService.saveRole(new HashSet<>(Collections.singletonList(rl)));
                 // usr.setRoles(Collections.singletonList(rl));
-                usr.setRoles(new HashSet<>(Collections.singletonList(rl)));
+                usr.setRoles(Set.of(rl));
+//                usr.setRoles(new HashSet<>(Collections.singletonList(rl)));
                
                 userService.saveInitialValue(usr);
             }
