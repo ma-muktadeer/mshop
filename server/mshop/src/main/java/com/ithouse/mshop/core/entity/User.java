@@ -110,7 +110,7 @@ public class User extends BaseEntity {
     @Column(name = "TX_PROFILE_BNNR_PATH")
     private String profileBannerPath;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(

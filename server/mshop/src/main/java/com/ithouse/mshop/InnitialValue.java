@@ -1,9 +1,9 @@
 package com.ithouse.mshop;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.ithouse.mshop.core.entity.Role;
+import com.ithouse.mshop.core.entity.User;
+import com.ithouse.mshop.core.service.UserService;
+import jakarta.el.ELException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.ithouse.mshop.core.entity.Role;
-import com.ithouse.mshop.core.entity.User;
-import com.ithouse.mshop.core.service.RoleService;
-import com.ithouse.mshop.core.service.UserService;
-
-import jakarta.el.ELException;
+import java.util.Set;
 
 @Component
 public class InnitialValue implements CommandLineRunner {
@@ -26,8 +21,6 @@ public class InnitialValue implements CommandLineRunner {
     private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private RoleService roleService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -54,7 +47,7 @@ public class InnitialValue implements CommandLineRunner {
                 // usr.setRoles(Collections.singletonList(rl));
                 usr.setRoles(Set.of(rl));
 //                usr.setRoles(new HashSet<>(Collections.singletonList(rl)));
-               
+
                 userService.saveInitialValue(usr);
             }
 
