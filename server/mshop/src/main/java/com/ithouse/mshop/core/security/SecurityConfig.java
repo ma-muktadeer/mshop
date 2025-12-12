@@ -100,17 +100,19 @@ public class SecurityConfig {
 
                 // Authorization rules
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
-                        .requestMatchers("/public/**").permitAll()
+                                // Public endpoints
+                                .requestMatchers("/public/**").permitAll()
 
-                        // Admin endpoints
-                        .requestMatchers("/secure/admin/**").hasAuthority("ROLE_ADMIN") // always use ROLE_ prefix
+                                // Admin endpoints
+                                .requestMatchers("/secure/admin/**").hasAuthority("ROLE_ADMIN")
 
-                        // POST requests for secure endpoints
-                        .requestMatchers(HttpMethod.POST, "/secure/**").hasAnyAuthority(roleService.findAllRoleNameList())
+                                // POST requests for secure endpoints
+//                        .requestMatchers(HttpMethod.POST, "/secure/**").hasAnyAuthority(roleService.findAllRoleNameList())
+                                .requestMatchers(HttpMethod.POST, "/secure/**").authenticated()
 
-                        // Deny everything else
-                        .anyRequest().denyAll()
+
+                                // Deny everything else
+                                .anyRequest().denyAll()
                 )
 
                 // CORS configuration
