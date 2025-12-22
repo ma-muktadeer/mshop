@@ -7,5 +7,4 @@ import { Component } from '@angular/core';
   styleUrl: './dashbord.scss'
 })
 export class Dashbord {
-
 }
