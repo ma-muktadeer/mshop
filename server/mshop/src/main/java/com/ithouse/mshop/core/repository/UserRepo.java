@@ -14,16 +14,20 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     Optional<User> findAllByLoginNameOrEmailAndActive(String loginName, String email, int i);
 
-	Optional<User> findAllByLoginNameOrEmailAndAppNameAndActive(String username, String username2, String appName, int i);
+    Optional<User> findAllByLoginNameOrEmailAndAppNameAndActive(String username, String username2, String appName,
+            int i);
 
-	Page<User> findAllByActive(int i, Pageable pageable);
+    Page<User> findAllByActive(int i, Pageable pageable);
 
-	User findAllByUserIdAndAppNameAndActive(Long userId, String appName, int i);
+    User findAllByUserIdAndAppNameAndActive(Long userId, String appName, int i);
 
     User findAllByUserIdAndActive(Long userId, int i);
 
+    // OAuth2 related methods
+    Optional<User> findByOauthProviderAndOauthProviderId(String oauthProvider, String oauthProviderId);
+
+    Optional<User> findByEmail(String email);
+
     // Optional<User> findAllByEmail(String username);
 
-    
-    
-} 
+}
