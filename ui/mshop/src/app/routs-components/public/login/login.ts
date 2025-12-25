@@ -47,13 +47,43 @@ export class Login extends Ithouse implements Service {
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(params => {
         this.sessionExpired = params['sessionExpired'] === 'true';
+        
+        // Handle OAuth2 callback
+        const token = params['token'];
+        const expireOn = params['expireOn'];
+        const loginName = params['loginName'];
+        
+        if (token && expireOn && loginName) {
+          // OAuth2 successful login
+          const oauth2Response = {
+            token: 'Bearer ' + token,
+            expireAt: expireOn,
+            res: { payload: [{ loginName: loginName }] }
+          };
+          this.cs.storeToken(oauth2Response);
+          this.cs.storeLoginUser({ loginName: loginName });
+          this.router.navigate([`/${loginName}/home`]);
+        }
+        
+        // Handle OAuth2 error
+        const error = params['error'];
+        const errorMessage = params['message'];
+        if (error) {
+          this.alert.showAlert('OAuth2 Error', errorMessage || 'Failed to login with Google', 'error');
+        }
       });
+      
     if (this.sessionExpired) {
       // this.cs.logout(this);
       this.alert.showAlert('Session Expriered.', 'Your session is expriered. Please login again.', 'error');
       this.cs.removeUserInfo();
 
     }
+  }
+
+  onGoogleLogin() {
+    // Redirect to backend OAuth2 endpoint
+    window.location.href = 'http://localhost:8081/oauth2/authorization/google';
   }
 
   setIsSignDivVisiable(res: boolean) {

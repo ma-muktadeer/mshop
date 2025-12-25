@@ -12,7 +12,7 @@
       <form (ngSubmit)="onRegister()" [hidden]="!isSignDivVisiable()">
         <h1>Create Account</h1>
         <div class="social-icons">
-          <a href="#" class="icon"><i class="bi bi-google"></i></a>
+          <a (click)="onGoogleLogin()" class="icon" style="cursor: pointer;"><i class="bi bi-google"></i></a>
           <a href="#" class="icon"><i class="bi bi-facebook"></i></a>
           <a href="#" class="icon"><i class="bi bi-github"></i></a>
           <a href="#" class="icon"><i class="bi bi-linkedin"></i></a>
@@ -29,7 +29,7 @@
         <h1>Sign In</h1>
         <div class="social-icons">
           <!-- <a href="#" class="icon"><i class="fa-solid fa-light fa-plus fa-beat-fade fa-1x1"></i></a> -->
-          <a href="#" class="icon"><i class="bi bi-google"></i></a>
+          <a (click)="onGoogleLogin()" class="icon" style="cursor: pointer;"><i class="bi bi-google"></i></a>
           <a href="#" class="icon"><i class="bi bi-facebook"></i></a>
           <a href="#" class="icon"><i class="bi bi-github"></i></a>
           <a href="#" class="icon"><i class="bi bi-linkedin"></i></a>
