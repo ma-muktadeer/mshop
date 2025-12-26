@@ -1,5 +1,8 @@
 package com.ithouse.mshop.core.security;
 
+import com.ithouse.mshop.core.security.oauth2.CustomOAuth2UserService;
+import com.ithouse.mshop.core.security.oauth2.OAuth2AuthenticationFailureHandler;
+import com.ithouse.mshop.core.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.ithouse.mshop.core.service.RoleService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -61,11 +64,20 @@ public class SecurityConfig {
     private final RoleService roleService;
     private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
     private final Environment env;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
-    public SecurityConfig(RoleService roleService, JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter, Environment env) {
+    public SecurityConfig(RoleService roleService, JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter,
+            Environment env, CustomOAuth2UserService customOAuth2UserService,
+            OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler,
+            OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler) {
         this.roleService = roleService;
         this.jwtTokenAuthenticationFilter = jwtTokenAuthenticationFilter;
         this.env = env;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
+        this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
     }
 
     @Bean
@@ -100,33 +112,39 @@ public class SecurityConfig {
 
                 // Authorization rules
                 .authorizeHttpRequests(auth -> auth
-                                // Public endpoints
-                                .requestMatchers("/public/**").permitAll()
+                        // Public endpoints
+                        .requestMatchers("/public/**").permitAll()
 
-                                // Admin endpoints
-                                .requestMatchers("/secure/admin/**").hasAuthority("ROLE_ADMIN")
+                        // Admin endpoints
+                        .requestMatchers("/secure/admin/**").hasAuthority("ROLE_ADMIN")
 
-                                // POST requests for secure endpoints
-//                        .requestMatchers(HttpMethod.POST, "/secure/**").hasAnyAuthority(roleService.findAllRoleNameList())
-                                .requestMatchers(HttpMethod.POST, "/secure/**").authenticated()
+                        // POST requests for secure endpoints
+                        // .requestMatchers(HttpMethod.POST,
+                        // "/secure/**").hasAnyAuthority(roleService.findAllRoleNameList())
+                        .requestMatchers(HttpMethod.POST, "/secure/**").authenticated()
 
+                        // Deny everything else
+                        .anyRequest().denyAll())
 
-                                // Deny everything else
-                                .anyRequest().denyAll()
-                )
+                // OAuth2 Login configuration
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService))
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                        .failureHandler(oAuth2AuthenticationFailureHandler))
 
                 // CORS configuration
                 .cors(cors -> cors.configurationSource(request -> corsRequestFilter()))
 
                 // Handle forwarded headers (for reverse proxy setups)
-//                .requiresChannel(channel -> channel
-//                        .requestMatchers(new RequestHeaderRequestMatcher("X-Forwarded-Proto", "http"))
-//                        .requiresSecure()
-//                )
+                // .requiresChannel(channel -> channel
+                // .requestMatchers(new RequestHeaderRequestMatcher("X-Forwarded-Proto",
+                // "http"))
+                // .requiresSecure()
+                // )
 
                 .build();
     }
-
 
     private void headersFilter(HeadersConfigurer<HttpSecurity> header) {
 
@@ -154,7 +172,8 @@ public class SecurityConfig {
                     }
                 })
                 .addHeaderWriter(new StaticHeadersWriter("Cross-Origin-Opener-Policy", "same-origin"))
-                .permissionsPolicyHeader(permissions -> permissions.policy("geolocation=(), microphone=(), camera=(), fullscreen=(self), vibrate=()"));
+                .permissionsPolicyHeader(permissions -> permissions
+                        .policy("geolocation=(), microphone=(), camera=(), fullscreen=(self), vibrate=()"));
 
     }
 
@@ -163,7 +182,8 @@ public class SecurityConfig {
 
         config.setAllowedOrigins(applicationDomain);
         config.setAllowedMethods(allowedMethod);
-//        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "appName", "Cache-Control"));
+        // config.setAllowedHeaders(List.of("Authorization", "Content-Type", "appName",
+        // "Cache-Control"));
         config.setAllowedHeaders(allowedHeaders);
         config.setExposedHeaders(exposedHeaders);
         config.setAllowCredentials(allowedCredentials); // Set to false if credentials are not needed
@@ -171,46 +191,48 @@ public class SecurityConfig {
         return config;
     }
 
-
-//    private UrlBasedCorsConfigurationSource corsConfigurationSource() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.setAllowedOrigins(applicationDomain); // Adjust for your domain
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("*");
-//        source.registerCorsConfiguration("/**", config);
-//        return source;
-//    }
+    // private UrlBasedCorsConfigurationSource corsConfigurationSource() {
+    // UrlBasedCorsConfigurationSource source = new
+    // UrlBasedCorsConfigurationSource();
+    // CorsConfiguration config = new CorsConfiguration();
+    // config.setAllowCredentials(true);
+    // config.setAllowedOrigins(applicationDomain); // Adjust for your domain
+    // config.addAllowedHeader("*");
+    // config.addAllowedMethod("*");
+    // source.registerCorsConfiguration("/**", config);
+    // return source;
+    // }
 
     @Bean
     public CorsConfigurationSource corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = corsRequestFilter();
         source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
+        // return new CorsFilter(source);
         return source;
     }
 
-//    @Bean
-//    AuthenticationManager customAuthenticationManager(UserDetailsService userDetailsService, PasswordEncoder encoder) {
-//
-//        return authentication -> {
-//            String username = authentication.getPrincipal() + "";
-//            String password = authentication.getCredentials() + "";
-//
-//            UserDetails user = userDetailsService.loadUserByUsername(username);
-//
-//            if (!encoder.matches(password, user.getPassword())) {
-//                throw new BadCredentialsException("Bad credentials.");
-//
-//            }
-//            if (!user.isEnabled()) {
-//                throw new DisabledException("User account is not active.");
-//            }
-//
-//            return new UsernamePasswordAuthenticationToken(username, null, user.getAuthorities());
-//        };
-//    }
+    // @Bean
+    // AuthenticationManager customAuthenticationManager(UserDetailsService
+    // userDetailsService, PasswordEncoder encoder) {
+    //
+    // return authentication -> {
+    // String username = authentication.getPrincipal() + "";
+    // String password = authentication.getCredentials() + "";
+    //
+    // UserDetails user = userDetailsService.loadUserByUsername(username);
+    //
+    // if (!encoder.matches(password, user.getPassword())) {
+    // throw new BadCredentialsException("Bad credentials.");
+    //
+    // }
+    // if (!user.isEnabled()) {
+    // throw new DisabledException("User account is not active.");
+    // }
+    //
+    // return new UsernamePasswordAuthenticationToken(username, null,
+    // user.getAuthorities());
+    // };
+    // }
 
 }
