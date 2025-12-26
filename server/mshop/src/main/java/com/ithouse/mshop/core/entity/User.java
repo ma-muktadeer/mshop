@@ -110,6 +110,12 @@ public class User extends BaseEntity {
     @Column(name = "TX_PROFILE_BNNR_PATH")
     private String profileBannerPath;
 
+    @Column(name = "tx_oauth_provider", length = 24)
+    private String oauthProvider; // GOOGLE, FACEBOOK, GITHUB, etc.
+
+    @Column(name = "tx_oauth_provider_id", length = 128)
+    private String oauthProviderId; // Unique ID from OAuth provider
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "users_roles",
@@ -396,5 +402,21 @@ public class User extends BaseEntity {
 
     public void setPermissions(List<AppPermission> permissions) {
         this.permissions = permissions;
+    }
+
+    public String getOauthProvider() {
+        return oauthProvider;
+    }
+
+    public void setOauthProvider(String oauthProvider) {
+        this.oauthProvider = oauthProvider;
+    }
+
+    public String getOauthProviderId() {
+        return oauthProviderId;
+    }
+
+    public void setOauthProviderId(String oauthProviderId) {
+        this.oauthProviderId = oauthProviderId;
     }
 }
