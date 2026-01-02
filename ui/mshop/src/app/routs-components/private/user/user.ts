@@ -8,6 +8,8 @@ import { CustomGridData } from 'src/app/ithouse/constants/CustomGridData';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { Service } from 'src/app/ithouse/services/service';
 import { ContentLoader } from "src/app/components/content-loader/content-loader";
+import Swal from 'sweetalert2';
+import { AppPermission, PermissionStoreService } from 'src/app/ithouse/services/permissioin-store.service';
 
 @Component({
   selector: 'ithouse-user',
@@ -17,7 +19,7 @@ import { ContentLoader } from "src/app/components/content-loader/content-loader"
 })
 export class User extends Ithouse implements Service {
   pageNumber: number = 1;
-  pageSize: number = 1;
+  pageSize: number = 10;
   dataset = signal<any[]>([]);
   userList = computed<CustomGridData>(() => {
     const data = this.dataset();
@@ -25,6 +27,7 @@ export class User extends Ithouse implements Service {
   });
 
   showGrid = signal<boolean>(false);
+  readonly appPermission = AppPermission;
 
   viewIcon: Formatter = (row: number, cell: number, value: any, columnDef: Column, dataContext: any, grid?: any) => {
     return '<i title="view"  style="font-size:14px;"  class="bi bi-eye pointer" aria-hidden="true"></i>'
@@ -56,21 +59,44 @@ export class User extends Ithouse implements Service {
     //   return '';
     // }
   };
-  constructor(
-    private cs: CommonService,
-  ) {
-    super();
+
+  contextMenu = {
+
+    hideCloseButton: false,
+    hideCopyCellValueCommand: true,
+    commandItems: [
+      {
+        command: 'Active_Status',
+        iconCssClass: 'fa fa-user',
+        title: 'Active/Inactive user',
+        action: (e, args) => { this.toggleActivation(e, args) },
+        disabled: false,
+        itemUsabilityOverride: (args) => {
+          console.log(args);
+          args.grid.getOptions().contextMenu.commandItems.forEach(element => {
+            if (element['command'] == 'Active_Status') {
+              element['title'] = this.checkStatus(args.dataContext.userStatus, args.dataContext.allowLogin);
+            }
+          });
+          return this.checkActiveRole(args.dataContext);
+        },
+        itemVisibilityOverride: (args) => {
+          return this.checkUserActionVisibility(args.dataContext);
+        }
+      },
+
+      {
+        command: 'Manage_Role',
+        iconCssClass: 'fa fa-cogs',
+        title: 'Manage Role',
+        action: (e, args) => {
+          // this.manageUserRole(args.dataContext)
+        },
+        disabled: false
+      },
+    ]
   }
-  ngOnInit(): void {
-    this.loadUse();
-  }
-  loadUse() {
-    const payload = {
-      pageNumber: 1,
-      pageSize: this.pageSize,
-    };
-    this.cs.sendRequest(this, ActionType.SELECT, ContentType.User, 'select', payload);
-  }
+
   serialFormmater: Formatter = (index, a, v, c) => {
     return index + 1 + "";
   };
@@ -217,32 +243,99 @@ export class User extends Ithouse implements Service {
       formatter: (row: number, cell: number, value: any, columnDef?: Column, dataContext?: any, grid?: any) => { return dataContext.allowLogin == 'Yes' ? "Yes" : "No" }
     }
   ]
-  check() {
-    debugger
-    // const rf = this.model.open(Product, { backdrop: 'static' });
+  constructor(
+    private cs: CommonService,
+    private permissioinStoreService: PermissionStoreService,
+  ) {
+    super();
+  }
+  ngOnInit(): void {
+    this.loadUserList();
+  }
+  loadUserList() {
+    const payload = {
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize,
+    };
+    this.cs.sendRequest(this, ActionType.SELECT, ContentType.User, 'select', payload);
+  }
 
-    // rf.result.then((res) => {
-    //   console.log('Modal closed with:', res);
-    // })
-    //   .catch((reason) => {
-    //     console.error('Modal dismissed with reason:', reason);
-    //   })
+  checkActiveRole(data) {
+    return this.permissioinStoreService.hasAnyPermission([this.appPermission.USER_MAKER, this.appPermission.USER_APPROVER])
+      && (this.cs.forceAllow() || data.creatorId != this.cs.getUserId());
+  }
+  toggleActivation(e, arge) {
+    debugger
+    var payload = {
+      userId: arge.dataContext.userId,
+      userStatus: '',
+      allowLogin: 0,
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize
+    };
+
+    const currentStatus = arge.dataContext.userStatus;
+    const currentAllowLogin = arge.dataContext.allowLogin;
+    const status = this.checkStatus(currentStatus, currentAllowLogin);
+    console.log(arge.dataContext.allowLogin);
+    payload.userStatus = status == 'Approve Inactive User'
+      ? 'INACTIVE' : status == 'Inactive User'
+        ? 'PEND_INACTIVE' : status == 'Approve Active User'
+          ? 'ACTIVE' : 'PEND_ACTIVE';
+    payload.allowLogin = arge.dataContext.allowLogin == 'No' ? 0 : 1;
+    debugger
+    Swal.fire({
+      icon: 'question',
+      title: `Want to Submit?`,
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+      cancelButtonText: 'No',
+    }).then((r) => {
+      if (r.isConfirmed) {
+        this.cs.sendRequestAdmin(this, ActionType.USER_ACTIVATION, ContentType.User, 'select', payload);
+      }
+    })
+  }
+
+  checkStatus(userStatus: string, allowLogin: string): string {
+    let status = '';
+    if (allowLogin == 'Yes') {
+      if (userStatus == 'PEND_INACTIVE') {
+        status = 'Approve Inactive User';
+      }
+      else {
+        status = 'Inactive User'
+      }
+    } else if (allowLogin == 'No') {
+      if (userStatus == 'PEND_ACTIVE') {
+        status = 'Approve Active User';
+      }
+      else {
+        status = 'Active User'
+      }
+    }
+    return status;
+  }
+  checkUserActionVisibility(data) {
+    return this.checkActiveRole(data)
+      && (data?.userStatus === 'ACTIVE' || data?.userStatus === 'PEND_ACTIVE' || data?.userStatus === 'INACTIVE' || data?.userStatus === 'PEND_INACTIVE');
   }
 
   paginationChanged($event: any) {
-    throw new Error('Method not implemented.');
+    this.pageNumber = $event.page;
+    this.pageSize = $event.pageSize;
+    // this.totalItem=$event.totalItem;
+    this.loadUserList();
   }
 
   buildGridData(payload: any) {
     console.log('user list', payload);
-    const gridData: CustomGridData = {
+    return {
       content: payload.content,
       total: payload.totalElements,
       totalPages: payload.totalPages,
       pageSize: payload.size,
     };
-    // this.userList.update(() => gridData);
-    return gridData;
   }
   blockToCamel(value: string) {
 
