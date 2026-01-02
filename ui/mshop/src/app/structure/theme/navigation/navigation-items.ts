@@ -78,7 +78,7 @@ export const NavigationItems: NavigationItem[] = [
               AppPermission.USER_VIEWER,
             ],
             type: 'item',
-            url: '/admin/user-list',
+            url: '/admin/users',
           },
           {
             id: 'permission-list',

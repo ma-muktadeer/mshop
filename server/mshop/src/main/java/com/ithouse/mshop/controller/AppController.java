@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ithouse.core.message.interfaces.Message;
 import com.ithouse.core.message.processor.services.ProcessorService;
 import com.ithouse.core.message.services.ServiceCoordinator;
-import com.ithouse.core.security.permission.annotations.RequirePermissions;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.repository.UserRepo;
 import com.ithouse.mshop.core.service.DocumentFilesService;
@@ -42,14 +41,16 @@ public class AppController {
 
     private final DocumentFilesService documentFilesService;
     private final UserService userService;
+    private final ObjectMapper objectMapper;
 
-    public AppController(ProcessorService processorService, ServiceCoordinator serviceCoordinator, UserRepo userRepo, DocumentFilesService documentFilesService, ProductService productRepo, UserService userService) {
+    public AppController(ProcessorService processorService, ServiceCoordinator serviceCoordinator, UserRepo userRepo, DocumentFilesService documentFilesService, ProductService productRepo, UserService userService, ObjectMapper objectMapper) {
         this.processorService = processorService;
         this.serviceCoordinator = serviceCoordinator;
         this.userRepo = userRepo;
         this.documentFilesService = documentFilesService;
         this.productRepo = productRepo;
         this.userService = userService;
+        this.objectMapper = objectMapper;
     }
 
     /*
@@ -172,7 +173,7 @@ public class AppController {
 
     @PostMapping("/admin/pro")
     public String getMethodPro(@RequestBody(required = false) String methodPro) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
+//        ObjectMapper objectMapper = new ObjectMapper();
 //		return new Gson().toJson(productRepo.findAllActiveProduct());
         List<ProductProjection> p = productRepo.findAllActiveProductP();
         return objectMapper.writeValueAsString(p);

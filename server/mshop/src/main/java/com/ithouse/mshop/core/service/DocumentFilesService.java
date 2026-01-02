@@ -36,9 +36,9 @@ public class DocumentFilesService {
 			if (!files.isEmpty() && loginUser != null) {
 				for (MultipartFile multipartFile : files) {
 					DocumentFiles documentFiles = saveDocument(multipartFile, userId, fileType, objectName);
-					if (StringUtils.equals(fileType.toString(), FileType.PROFILE.toString())) {
+					if (fileType.toString().equals(FileType.PROFILE.toString())) {
 						loginUser.setProfileImagePath(documentFiles.getFilePath());
-					} else if (StringUtils.equals(fileType.toString(), FileType.PROFILE_BANNER.toString())) {
+					} else if (fileType.toString().equals(FileType.PROFILE_BANNER.toString())) {
 						loginUser.setProfileBannerPath(documentFiles.getFilePath());
 					}
 					userService.saveInitialValue(loginUser);
@@ -61,6 +61,7 @@ public class DocumentFilesService {
 		documentFiles.setObjectId(userId);
 		documentFiles.setObjectType(objectName);
 		documentFiles.setCreatorId(userId);
+		documentFiles.setUserModId(userId);
 
 		return documentFilesRepo.save(documentFiles);
 	}

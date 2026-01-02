@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.NonNullFields;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -320,10 +321,10 @@ public class UserService extends ItHouseService<List<User>> {
     }
 
     public boolean isEmptyUser() {
-        return userRepo.count() > 0 ? false : true;
+        return userRepo.count() <= 0;
     }
 
-    public void saveInitialValue(@NonNull User usr) {
+    public void saveInitialValue( User usr) {
         log.info("try to save initial value");
         userRepo.save(usr);
     }

@@ -4,6 +4,7 @@ import { Dashbord } from 'src/app/routs-components/private/dashbord/dashbord';
 import { User } from 'src/app/routs-components/private/user/user';
 import { PageNotFound } from "src/app/routs-components/public/page-not-found/page-not-found";
 import { Profile } from '../routs-components/private/profile/profile';
+import { adminRoutes } from '../routs-components/private/private.routing';
 
 export const structureRouts: Routes = [
   {
@@ -24,9 +25,9 @@ export const structureRouts: Routes = [
   { path: 'profile', loadComponent: () => Profile, pathMatch: 'full' },
   {
     path: 'admin',
-    loadChildren: () =>
-      import('../routs-components/private/admin/admin-routing').then((m) => m.adminRoutes),
-    canActivateChild: [securiedGuard],},
+    loadChildren: () => adminRoutes,
+    canActivateChild: [securiedGuard],
+  },
   {
     path: 'page-not-found',
     loadComponent: () => PageNotFound,
