@@ -222,6 +222,12 @@ export class CommonService {
     this.sessionStorage?.setItem("AUTH_TOKEN", res?.token);
     this.sessionStorage?.setItem("IS_AUTHENTICATED", res?.authenticated);
   }
+  store2Session(key: string, value: any) {
+    this.sessionStorage?.setItem(key, value);
+  }
+  get4Session(key: string) {
+    return this.sessionStorage?.getItem(key);
+  }
   public loadLoginUser(): any {
     var loginUser = this.sessionStorage?.getItem(Constants.APP_LOGIN_USER)
     if (loginUser && loginUser != 'undefined') {
