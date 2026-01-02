@@ -1,0 +1,9 @@
+@if(columnDefinitions().length){
+<angular-slickgrid [id]="customId()" [gridId]="'grid'+customId()" #angularSlickGrid
+    (onAngularGridCreated)="gridReady($event)" [columnDefinitions]="columnDefinitions()" [gridOptions]="gridOptions"
+    [dataset]="dataset()" (onGridStateChanged)="onColumnsReordered($event)" (onBeforeGridDestroy)="_onGridDesroy()"
+    (onSelectedRowsChanged)="handleSelectedRowsChanged($event)">
+</angular-slickgrid>
+<div id="id"></div>
+
+}

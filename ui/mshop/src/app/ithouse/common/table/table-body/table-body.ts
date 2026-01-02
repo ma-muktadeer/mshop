@@ -1,34 +1,35 @@
-import { Component, EventEmitter, HostListener, Inject, Input, Output, signal, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, signal, ViewChild } from '@angular/core';
+import { AngularSlickgridComponent, ContextMenu, GridState, Column, BackendServiceOption, Pagination, FilterChangedArgs, AngularGridInstance, GridOption, OperatorType, SlickDataView, BackendService, AngularSlickgridModule } from 'angular-slickgrid';
 import { ExcelExportService } from '@slickgrid-universal/excel-export';
-import { AngularGridInstance, AngularSlickgridComponent, AngularSlickgridModule, BackendService, BackendServiceOption, Column, ContextMenu, FilterChangedArgs, GridOption, OperatorType, Pagination, SlickDataView } from 'angular-slickgrid';
-import { IthouseGridPagination } from '../ithouse-grid-pagination/ithouse-grid-pagination';
-import { isPlatformBrowser } from '@angular/common';
+import { TableFilterCriteria, TablePresets } from '../table-data';
+import { TablePagination } from '../table-pagination/table-pagination';
 
 let timer: any;
 const DEFAULT_FILTER_TYPING_DEBOUNCE = 10;
 
 @Component({
-  selector: 'app-ithouse-grid-body',
+  selector: 'ithouse-table-body',
   imports: [AngularSlickgridModule],
-  templateUrl: './ithouse-grid-body.html',
-  styleUrl: './ithouse-grid-body.scss'
+  templateUrl: './table-body.html',
+  styleUrl: './table-body.scss',
 })
-export class IthouseGridBody {
+export class TableBody implements BackendService {
+  @ViewChild('angularSlickGrid', { static: true }) angularSlickGrid!: AngularSlickgridComponent;
+
+  @Input({ required: true }) gridDataValue: any[] = [];
+
+  // if enableContextMenu = true then need to pass contextMenu. default is {}
   @Input() contextMenu?: ContextMenu = {};
-  @Input() gridDataValue: any[] = [];
-  @Input() enableMultiSelect: boolean = true;
 
   @Input() gridHeight = 100;
   @Input() gridWidth = 600;
 
-  @Inject('PLATFORM_ID') private platformId: Object;
-
+  customPresets?: TablePresets;
+  private presets?: GridState;
   gridHeightString!: string;
   gridWidthString!: string;
 
-  @ViewChild('angularSlickGrid', { static: true }) angularSlickGrid!: AngularSlickgridComponent;
-
-  columnDefinitions: Column[] = [];
+  columnDefinitions = signal<Column[]>([]);
   dataset = signal<any>(null);
   gridObj: any;
   dataviewObj: any;
@@ -38,32 +39,27 @@ export class IthouseGridBody {
   selectedObjects!: any[];
   selectedObject: any;
 
-  // Slick grid
   metaData: any;
   columnData: any;
   rowsData: any;
   selects: any;
   id: any;
-
   options!: BackendServiceOption;
   pagination?: Pagination;
+  enableCheckBoxSelector: boolean;
+  isMultiselect: boolean;
 
   @Output() onFilterChanged: EventEmitter<FilterChangedArgs> = new EventEmitter<FilterChangedArgs>();
   @Output() onPaginationChanged: EventEmitter<Pagination> = new EventEmitter<Pagination>();
   @Output() onSortChanged: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onSelectedRowsChanged: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() onSelectedRowsChanged: EventEmitter<any> = new EventEmitter<any>();
 
   sortedGridColumn = '';
   currentPage = 1;
   filteredGridColumns = '';
 
-  // Data
-
-  // Injected functions
-  private _onRowDoubleClick: Function = new Function();
-  private _onRowClick: Function = new Function();
-
-  private _selectedRow: any;
+  private LOCAL_STORAGE_KEY = 'LOCAL_STORAGE_KEY';
+  private angularGrid: AngularGridInstance;
 
   private filterBy: Map<any, any> = new Map<any, any>();
   private sortBy: Map<string, boolean> = new Map<string, boolean>();
@@ -76,18 +72,22 @@ export class IthouseGridBody {
       container: '#common-grid-container',
       rightPadding: 10
     },
+    // enableTranslate: true,
+    enableExcelExport: true,
+    excelExportOptions: {
+      exportWithFormatter: true,
+      customColumnWidth: 15,
+      columnHeaderStyle: { font: { bold: true, italic: true } },
+    },
     enableColumnPicker: true,
     enableCellNavigation: true,
-    enableRowSelection: true,
-    enableCheckboxSelector: true,
     enableFiltering: true,
+    syncColumnCellResize: true,
     rowHeight: 35,
     forceFitColumns: true,
     enableAutoTooltip: true,
     enableGridMenu: true,
-    enablePagination: false,
     enableContextMenu: true,
-
     enableAutoResize: false,
     enableSorting: true,
     createPreHeaderPanel: false,
@@ -99,13 +99,8 @@ export class IthouseGridBody {
       hideClearFrozenColumnsCommand: false,
       hideExportCsvCommand: false
     },
-    enableExcelExport: true,
-    excelExportOptions: {
-      exportWithFormatter: true
-    },
     externalResources: [new ExcelExportService()],
 
-    presets: {},
     enableHeaderMenu: true,
     headerMenu: {
       hideFreezeColumnsCommand: false
@@ -115,29 +110,24 @@ export class IthouseGridBody {
         console.log(args);
       }
     },
-
-    checkboxSelector: {
-      // you can toggle these 2 properties to show the "select all" checkbox in different location
-      hideInFilterHeaderRow: false,
-      hideInColumnTitleRow: true
-    },
     enableCellMenu: true,
-    rowSelectionOptions: {
-      // True (Single Selection), False (Multiple Selections)
-      selectActiveRow: false,
-    },
 
   };
 
+  handleSelectedRowsChanged(event: any) {
+    const args = event.detail.args;
+    const selectedRowIndexes = args.rows;
+    const selectedItems = selectedRowIndexes.map((idx: number) => this.gridData[idx]);
+    this.onSelectedRowsChanged.emit(selectedItems);
+  }
 
-  // Initialized to a fake pagination object
   private _paginationComponent: any = {
     processing: false,
     realPagination: false
   };
 
   @Input()
-  set paginationComponent(value: IthouseGridPagination) {
+  set paginationComponent(value: TablePagination) {
     if (value.realPagination) {
       this._paginationComponent = value;
       this.gridOptions.backendServiceApi = {
@@ -165,47 +155,70 @@ export class IthouseGridBody {
       } as any;
       this._paginationComponent.gridPaginationOptions = this.gridOptions;
 
-      this.angularSlickGrid.createBackendApiInternalPostProcessCallback(this.gridOptions);
+      this.angularSlickGrid?.createBackendApiInternalPostProcessCallback(this.gridOptions);
     }
   }
 
-  get paginationComponent(): IthouseGridPagination {
+  get paginationComponent(): TablePagination {
     return this._paginationComponent;
   }
-  /**
-   *
-   * @param gridService
-   * @param resizer
-   * @param httpClient
-   */
-  constructor() {
-
-  }
-
 
   ngOnInit() {
-    // this.gridHeightString = `${this.gridHeight}px`;
-    // this.gridWidthString = `${this.gridWidth}px`;
-    this.buildGridOptions();
+    setTimeout(() => {
+      this.LOCAL_STORAGE_KEY = this.customPresets?.gridId;
+      this.presets = this.customPresets?.presets;
+      this.buildGridOptions();
+      console.log('custom presets', this.customPresets);
+
+    }, 0);
   }
 
   buildGridOptions() {
     this.gridOptions.contextMenu = this.contextMenu;
-    this.gridOptions.enableCheckboxSelector = this.enableMultiSelect;
-    this.gridOptions.enableRowSelection = this.enableMultiSelect;
+
+    this.gridOptions.enableCheckboxSelector = this.enableCheckBoxSelector;
+    this.gridOptions.enableRowSelection = this.enableCheckBoxSelector;
+
+    this.gridOptions.checkboxSelector = {
+      // hideInColumnTitleRow: true,
+      // hideInFilterHeaderRow: !this.isMultiselect,
+      ...this.gridOptions.checkboxSelector,
+      hideSelectAllCheckbox: !this.isMultiselect,
+    };
+
+    this.gridOptions.rowSelectionOptions = {
+      ...this.gridOptions.rowSelectionOptions,
+      selectActiveRow: !this.isMultiselect,
+    };
+    this.saveCurrentGridState();
   }
 
-  /**
-   *
-   */
+  onColumnsReordered(event: any) {
+    const gridStateChanges = event.detail;
+
+    if (gridStateChanges.change.type === 'columns') {
+      this.presets = gridStateChanges.gridState;
+    }
+  }
+
+  saveCurrentGridState() {
+    if (!!this.presets) {
+      this.presets = JSON.parse(localStorage[this.LOCAL_STORAGE_KEY] || null) ?? this.presets;
+      // console.log('preset', lst);
+      this.gridOptions.presets = this.presets;
+      console.log('presets', this.presets);
+    }
+  }
+
+  _onGridDesroy() {
+    if (!!this.presets) {
+      localStorage[this.LOCAL_STORAGE_KEY] = JSON.stringify(this.presets);
+    }
+  }
+
   ngAfterViewInit() {
-    this.getWindowSize(null);
+    this.getWindowSize();
   }
-
-  /**
-  * CustomGrid constructor
-  * @param columnData
-  */
 
   createUUID(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -214,35 +227,38 @@ export class IthouseGridBody {
     });
   }
 
+
+  /**
+  * CustomGrid constructor
+  * @param columnData
+  */
   CustomGrid(columnData: any) {
+    setTimeout(() => {
+      this.id = 'grid' + Math.floor(Math.random() * Math.floor(100));
+      this.metaData = columnData;
 
-    this.id = 'grid' + Math.floor(Math.random() * Math.floor(100));
+      const rowData: any = [];
 
-    // get metadata from input JSON
-    this.metaData = columnData;
+      if (this.metaData.columns.column) {
 
-    // COLUMNS DATA
-    const rowData: any = [];
+        this.columnData = this.metaData.columns.column;
 
-    // check if allcolumns tag contains any children
-    if (this.metaData.columns.column) {
+        for (const colData of this.columnData) {
+          const col = colData;
+          this.columnDefinitions.update((value: Column[]) => [...value, col]);
+          rowData[col.id] = '';
+        }
 
-      // set columnsData and columnDefinitions
-      this.columnData = this.metaData.columns.column;
+        // this.gridObj.setColumns(this.columnDefinitions);
+        // this.columnDefinitions = columnData;
+        // this.angularSlickGrid.showPagination = false;
 
-      const columns = [];
-      for (const colData of this.columnData) {
-        columns.push(colData);
-        rowData[colData.id] = '';
+        // this.gridObj.setHeaderRowVisibility(false);
+        // this.gridObj.setTopPanelVisibility(false);
       }
+      // this.dataset.update(() => rowData);
 
-      this.columnDefinitions = columns;
-      this.angularSlickGrid.showPagination = false;
-    }
-
-    // Dummy dataset
-    this.dataset.update(() => rowData);
-
+    }, 0);
   }
 
   /**
@@ -261,36 +277,21 @@ export class IthouseGridBody {
   CommonGrid(_columnsData: any, _lockedColumnCount: number, _uniqueColumn: string, _baseURL: string, _programId: string, _componentId: string, _enableRenders = true, _colValidationMap = null, _checkHeader = false, _cboLinked = false) {
   }
 
-
   set gridData(rawData: any) {
-    const dataProvider: any = [];
-
-    for (let index = 0; rawData.row && index < rawData.row.length; index++) {
-      const row = rawData.row[index] as object;
-      const idObj = {
-        id: index
-      };
-
-      let key: string;
-      const rowData: any = [];
-      for (key in row) {
-        if (key in row) {
-          rowData[key] = (row as any)[key];
-        }
-      }
-      dataProvider[index] = Object.assign(rowData, idObj);
+    if (!rawData?.row?.length) {
+      this.dataset.update(() => []);
+      this.paginationComponent.processing.update(() => false);
+      return;
     }
 
+    const dataProvider = rawData.row.map((row: any, index: number) => ({
+      ...row,
+      id: index
+    }));
+
     this.dataset.update(() => dataProvider);
-    // this.dataset = dataProvider;
     this.paginationComponent.processing.update(() => false);
 
-    // this.gridObj.setSortColumn('excludeType', true);
-    // this.dataviewObj.reSort();
-    // this.gridObj.setSortColumns([{'columnId':'excludeType','sortAsc':true}]);
-
-    // this.gridObj.invalidate();
-    // this.gridObj.render();
   }
 
   get gridData(): any {
@@ -298,24 +299,15 @@ export class IthouseGridBody {
   }
 
   gridReady(instance: any) {
-    const gridInstance = instance.detail || instance;
-    this.gridObj = gridInstance.slickGrid as AngularGridInstance;
-    this.dataviewObj = gridInstance.dataView;
-    debugger
-    if (this.gridObj && this.gridObj.onSelectedRowsChanged) {
-      this.gridObj.onSelectedRowsChanged.subscribe((e, args) => {
-        const selectedIds = args.rows;
-        const selectedObjects = selectedIds.map(rowIdx => this.gridObj.getDataItem(rowIdx));
-        this.onSelectedRowsChanged.emit(selectedObjects);
-      });
-    }
+    this.angularGrid = instance.detail as AngularGridInstance;
+    this.gridObj = instance.detail.slickGrid as AngularGridInstance;
+    this.dataviewObj = instance.dataView;
+
   }
 
   dataviewReady(dataview: SlickDataView) {
     this.dataviewObj = dataview;
   }
-
-
 
 
   /********************************************************/
@@ -346,6 +338,7 @@ export class IthouseGridBody {
    * @param args
    */
   processOnFilterChanged(event: Event | undefined, args: FilterChangedArgs): string {
+    this.paginationComponent.processing.update(() => true);
     this.filteredGridColumns = '';
     let timing = 0;
     if (event && (event.type === 'keyup' || event.type === 'keydown')) {
@@ -354,7 +347,7 @@ export class IthouseGridBody {
     }
     timer = setTimeout(() => {
       this.filteredGridColumns = '';
-      for (const column of this.columnDefinitions) {
+      for (const column of this.columnDefinitions()) {
         // if(!column?.filterable) return;
         if (column.field in args.columnFilters) {
           // this.filteredGridColumns += args.columnFilters[column.field].searchTerms[0] + '|';
@@ -374,24 +367,71 @@ export class IthouseGridBody {
         this.gridData = { row: this.gridDataValue };
       }
 
-      // Reset to the first page
-      // this.paginationComponent.pageNumber = 1;
-      // this.currentPage = 1;
-
-      // dispatch event
-      // this.onFilterChanged.emit(args);
     }, timing);
+    this.onFilterChanged.emit(args);
 
-    return '';
+    return 'onFilterChanged';
   }
 
+  /**
+   * SORT EMIT EVENT
+   * @param _event
+   * @param args
+   */
+  processOnSortChanged(_event: Event | undefined, args: any) {
+    let timer: any;
+    const timing = DEFAULT_FILTER_TYPING_DEBOUNCE;
+
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    this.paginationComponent.processing.update(() => true);
+
+    timer = setTimeout(() => {
+      if (!args?.sortCols?.length) {
+        this.paginationComponent.processing.update(() => false);
+        return;
+      }
+
+      const sortCol = args.sortCols[0];
+      const sortField = sortCol.sortCol.field;
+      const sortAsc = sortCol.sortAsc;
+
+      const colIndex = this.columnDefinitions().findIndex(col => col.field === sortField);
+      this.sortedGridColumn = `${colIndex}|${sortAsc}|`;
+
+      const sortedData = [...this.dataset()].sort((a, b) => {
+        const aVal = a[sortField];
+        const bVal = b[sortField];
+
+        if (aVal == null && bVal != null) return sortAsc ? -1 : 1;
+        if (aVal != null && bVal == null) return sortAsc ? 1 : -1;
+        if (aVal == null && bVal == null) return 0;
+
+        if (typeof aVal === 'number' && typeof bVal === 'number') {
+          return sortAsc ? aVal - bVal : bVal - aVal;
+        } else {
+          return sortAsc
+            ? String(aVal).localeCompare(String(bVal))
+            : String(bVal).localeCompare(String(aVal));
+        }
+      });
+
+      this.dataset.update(() => sortedData);
+      this.paginationComponent.processing.update(() => false);
+    }, timing);
+    this.onSortChanged.emit(args);
+
+    return 'onSortChanged';
+  }
   filterGridDate() {
     const fitterValueBy = this.convertMapToFilterCriteria();
     this.filterItems(this.gridDataValue, fitterValueBy);
   }
 
-  convertMapToFilterCriteria(): FilterCriteria[] {
-    const criteriaArray: FilterCriteria[] = [];
+  convertMapToFilterCriteria(): TableFilterCriteria[] {
+    const criteriaArray: TableFilterCriteria[] = [];
     this.filterBy.forEach((value, key) => {
       criteriaArray.push({ id: key, value: value });
     });
@@ -400,7 +440,7 @@ export class IthouseGridBody {
 
   filterItems(
     items: any[],
-    criteria: FilterCriteria[]
+    criteria: TableFilterCriteria[]
   ) {
     const filteredItems = items.filter(item => {
       return criteria.every(criterion => {
@@ -446,24 +486,6 @@ export class IthouseGridBody {
     return 'onPaginationChanged';
   }
 
-  /**
-   * SORT EMIT EVENT
-   * @param _event
-   * @param args
-   */
-  processOnSortChanged(_event: Event | undefined, args: any) {
-    this.sortedGridColumn = '';
-    const sortDirection = '|' + args!.sortCols![0].sortAsc + '|';
-    for (let idx = 0; idx < this.columnDefinitions.length; idx++) {
-      if (this.columnDefinitions[idx].field === args!.sortCols![0].sortCol.field) {
-        this.sortedGridColumn = '' + idx + sortDirection;
-      }
-    }
-    this.onSortChanged.emit(args);
-    return 'onSortChanged';
-  }
-
-
   getFilteredGridColumns() {
     return this.filteredGridColumns;
   }
@@ -474,55 +496,13 @@ export class IthouseGridBody {
 
   /******** Pagination+Sot+Filter service: END *****************/
 
-  // Getters and Setters
-  // get selectedRow() {
-  //   return this._selectedRow;
-  // }
-  // set selectedRow(row: any) {
-  //   this._selectedRow = row;
-  // }
-
-  // get onRowDoubleClick() {
-  //   return this._onRowDoubleClick;
-  // }
-  // set onRowDoubleClick(event: Function) {
-  //   this._onRowDoubleClick = event;
-  // }
-
-  // get onRowClick() {
-  //   return this._onRowClick;
-  // }
-  // set onRowClick(event: Function) {
-  //   this._onRowClick = event;
-  // }
-
-  @HostListener('window:resize', ['$event'])
-  getWindowSize(event) {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-    // this.height = window.innerHeight * 0.7;
+  @HostListener('window:resize')
+  getWindowSize() {
     const width = document.getElementById('id')?.offsetWidth;
-    let grid = document.getElementById('gridId');
+    let grid = document.getElementById(this.customId());
     if (grid) {
       grid.style.width = width + 'px';
       this.gridObj?.slickGrid?.resizeCanvas();
     }
   }
-
 }
-
-export interface GridFillter {
-  columnId: any;
-  searchTerm: any;
-}
-
-export interface Item {
-  [key: string]: any;
-}
-
-export interface FilterCriteria {
-  id: string;
-  value: string | boolean;
-}
-

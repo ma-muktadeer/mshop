@@ -1,6 +1,5 @@
 import { Component, signal, computed } from '@angular/core';
 import { Formatter, FieldType, Column, Filters } from 'angular-slickgrid';
-import { IthouseGridModule } from 'src/app/ithouse/common/ithouse-grid/ithouse-grid-module';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { CommonService } from 'src/app/ithouse/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
@@ -10,10 +9,11 @@ import { Service } from 'src/app/ithouse/services/service';
 import { ContentLoader } from "src/app/components/content-loader/content-loader";
 import Swal from 'sweetalert2';
 import { AppPermission, PermissionStoreService } from 'src/app/ithouse/services/permissioin-store.service';
+import { TableModule } from "src/app/ithouse/common/table/table-module";
 
 @Component({
   selector: 'ithouse-user',
-  imports: [IthouseGridModule, ContentLoader],
+  imports: [ContentLoader, TableModule],
   templateUrl: './user.html',
   styleUrl: './user.scss'
 })

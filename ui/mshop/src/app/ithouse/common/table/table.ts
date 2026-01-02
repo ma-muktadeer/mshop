@@ -1,48 +1,54 @@
-import { Component, effect, EventEmitter, Input, Output, Signal, ViewChild } from '@angular/core';
-import { Column, ContextMenu, Pagination } from 'angular-slickgrid';
-import { CustomGridData } from '../../../constants/CustomGridData';
-import { IthouseGridBody } from '../ithouse-grid-body/ithouse-grid-body';
-import { IthouseGridPagination } from '../ithouse-grid-pagination/ithouse-grid-pagination';
+import { Component, effect, EventEmitter, Input, Output, Signal, signal, ViewChild } from '@angular/core';
+import { Column, Pagination, ContextMenu } from 'angular-slickgrid';
+import { TableBody } from './table-body/table-body';
+import { TablePagination } from './table-pagination/table-pagination';
+import { TableData, TablePresets } from './table-data';
 
 @Component({
-  selector: 'ithouse-grid',
-  templateUrl: './ithouse-grid.html',
-  styleUrl: './ithouse-grid.scss',
-  standalone: false
+  selector: 'ithouse-table',
+  standalone: false,
+  templateUrl: './table.html',
+  styleUrl: './table.scss',
 })
-export class IthouseGrid {
+export class Table {
+  @ViewChild('commonGrid', { static: true }) readonly commonGrid!: TableBody;
+  @ViewChild('commonGridPag', { static: true }) readonly commonGridPag!: TablePagination;
 
-  @ViewChild('commonGrid', { static: true }) commonGrid!: IthouseGridBody;
-  @ViewChild('commonGridPag', { static: true }) commonGridPag!: IthouseGridPagination;
-
-  @Input() datasetObs!: Signal<CustomGridData>;
-  @Input() columnDefinitions!: Column[];
-  //it is a custom pagination
+  @Input({ required: true }) datasetObs!: Signal<TableData>;
+  @Input({ required: true }) columnDefinitions!: Column[];
+  //it is a custom pagination 
   @Input() enablePagination: boolean = false;
+  @Input() enableCheckBoxSelector: boolean = false;
+  @Input() enableMultiselect: boolean = false;
   @Input() customPagination?: Pagination;
   // if you need to context menu then enableContextMenu = true
   @Input() enableContextMenu?: boolean = false;
-  // if enableContextMenu = true then need to pass contextMenu. default is {}
+
   @Input() contextMenu?: ContextMenu = {};
-  @Input() enableMultiSelect: boolean = true;
+  @Input() customPresets?: TablePresets;
 
   @Output() onPaginationChanged: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onSelectedRowsChanged: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() onSelectedRowsChanged: EventEmitter<any> = new EventEmitter<any>();
+
   gridDataValue: any[];
 
+  viewGrid = signal<boolean>(false);
   constructor() {
     effect(() => {
       console.log('getting log commmn,', this.datasetObs());
       if (this.datasetObs()?.content) {
+        this.viewGrid.update(() => true);
         this._subscribeToDatasetObs();
       }
     })
   }
 
   ngOnInit() {
-    // Link pagination component into the current Grid
     if (this.commonGridPag) {
       this.commonGrid.paginationComponent = this.commonGridPag;
+      this.commonGrid.enableCheckBoxSelector = this.enableCheckBoxSelector;
+      this.commonGrid.isMultiselect = this.enableMultiselect;
+      this.commonGrid.customPresets = this.customPresets;
     }
 
   }
@@ -111,5 +117,9 @@ export class IthouseGrid {
     console.log('load data');
     this.onPaginationChanged.emit(_event);
 
+  }
+
+  handleSelectedRowsChanged(event: any) {
+    this.onSelectedRowsChanged.emit(event);
   }
 }
