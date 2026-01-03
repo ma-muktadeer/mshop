@@ -4,7 +4,7 @@ import { Dashbord } from 'src/app/routs-components/private/dashbord/dashbord';
 import { User } from 'src/app/routs-components/private/user/user';
 import { PageNotFound } from "src/app/routs-components/public/page-not-found/page-not-found";
 import { Profile } from '../routs-components/private/profile/profile';
-import { adminRoutes } from '../routs-components/private/private.routing';
+import { adminRoutes } from '../routs-components/private/admin.routing';
 import { securiedChildGuard } from '../ithouse/guard/securied-child.guard';
 
 export const structureRouts: Routes = [

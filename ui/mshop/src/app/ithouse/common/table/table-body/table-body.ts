@@ -1,8 +1,9 @@
-import { Component, EventEmitter, HostListener, Input, Output, signal, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, inject, Input, Output, signal, ViewChild } from '@angular/core';
 import { AngularSlickgridComponent, ContextMenu, GridState, Column, BackendServiceOption, Pagination, FilterChangedArgs, AngularGridInstance, GridOption, OperatorType, SlickDataView, BackendService, AngularSlickgridModule } from 'angular-slickgrid';
 import { ExcelExportService } from '@slickgrid-universal/excel-export';
 import { TableFilterCriteria, TablePresets } from '../table-data';
 import { TablePagination } from '../table-pagination/table-pagination';
+import { CommonService } from 'src/app/ithouse/services/common.service';
 
 let timer: any;
 const DEFAULT_FILTER_TYPING_DEBOUNCE = 10;
@@ -14,6 +15,7 @@ const DEFAULT_FILTER_TYPING_DEBOUNCE = 10;
   styleUrl: './table-body.scss',
 })
 export class TableBody implements BackendService {
+  private readonly _cs = inject(CommonService);
   @ViewChild('angularSlickGrid', { static: true }) angularSlickGrid!: AngularSlickgridComponent;
 
   @Input({ required: true }) gridDataValue: any[] = [];
@@ -203,8 +205,7 @@ export class TableBody implements BackendService {
 
   saveCurrentGridState() {
     if (!!this.presets) {
-      this.presets = JSON.parse(localStorage[this.LOCAL_STORAGE_KEY] || null) ?? this.presets;
-      // console.log('preset', lst);
+      this.presets = JSON.parse(this._cs.get4Session(this.LOCAL_STORAGE_KEY) || null) ?? this.presets;
       this.gridOptions.presets = this.presets;
       console.log('presets', this.presets);
     }
@@ -212,7 +213,7 @@ export class TableBody implements BackendService {
 
   _onGridDesroy() {
     if (!!this.presets) {
-      localStorage[this.LOCAL_STORAGE_KEY] = JSON.stringify(this.presets);
+      this._cs.store2Session(this.LOCAL_STORAGE_KEY, this.presets);
     }
   }
 

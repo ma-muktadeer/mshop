@@ -97,7 +97,7 @@ export const NavigationItems: NavigationItem[] = [
               AppPermission.VIEW_ROLE,
             ],
             type: 'item',
-            url: '/admin/role-list'
+            url: '/admin/roles'
           },
 
         ]

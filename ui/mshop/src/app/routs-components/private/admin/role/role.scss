@@ -1,0 +1,94 @@
+  .custom-btn {
+      padding: 5px 6px;
+      font-size: 14px;
+      line-height: 1;
+      margin-top: -20px;
+  }
+
+
+  @mixin hover {
+      background-color: rgba(4, 26, 66, 0.411);
+      cursor: pointer;
+      color: rgb(252, 252, 252);
+      transition: all 0.5s;
+      font-size: 0.8rem !important;
+  }
+
+  .hover-color:hover {
+      @include hover;
+  }
+
+  .select-color {
+      @include hover;
+  }
+
+  .ul-scrollable {
+      border: solid 1px #ccc !important;
+      height: 520px;
+      border-radius: 4px;
+      overflow: hidden;
+      overflow-y: scroll;
+  }
+
+  .example-container {
+      min-width: 250px;
+      // max-width: 100%;
+      margin: 0 5px 5px 0;
+      display: inline-block;
+      vertical-align: top;
+  }
+
+  .example-list {
+      border: solid 1px #ccc;
+      min-height: 40px;
+      background: white;
+      border-radius: 4px;
+      overflow: scroll;
+      display: block;
+      height: 400px;
+  }
+
+  .example-box {
+      padding: 2px 2px;
+      height: 30px;
+      padding: 5px;
+      border-bottom: solid 1px #ccc;
+      color: rgba(0, 0, 0, 0.87);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      cursor: move;
+      background: white;
+      font-size: 12px;
+
+  }
+
+  .btnApprove {
+      padding: 1px;
+      font-size: 12px;
+      cursor: pointer;
+      color: green;
+      border: 1px solid black;
+  }
+
+  .btnDeAssign {
+      padding: 1px;
+      font-size: 12px;
+      cursor: pointer;
+      color: red;
+      border: 1px solid black;
+  }
+
+  .btnUndo {
+      padding: 1px;
+      font-size: 12px;
+      cursor: pointer;
+      color: black;
+      border: 1px solid black;
+  }
+
+  I {
+      color: black;
+  }
