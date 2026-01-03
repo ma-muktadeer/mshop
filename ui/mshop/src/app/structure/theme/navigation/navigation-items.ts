@@ -89,24 +89,7 @@ export const NavigationItems: NavigationItem[] = [
             type: 'item',
             url: '/:loginName/admin/permission'
           },
-          {
-            id: 'bank-list',
-            title: 'Bank List',
-            permission: [
-              AppPermission.VIEW_BANK,
-            ],
-            type: 'item',
-            url: '/admin/banks'
-          },
-          {
-            id: 'branch',
-            title: 'Branch',
-            permission: [
-              AppPermission.VIEW_BRANCH,
-            ],
-            type: 'item',
-            url: '/admin/branch'
-          },
+
           {
             id: 'role-list',
             title: 'Role List',
@@ -116,15 +99,7 @@ export const NavigationItems: NavigationItem[] = [
             type: 'item',
             url: '/admin/role-list'
           },
-          {
-            id: 'rm-code',
-            title: 'RM Code',
-            permission: [
-              AppPermission.VIEW_RM_CODE,
-            ],
-            type: 'item',
-            url: '/admin/rm-code'
-          }
+
         ]
       }
     ]
@@ -150,100 +125,12 @@ export const NavigationItems: NavigationItem[] = [
         permission: 'DEFAULT',
         icon: 'feather icon-settings',
         children: [
-          {
-            id: 'professions',
-            title: 'Profession',
-            permission: [
-              AppPermission.VIEW_PROFESSION_TYPE,
-            ],
-            type: 'item',
-            url: '/admin/professions'
-          },
-          {
-            id: 'business_type',
-            title: 'Business Type',
-            permission: [
-              AppPermission.VIEW_BUSINESS_TYPE,
-            ],
-            type: 'item',
-            url: '/admin/business-type'
-          },
-          {
-            id: 'designation_type',
-            title: 'Designation',
-            permission: [
-              AppPermission.VIEW_DESIGNATION,
-            ],
-            type: 'item',
-            url: '/admin/designation-type'
-          },
-          {
-            id: 'document_list',
-            title: 'Document Config',
-            permission: [
-              AppPermission.VIEW_DOCUMENT,
-            ],
-            type: 'item',
-            url: '/admin/document-configuration'
-          },
-          {
-            id: 'profit-margin',
-            title: 'Profit-Margin',
-            permission: [
-              AppPermission.VIEW_PROFIT_MARGIN,
-            ],
-            type: 'item',
-            url: '/admin/profit-margin'
-          },
+
 
         ]
       }
     ]
   },
-  {
-    id: 'loan',
-    title: 'Loan',
-    type: 'group',
-    icon: 'feather icon-box',
-    permission: [
-      AppPermission.VIEW_LOAN,
-    ],
-    children: [
-      {
-        id: 'ln',
-        title: 'Loan',
-        type: 'collapse',
-        permission: 'DEFAULT',
-        icon: 'feather icon-clock',
-        children: [
-          {
-            id: 'creat-ln',
-            title: 'Creat Loan',
-            permission: [
-              AppPermission.SAVE_LOAN,
-            ],
-            type: 'item',
-            url: '/loan/creat-loan'
-          },
-          {
-            id: 'ln-list',
-            title: 'Loan List',
-            permission: [
-              AppPermission.VIEW_LOAN,
-              AppPermission.SAVE_LOAN,
-            ],
-            type: 'item',
-            url: '/loan/list'
-          },
-
-        ]
-      }
-    ]
-  },
-
-
-
-
 
   // {
   //   id: 'other',
