@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { AngularSlickgridModule } from 'angular-slickgrid';
 
 import { routes } from './app.routes';
@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes, withEnabledBlockingInitialNavigation()),
+    provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptors([globalInterceptor])),
     importProvidersFrom(AngularSlickgridModule.forRoot()),
     provideAppInitializer(() => initializeApplication(inject(ConfigService))),
