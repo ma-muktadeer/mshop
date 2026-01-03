@@ -26,7 +26,7 @@ export const structureRouts: Routes = [
   {
     path: 'admin',
     loadChildren: () => adminRoutes,
-    canActivateChild: [securiedGuard],
+    // canActivateChild: [securiedGuard],
   },
   {
     path: 'page-not-found',

@@ -7,8 +7,9 @@ export const securiedGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   console.log('securied ');
   if (injectPermission.isAuthUrl(state.url)) {
-    return true; // Or add your custom logic
+    return true;
   }
-  return router.parseUrl(`/page-not-found`);
+  router.parseUrl(`/page-not-found`);
+  return false;
 
 };

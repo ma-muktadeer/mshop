@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { AngularSlickgridModule } from 'angular-slickgrid';
 
 import { routes } from './app.routes';
@@ -12,12 +12,13 @@ import { ToggleFullScreenDirective } from './structure/shared/full-screen/toggle
 import { DatePipe } from '@angular/common';
 import { NabItemsService } from './structure/theme/navigation/nab-items.service';
 import { TabManagerService } from './ithouse/services/tab-manager.service';
+import { layoutGuard } from './ithouse/guard/layout.guard';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes),
+    provideRouter(routes, withEnabledBlockingInitialNavigation()),
     provideHttpClient(withFetch(), withInterceptors([globalInterceptor])),
     importProvidersFrom(AngularSlickgridModule.forRoot()),
     provideAppInitializer(() => initializeApplication(inject(ConfigService))),
@@ -28,6 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay(),
       withHttpTransferCacheOptions({ includePostRequests: true })
     ),
+    layoutGuard,
     ToggleFullScreenDirective,
     CommonService,
     DatePipe,
