@@ -4,13 +4,13 @@ import { TableBody } from './table-body/table-body';
 import { TablePagination } from './table-pagination/table-pagination';
 
 @NgModule({
-  declarations: [Table],
+  declarations: [],
   imports: [
     TableBody,
     TablePagination
   ],
   exports: [
-    Table
+
   ]
 })
 export class TableModule { }

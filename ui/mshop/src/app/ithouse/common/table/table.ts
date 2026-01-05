@@ -6,9 +6,9 @@ import { TableData, TablePresets } from './table-data';
 
 @Component({
   selector: 'ithouse-table',
-  standalone: false,
   templateUrl: './table.html',
   styleUrl: './table.scss',
+  imports: [TableBody, TablePagination],
 })
 export class Table {
   @ViewChild('commonGrid', { static: true }) readonly commonGrid!: TableBody;

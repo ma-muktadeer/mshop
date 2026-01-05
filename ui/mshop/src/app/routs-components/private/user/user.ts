@@ -9,11 +9,11 @@ import { Service } from 'src/app/ithouse/services/service';
 import { ContentLoader } from "src/app/components/content-loader/content-loader";
 import Swal from 'sweetalert2';
 import { AppPermission, PermissionStoreService } from 'src/app/ithouse/services/permissioin-store.service';
-import { TableModule } from "src/app/ithouse/common/table/table-module";
+import { Table } from 'src/app/ithouse/common/table/table';
 
 @Component({
   selector: 'ithouse-user',
-  imports: [ContentLoader, TableModule],
+  imports: [ContentLoader, Table],
   templateUrl: './user.html',
   styleUrl: './user.scss'
 })
