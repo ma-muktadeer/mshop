@@ -7,7 +7,6 @@ import { IthouseGrid } from './ithouse-grid/ithouse-grid';
 @NgModule({
   declarations: [IthouseGrid],
   imports: [
-    CommonModule,
     IthouseGridBody,
     IthouseGridPagination
   ],
