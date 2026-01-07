@@ -13,7 +13,6 @@ import { DatePipe } from '@angular/common';
 import { NabItemsService } from './structure/theme/navigation/nab-items.service';
 import { TabManagerService } from './ithouse/services/tab-manager.service';
 import { layoutGuard } from './ithouse/guard/layout.guard';
-import { AlertService } from './ithouse/services/alert.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -36,6 +35,5 @@ export const appConfig: ApplicationConfig = {
     DatePipe,
     NabItemsService,
     TabManagerService,
-    AlertService
   ]
 };

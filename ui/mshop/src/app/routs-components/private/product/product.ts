@@ -7,11 +7,11 @@ import { SubCategory } from '../../../ithouse/classes/product-info/sub-category'
 import _ from 'lodash';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
-import { AlertService } from 'src/app/ithouse/services/alert.service';
 import { CommonService } from 'src/app/ithouse/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { FileService } from 'src/app/ithouse/services/file.service';
 import { Service } from 'src/app/ithouse/services/service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'ithouse-product',
@@ -55,7 +55,7 @@ export class Product extends Ithouse implements Service, OnInit {
   };
   productSubCategories: SubCategory[] = [];
   // selectedValue: any;
-  constructor(private alert: AlertService,
+  constructor(
     private fileService: FileService,
     private cs: CommonService,
     public md: NgbActiveModal
@@ -85,7 +85,7 @@ export class Product extends Ithouse implements Service, OnInit {
   fileUpload(upFile: File, fileInput: HTMLInputElement) {
     const fileExt = upFile.name.split('.').pop();
     if (!this.accept.includes(`.${fileExt.toLowerCase()}`)) {
-      this.alert.showAlert('Info', `${fileExt} file is not allowed. Only ${this.accept.join(',')} file is allowed.`, 'info', true).then(() => { return; })
+      Swal.fire('Info', `${fileExt} file is not allowed. Only ${this.accept.join(',')} file is allowed.`, 'info');
     }
     else if (this.uploadFor === 'text') {
       const fileReader = new FileReader();
@@ -120,7 +120,7 @@ export class Product extends Ithouse implements Service, OnInit {
       this.isUpdate = false;
     })
       .catch(error => {
-        this.alert.showAlert('Oppsss', error, 'error', true).then(() => fileInput.value = '');
+        Swal.fire('Oppsss', error, 'error');
       });
   }
 
@@ -195,7 +195,7 @@ export class Product extends Ithouse implements Service, OnInit {
   onResponse(service: Service, req: any, res: any) {
     debugger
     if (!super.isOK(res)) {
-      this.alert.showAlert('OPSSSS', super.getErrorMsg(res), 'error');
+      Swal.fire('OPSSSS', super.getErrorMsg(res), 'error');
       return;
     } else if (res.header.referance === 'SELECT_ALL_BY_USER') {
       console.log('product list ', res.payload);
@@ -203,7 +203,7 @@ export class Product extends Ithouse implements Service, OnInit {
     }
   }
   onError(service: Service, req: any, res: any) {
-    this.alert.showAlert('Error', res?.error, 'error');
+    Swal.fire('Error', res?.error, 'error');
   }
 
 }

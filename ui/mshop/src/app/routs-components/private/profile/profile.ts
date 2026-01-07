@@ -1,7 +1,6 @@
 import { Component, Input, signal } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
-import { AlertService } from 'src/app/ithouse/services/alert.service';
 import { CommonService } from 'src/app/ithouse/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
@@ -46,7 +45,6 @@ export class Profile extends Ithouse implements Service {
   // userInfo: any;
   constructor(
     private fileService: FileService,
-    private alert: AlertService,
     private cs: CommonService,
     private ngModel: NgbModal,
     private dateservice: DateConvertService
@@ -111,7 +109,8 @@ export class Profile extends Ithouse implements Service {
         this.coverImage.update(() => value);
       })
         .catch(error => {
-          this.alert.showAlert('Oppsss', error, 'error', true).then(() => fileInput.value = '');
+          Swal.fire('Oppsss', error, 'error');
+          fileInput.value = '';
         });
     }
   }
@@ -141,7 +140,7 @@ export class Profile extends Ithouse implements Service {
 
       })
         .catch(error => {
-          this.alert.showAlert('Oppsss', error, 'error', true);
+          Swal.fire('Oppsss', error, 'error');
           fileInput.value = '';
         });
     }
@@ -160,7 +159,7 @@ export class Profile extends Ithouse implements Service {
   }
   onError(service: Service, req: any, res: any) {
     this.loading.update(() => false);
-    this.alert.showAlert('Error', `${res?.statusText} with error code:${res?.status}`, 'error');
+    Swal.fire(`${res?.statusText} with error code:${res?.status}`, 'error');
     throw new Error('Method not implemented.');
   }
 
@@ -171,13 +170,13 @@ export class Profile extends Ithouse implements Service {
     openRef.closed.subscribe(res => {
       console.log('close model: ', res);
       if (!res) {
-        this.alert.showAlert('Error', 'Can not save User information', 'error', true);
+        Swal.fire('Error', 'Can not save User information', 'error');
       }
       else if (typeof res === 'string' || res instanceof String) {
         return;
       } else {
         this.userDetails = res;
-        this.alert.showAlert('Success', 'User information updated', 'success', true);
+        Swal.fire('Success', 'User information updated', 'success');
       }
 
     });

@@ -41,7 +41,7 @@ public class AppPermissionService extends ItHouseService<List<AppPermission>> {
     // private UserService userService;
 
     @SuppressWarnings({ "unchecked" })
-    public Message<?> itHouseService(Message requestMessage) throws Exception {
+    public Message itHouseService(Message requestMessage) throws Exception {
 
         AbstractMessageHeader header = null;
         Message<?> msgResponse = null;
