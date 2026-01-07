@@ -1,6 +1,7 @@
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, signal } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { CommonService } from 'src/app/ithouse/services/common.service';
@@ -9,6 +10,7 @@ import { PermissionStoreService } from 'src/app/ithouse/services/permissioin-sto
 import { Service } from 'src/app/ithouse/services/service';
 import { Toast } from 'src/app/ithouse/services/Toast';
 import Swal from 'sweetalert2';
+import { RoleForm } from './role-form/role-form';
 
 @Component({
   selector: 'ithouse-role',
@@ -41,9 +43,8 @@ export class Role extends Ithouse implements Service {
 
   showRoleGroupAssignSave = false;
 
-
-
   constructor(
+    private readonly _modal: NgbModal,
     private fb: FormBuilder,
     private cs: CommonService,
     public permissioinStoreService: PermissionStoreService) {
@@ -68,13 +69,23 @@ export class Role extends Ithouse implements Service {
     })
   }
 
-
-
   onAddRole() {
-    this.roleForm.reset();
-    this.roleId = null
-    this.displayStyle = "block"
-    this.buttonSaveOrUpdate = "Save"
+    // this.roleForm.reset();
+    // this.roleId = null
+    // this.displayStyle = "block"
+    // this.buttonSaveOrUpdate = "Save"
+
+    const res = this._modal.open(RoleForm, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false
+    });
+    res.result.then((result) => {
+      if (result && typeof result !== 'string') {
+        this.onLoad();
+      }
+    });
+
   }
 
   onDelete(e, group) {
@@ -104,7 +115,6 @@ export class Role extends Ithouse implements Service {
     console.log(this.clickedItem)
     this.cs.sendRequestAdmin(this, ActionType.SELECT_ROLE_WITH_PERMISSION, ContentType.Role, 'SELECT_ROLE_WITH_PERMISSION', group)
   }
-  getItemBackgroupColor(group) { }
 
   onEdit(e, role) {
     debugger
@@ -126,20 +136,20 @@ export class Role extends Ithouse implements Service {
     this.buttonSaveOrUpdate = "Update"
   }
 
-  onSave() {
-    debugger
-    if (this.spinnerAddSave) {
-      return
-    }
-    var payload = this.roleForm.value
-    payload.roleId = this.roleId
-    this.cs.sendRequestAdmin(this, ActionType.SAVE, ContentType.Role, 'SAVE', payload);
-    this.spinnerAddSave = true
-    this.roleBtnAddDisabled = true
-    this.displayStyle = "none";
-    this.buttonSaveOrUpdate = null;
+  // onSave() {
+  //   debugger
+  //   if (this.spinnerAddSave) {
+  //     return
+  //   }
+  //   var payload = this.roleForm.value
+  //   payload.roleId = this.roleId
+  //   this.cs.sendRequestAdmin(this, ActionType.SAVE, ContentType.Role, 'SAVE', payload);
+  //   this.spinnerAddSave = true
+  //   this.roleBtnAddDisabled = true
+  //   this.displayStyle = "none";
+  //   this.buttonSaveOrUpdate = null;
 
-  }
+  // }
 
   onLoad() {
     this.cs.sendRequestAdmin(this, ActionType.SELECT, ContentType.Role, 'FindAll', {});
@@ -155,14 +165,14 @@ export class Role extends Ithouse implements Service {
 
 
 
-  closePopup() {
-    this.displayStyle = "none";
-    this.buttonSaveOrUpdate = null;
-    this.displayName = null;
-    this.desc = null;
-    this.roleForm.reset();
-    this.roleId = null;
-  }
+  // closePopup() {
+  //   this.displayStyle = "none";
+  //   this.buttonSaveOrUpdate = null;
+  //   this.displayName = null;
+  //   this.desc = null;
+  //   this.roleForm.reset();
+  //   this.roleId = null;
+  // }
 
   drop(event: CdkDragDrop<string[]>) {
     debugger
@@ -233,7 +243,7 @@ export class Role extends Ithouse implements Service {
 
 
   }
-  user
+
   onApprovePermission(permission) {
     debugger
 
@@ -278,10 +288,10 @@ export class Role extends Ithouse implements Service {
       this.filtedRoleList.set(res.payload);
       console.log(res);
     }
-    else if (res.header.referance == 'SAVE') {
-      Toast.show("Role Saved");
-      this.onLoad();
-    }
+    // else if (res.header.referance == 'SAVE') {
+    //   Toast.show("Role Saved");
+    //   this.onLoad();
+    // }
     else if (res.header.referance == 'Approved') {
       Toast.show("Role Approved");
       this.onLoad();
