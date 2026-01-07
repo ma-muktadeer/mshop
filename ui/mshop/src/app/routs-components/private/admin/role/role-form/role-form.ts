@@ -5,10 +5,10 @@ import { DynamicForm } from "src/app/ithouse/common/components/dynamic-form/dyna
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { RequestBody } from 'src/app/ithouse/constants/RequestBody';
-import { AlertService } from 'src/app/ithouse/services/alert.service';
 import { CommonService } from 'src/app/ithouse/services/common.service';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
 import { Service } from 'src/app/ithouse/services/service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'ithouse-role-form',
@@ -18,7 +18,6 @@ import { Service } from 'src/app/ithouse/services/service';
 })
 export class RoleForm extends Ithouse implements Service {
   private readonly activeModal = inject(NgbActiveModal);
-  private readonly alert = inject(AlertService);
   @Input() formDataInfo: FormValue[] = [];
   @Input() formValue: any;
 
@@ -44,7 +43,7 @@ export class RoleForm extends Ithouse implements Service {
   onResponse(service: Service, req: RequestBody<any>, res: any) {
     // this.loading = false;
     if (!super.isOK(res)) {
-      this.alert.showAlert('Error', `${super.getErrorMsg(res)}`, 'error');
+      Swal.fire('Error', `${super.getErrorMsg(res)}`, 'error');
       return;
     } else if (req.header.reference === 'SAVE') {
       const response = res.payload;
@@ -59,6 +58,6 @@ export class RoleForm extends Ithouse implements Service {
   onError(service: Service, req: any, res: any) {
     // this.loading = false;
     console.log('getting error', res);
-    this.alert.showAlert('Error', `${super.getErrorMsg(res)}`, 'error');
+    Swal.fire('Error', `${super.getErrorMsg(res)}`, 'error');
   }
 }

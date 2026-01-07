@@ -7,8 +7,10 @@ import com.ithouse.core.message.services.ServiceCoordinator;
 import com.ithouse.core.message.services.ServiceMap;
 import com.ithouse.mshop.contants.ActionType;
 import com.ithouse.mshop.core.entity.AppPermission;
+import com.ithouse.mshop.core.entity.Role;
 import com.ithouse.mshop.core.entity.User;
 import com.ithouse.mshop.core.service.AppPermissionService;
+import com.ithouse.mshop.core.service.RoleService;
 import com.ithouse.mshop.core.service.UserService;
 import com.ithouse.mshop.shop.entity.Product;
 import com.ithouse.mshop.shop.service.ProductService;
@@ -26,22 +28,21 @@ import java.util.Map;
 @ComponentScan(basePackages = {"com.ithouse.mshop"})
 public class AppConfig {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    private final ProductService productService;
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private AppPermissionService appPermissionService;
 
+    @Autowired
+    private RoleService roleService;
+
 //    private final RegexRepo regexRepo;
 //
 //    List<Regex> regexList;
-
-    public AppConfig(UserService userService, ProductService productService) {
-        this.userService = userService;
-        this.productService = productService;
-//        this.regexRepo = regexRepo;
-    }
 
 //    @PostConstruct
 //    public void init() {
@@ -56,26 +57,6 @@ public class AppConfig {
         return sc;
     }
 
-//	@Bean
-//	public RegexCoordinator regexCoordinator() {
-//		RegexCoordinator rdc = new RegexCoordinator();
-//		rdc.setRegexMap(regexMap());
-//		return rdc;
-//	}
-//
-//	private RegexMap regexMap() {
-//		RegexMap rm = new RegexMap();
-//		Map<String, String> patterns = new LinkedHashMap<>();
-
-    /// /		List<Regex> regexList = regexRepo.findAll();
-//		if (regexList.isEmpty()) {
-//			return null;
-//		}
-//		patterns = regexList.stream().collect(Collectors.toMap(Regex::getRegexType, Regex::getRegex));
-//
-//		rm.setRegexMap(patterns);
-//		return rm;
-//	}
     public ServiceMap serviceMap() {
         ServiceMap serviceMap = new ServiceMap();
         Map<String, Service<?>> map = new LinkedHashMap<>();
@@ -87,11 +68,11 @@ public class AppConfig {
         map.put(UserService.class.getSimpleName(), userService);
         map.put(ProductService.class.getSimpleName(), productService);
         map.put(AppPermissionService.class.getSimpleName(), appPermissionService);
+        map.put(RoleService.class.getSimpleName(), roleService);
 
         serviceMap.setServiceMap(map);
         return serviceMap;
     }
-
 
     public PublicMapService publicMapService() {
         PublicMapService service = new PublicMapService();
@@ -121,6 +102,7 @@ public class AppConfig {
         mapClass(classMap, User.class);
         mapClass(classMap, Product.class);
         mapClass(classMap, AppPermission.class);
+        mapClass(classMap, Role.class);
 
         processorService.setClassMap(classMap);
         return processorService;

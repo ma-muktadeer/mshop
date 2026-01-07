@@ -11,6 +11,7 @@ import { Service } from 'src/app/ithouse/services/service';
 import { Toast } from 'src/app/ithouse/services/Toast';
 import Swal from 'sweetalert2';
 import { RoleForm } from './role-form/role-form';
+import { RequestBody } from 'src/app/ithouse/constants/RequestBody';
 
 @Component({
   selector: 'ithouse-role',
@@ -213,7 +214,6 @@ export class Role extends Ithouse implements Service {
 
   }
 
-
   onSaveRoleManage() {
     debugger
     if (this.spinnerSave) {
@@ -271,19 +271,19 @@ export class Role extends Ithouse implements Service {
     }
   }
 
-  onResponse(service: Service, req: any, res: any) {
+  onResponse(service: Service, req: RequestBody<any>, res: any) {
     this.spinnerSave = false
     this.spinnerAddSave = false
     this.roleBtnAddDisabled = false
     this.roleBtnDisabled = false
 
     if (!super.isOK(res)) {
-      Swal.fire(super.getErrorMsg(res));
+      Swal.fire("Error", super.getErrorMsg(res), "error");
       return;
     }
 
     debugger
-    if (res.header.referance == 'FindAll') {
+    if (req.header.reference == 'FindAll') {
       this.roleList = res.payload
       this.filtedRoleList.set(res.payload);
       console.log(res);

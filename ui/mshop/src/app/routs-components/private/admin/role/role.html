@@ -18,7 +18,6 @@
 
         <div class="ul-scrollable" style="max-height: 440px; overflow-y: auto;">
             @for (group of filtedRoleList(); track group.roleId) {
-            <!-- *ngFor="let group of filtedRoleList" -->
             <div class="col-md-12" (click)="onClickGroupItem($event, group)">
                 <div class="d-flex justify-content-between align-items-center hover-color py-1"
                     [class.select-color]="clickedItem?.displayName == group.displayName"
