@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormValue } from 'src/app/ithouse/classes/FormValue';
 import { ActionType } from 'src/app/ithouse/constants/action-type.enum';
-import { AlertService } from 'src/app/ithouse/services/alert.service';
 import { CommonService } from 'src/app/ithouse/services/common.service';
 import { ContentType } from 'src/app/ithouse/constants/content-type.enum';
 import { Ithouse } from 'src/app/ithouse/services/Ithouse';
@@ -23,7 +22,7 @@ export class EditProfile extends Ithouse implements Service {
   // profileForm: FormGroup;
 
 
-  constructor(private activeModal: NgbActiveModal, private cs: CommonService, private alert: AlertService,) {
+  constructor(private activeModal: NgbActiveModal, private cs: CommonService,) {
     super();
   }
 
@@ -81,7 +80,7 @@ export class EditProfile extends Ithouse implements Service {
   }
   onError(service: Service, req: any, res: any) {
     this.loading = false;
-    this.alert.showAlert('Error', `${res?.statusText} with error code:${res?.status}`, 'error');
+    Swal.fire(`${res?.statusText} with error code:${res?.status}`, 'error');
     throw new Error('Method not implemented.');
   }
 
