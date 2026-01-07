@@ -6,17 +6,17 @@ import { DateConvertService } from 'src/app/ithouse/services/date-convert.servic
 
 @Component({
   selector: 'ithouse-dynamic-form',
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule],
   templateUrl: './dynamic-form.html',
   styleUrl: './dynamic-form.scss'
 })
 export class DynamicForm {
 
-  @Input()
-  public formDataInfo: FormValue[];
+  @Input({ required: true })
+  public formInfo!: FormValue[];
 
   @Input()
-  formValue?: any;
+  formValue!: any;
 
   @Output()
   onButtonClick?: EventEmitter<any> = new EventEmitter<any>();
@@ -30,7 +30,7 @@ export class DynamicForm {
     console.log('user info is', this.formValue);
     debugger
     this.form = this.fb.group({});
-    this.formDataInfo.forEach(field => {
+    this.formInfo.forEach(field => {
       let value: any;
       if (this.formValue) {
         if (field.type === 'date') {
@@ -82,7 +82,7 @@ export class DynamicForm {
   }
 
   getValidationMessage(fieldName: string, errorKey: string): string {
-    const field = this.formDataInfo.find(f => f.name === fieldName);
+    const field = this.formInfo.find(f => f.name === fieldName);
     return field?.validationMessages?.[errorKey] || 'Invalid value';
   }
 
