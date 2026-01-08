@@ -2,6 +2,7 @@ package com.ithouse.mshop.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ithouse.core.message.AbstractMessageHeader;
 import com.ithouse.core.message.interfaces.Message;
 import com.ithouse.core.message.processor.services.ProcessorService;
 import com.ithouse.core.message.services.ServiceCoordinator;
@@ -76,6 +77,23 @@ public class AppController {
             log.error("Exception processig message [{}]", e);
         }
 
+        return serverResponse;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getRequest", produces = "application/json")
+    public String handleGetRequest(
+            AbstractMessageHeader messageHeader ,
+            HttpServletRequest req) {
+        Message processedMessage = null;
+        String serverResponse = null;
+        try {
+            messageHeader.setSenderSourceIPAddress(req.getRemoteAddr());
+            messageHeader.setSenderGatewayIPAddress(req.getHeader(VIA));
+            processedMessage = serviceCoordinator.service(messageHeader, false);
+            serverResponse = processorService.toJson(processedMessage);
+        } catch (Exception e) {
+            log.error("Exception processing message [{}]", e);
+        }
         return serverResponse;
     }
 

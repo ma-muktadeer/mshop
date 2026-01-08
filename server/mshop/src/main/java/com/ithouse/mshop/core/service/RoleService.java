@@ -55,7 +55,8 @@ public class RoleService extends ItHouseService<List<Role>> {
 
 		} catch (Exception ex) {
 
-			msgResponse = ResponseBuilder.buildErrorResponse(header, ex);
+            assert header != null;
+            msgResponse = ResponseBuilder.buildErrorResponse(header, ex);
 
 			log.error("Exception Message **** [{}]", ex.getLocalizedMessage());
 		}

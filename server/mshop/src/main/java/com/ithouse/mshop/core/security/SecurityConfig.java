@@ -116,12 +116,12 @@ public class SecurityConfig {
                         .requestMatchers("/public/**").permitAll()
 
                         // Admin endpoints
-                        .requestMatchers("/secure/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/secure/admin/**").hasAuthority("SUPER_ADMIN")
 
                         // POST requests for secure endpoints
                         // .requestMatchers(HttpMethod.POST,
                         // "/secure/**").hasAnyAuthority(roleService.findAllRoleNameList())
-                        .requestMatchers(HttpMethod.POST, "/secure/**").authenticated()
+                        .requestMatchers("/secure/**").authenticated()
 
                         // Deny everything else
                         .anyRequest().denyAll())

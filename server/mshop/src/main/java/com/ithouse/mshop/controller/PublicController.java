@@ -155,46 +155,13 @@ public class PublicController {
         return serverResponse;
     }
 
-    @GetMapping("/t")
-    public String ttt() {
-        return "ok";
-    }
 
-//	private final ExecutorService executorService = Executors.newThreadPerTaskExecutor(new VirtualThreadFactory());
-//
-//	@GetMapping("/users")
-//    public CompletableFuture<List<User>> getAll() throws InterruptedException {
-
-    /// /        Thread.sleep(1000); // Simulate delay
-//        log.info("my thread is [{}]", Thread.currentThread().getName());
-//        return CompletableFuture.supplyAsync(() -> {
-//            List<User> users = userService.getAllUsers();
-//            return users;
-//        });
-//    }
-//	
-//	static class VirtualThreadFactory implements ThreadFactory {
-//        @Override
-//        public Thread newThread(Runnable r) {
-//            return Thread.ofVirtual().start(r);
-//        }
-//    }
-
-//    @Autowired
-//    private SessionRegistry sessionRegistry;
-//    @GetMapping("/session")
-//    public String getSessionId(HttpSession session) {
-//
-//        SessionInformation sf = sessionRegistry.getSessionInformation(session.getId());
-//
-//        return "Session ID: " + session.getId();
-//    }
     @RequestMapping(path = "/check", method = RequestMethod.POST)
     public ResponseEntity<?> checkValid(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {
             // Collect error messages from the BindingResult object
             List<String> errorMessages = result.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)  // Get the message from @RegexMatch
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toList();
 //            result.getFieldError().getField()
             // Return errors as a JSON response

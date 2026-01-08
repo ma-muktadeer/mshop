@@ -61,6 +61,14 @@ export class CommonService {
     this.doSendRequestAdmin(service, actionType, contentType, referance, payload, path);
   }
 
+  public sendGetRequest(service: Service, actionType: ActionType, contentType: ContentType, referance: string, pageNumber: number, pageSize: number, path: string = null) {
+    this.doSendGetRequest(service, actionType, contentType, referance, pageNumber, pageSize, path);
+  }
+
+  public sendGetRequestAdmin(service: Service, actionType: ActionType, contentType: ContentType, referance: string, pageNumber: number, pageSize: number, path: string = null) {
+    this.doSendGetRequestAdmin(service, actionType, contentType, referance, pageNumber, pageSize, path);
+  }
+
   private async doSendRequestPublic<T>(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
 
     var req = this.generateReqJson(actionType, contentType, referance, payload);
@@ -68,6 +76,24 @@ export class CommonService {
     var url = path ? this.environment.SERVER_BASE_URL_PUBLIC + path : this.environment.SERVER_BASE_URL_PUBLIC + "/jsonRequest"
 
     await this._postRequest<T, any>(url, req, service);
+  }
+
+  private async doSendGetRequest<T>(service: Service, actionType: ActionType, contentType: ContentType, referance: string, pageNumber: number, pageSize: number, path: string = null) {
+
+    const header: Header = this.buildHeader(actionType, contentType, referance, { pageNumber, pageSize });
+
+    var url = path ? this.environment.SERVER_BASE_URL + path : this.environment.SERVER_BASE_URL + "/getRequest"
+
+    await this._getRequest<T, any>(url, header, service);
+  }
+
+  private async doSendGetRequestAdmin<T>(service: Service, actionType: ActionType, contentType: ContentType, referance: string, pageNumber: number, pageSize: number, path: string = null) {
+
+    const header: Header = this.buildHeader(actionType, contentType, referance, { pageNumber, pageSize });
+
+    var url = path ? this.environment.SERVER_BASE_URL_ADMIN + path : this.environment.SERVER_BASE_URL_ADMIN + "/getRequestAdmin"
+
+    await this._getRequest<T, any>(url, header, service);
   }
 
   private async doSendRequestAdmin<T>(service: Service, actionType: ActionType, contentType: ContentType, referance: string, payload: any, path: string = null) {
@@ -88,7 +114,6 @@ export class CommonService {
   }
 
   private async _postRequest<T, R>(url: string, req: RequestBody<T>, service: Service): Promise<R> {
-
     try {
       const res = await firstValueFrom(
         this.http.post<R>(url, req).pipe(
@@ -134,22 +159,65 @@ export class CommonService {
       service.onError(service, req, message);
       throw error;
     }
+  }
+  private async _getRequest<T, R>(url: string, header: Header, service: Service): Promise<R> {
+    try {
+      const prm: Record<string, any> = this.convertHeaderToParams(header);
+      const res = await firstValueFrom(
+        this.http.get<R>(url, { params: prm }).pipe(
+          timeout(this.environment.HTTP_REQUEST_TIMEOUT),
+          retry(
+            {
+              count: this.environment.HTTP_REQUEST_RETRY_COUNT || 0,
+              delay: this.environment.HTTP_REQUEST_RETRY_DELAY || 1000
+            }
+          ),
+          catchError((error) => {
+            let message = 'An unexpected error occurred.';
+            if (error.name === 'TimeoutError') {
+              message = 'The server took too long to respond. Please try again later.';
+            } else if (error.status === 0) {
+              message = 'Unable to connect to the server. Check your internet connection.';
+            } else if (error.status >= 500) {
+              message = 'The server is temporarily unavailable. Please try again later.';
+            } else if (error.status === 401) {
+              message = 'Un-authorized request.';
+            } else if (error.status === 404) {
+              message = 'The requested service could not be found.';
+            }
+            else if (error.status === 400) {
+              message = error.error?.message || 'Bad request — please check your input.';
+            } else if (error.error?.message) {
+              message = error.error.message;
+            }
+            console.error('HTTP error:', { url, request: header, status: error.status, error });
 
-    // this.http.post(url, req)
-    //   .pipe(
-    //     takeUntilDestroyed(this._destroyRef),
-    //     catchError((error: any) => {
-    //       service.onError(service, req, error);
-    //       return throwError(() => error);
-    //     })
-    //   )
-    //   .subscribe({
-    //     next: (res) => {
-    //       service.onResponse(service, req, res);
-    //     }
-    //   });
+            return throwError(() => ({
+              message,
+              raw: error
+            }));
+          }),
+        )
+      ) as R;
+      service.onResponse(service, { header: header }, res);
+      return res;
+    } catch (error) {
+      console.error('HTTP request failed', { url, header, error });
+      const message = error?.message || 'Something went wrong.';
+      service.onError(service, { header: header }, message);
+      throw error;
+    }
   }
 
+  private convertHeaderToParams(header: Header): Record<string, any> {
+    const prm: Record<string, any> = {};
+    for (const key in header) {
+      if (header.hasOwnProperty(key)) {
+        prm[key] = header[key];
+      }
+    }
+    return prm;
+  }
 
   public async execute<T>(actionType: ActionType, contentType: ContentType, payload: T | T[]) {
 
@@ -179,26 +247,31 @@ export class CommonService {
     reference: string,
     payload: T | T[]): RequestBody<T> {
 
-    const loginUser = this.loadLoginUser();
-    let userId = null;
-    if (loginUser && loginUser.userId) {
-      userId = loginUser.userId;
-    }
-    const header: Header = {
-      actionType: actionType.toString(),
-      contentType: contentType.toString(),
-      reference: reference,
-      userId: userId,
-      extraInfoMap: {
-        appName: this._config.config.app.constantAppName
-      }
-    };
+    const header: Header = this.buildHeader(actionType, contentType, reference);
 
     const data: RequestBody<T> = {
       header: header,
       payload: Array.isArray(payload) ? payload : [payload]
     }
     return data;
+  }
+
+  private buildHeader(actionType: ActionType, contentType: ContentType, reference: string, page?: { pageNumber: number, pageSize: number }): Header {
+
+    const header: Header = {
+      actionType: actionType.toString(),
+      contentType: contentType.toString(),
+      reference: reference,
+      userId: this.loadLoginUser()?.userId,
+      // extraInfoMap: {
+      //   appName: this._config.config.app.constantAppName
+      // }
+    };
+    if (page) {
+      header.pageNumber = page.pageNumber;
+      header.pageSize = page.pageSize;
+    }
+    return header;
   }
 
   public reqJson(actionType: ActionType, contentType: ContentType, referance: string, payload: any): string {

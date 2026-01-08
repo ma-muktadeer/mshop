@@ -24,4 +24,7 @@ export class Header {
   encryptedData?: boolean;
   extraInfoMap?: Record<string, string>;
 
+  pageNumber?: number;
+  pageSize?: number;
+
 }
