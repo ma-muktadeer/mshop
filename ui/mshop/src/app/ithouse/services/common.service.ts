@@ -162,7 +162,7 @@ export class CommonService {
   }
   private async _getRequest<T, R>(url: string, header: Header, service: Service): Promise<R> {
     try {
-      const prm: Record<string, any> = this.convertHeaderToParams(header);
+      const prm: Record<string, any> = this.convertHeaderToParams(header, true);
       const res = await firstValueFrom(
         this.http.get<R>(url, { params: prm }).pipe(
           timeout(this.environment.HTTP_REQUEST_TIMEOUT),
@@ -209,11 +209,16 @@ export class CommonService {
     }
   }
 
-  private convertHeaderToParams(header: Header): Record<string, any> {
+  private convertHeaderToParams(header: Header, isRemoveExtra: boolean = false): Record<string, any> {
     const prm: Record<string, any> = {};
     for (const key in header) {
       if (header.hasOwnProperty(key)) {
-        prm[key] = header[key];
+        if (key == 'extraInfoMap' && isRemoveExtra) {
+          continue;
+        }
+        else {
+          prm[key] = header[key];
+        }
       }
     }
     return prm;
@@ -263,9 +268,9 @@ export class CommonService {
       contentType: contentType.toString(),
       reference: reference,
       userId: this.loadLoginUser()?.userId,
-      // extraInfoMap: {
-      //   appName: this._config.config.app.constantAppName
-      // }
+      extraInfoMap: {
+        appName: this._config.config.app.constantAppName
+      }
     };
     if (page) {
       header.pageNumber = page.pageNumber;

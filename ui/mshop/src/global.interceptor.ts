@@ -36,7 +36,7 @@ export const globalInterceptor: HttpInterceptorFn = (req, next) => {
         withCredentials: true,
         setHeaders: {
           // 'Content-Type' : 'application/x-www-form-urlencoded',
-          // 'Content-Type': 'application/json; charset=utf-8',
+          'Content-Type': 'application/json; charset=utf-8',
           'Authorization': cs.getToken(),
           'appName': config.appName,
         },
