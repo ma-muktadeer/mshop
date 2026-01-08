@@ -89,7 +89,7 @@ public class AppController {
         try {
             messageHeader.setSenderSourceIPAddress(req.getRemoteAddr());
             messageHeader.setSenderGatewayIPAddress(req.getHeader(VIA));
-            processedMessage = serviceCoordinator.service(messageHeader, false);
+            processedMessage = serviceCoordinator.service(messageHeader, processorService.findPayloadClass(messageHeader.getContentType()), false);
             serverResponse = processorService.toJson(processedMessage);
         } catch (Exception e) {
             log.error("Exception processing message [{}]", e);
