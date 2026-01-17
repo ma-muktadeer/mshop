@@ -1,30 +1,36 @@
 package com.ithouse.mshop.core.entity;
 
+import com.ithouse.core.message.interfaces.EnablePagination;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 
 @MappedSuperclass
-public class BaseEntity extends BaseIthouse{
+public class BaseEntity extends BaseIthouse implements EnablePagination {
 
-	@Transient
-	private Integer pageNumber = 1;
+    @Transient
+    private Integer pageNumber;
 
-	@Transient
-	private Integer pageSize = 20;
+    @Transient
+    private Integer pageSize;
 
-	public Integer getPageNumber() {
-		return pageNumber;
-	}
 
-	public void setPageNumber(Integer pageNumber) {
-		this.pageNumber = pageNumber;
-	}
+    @Override
+    public void setPageNumber(Integer page) {
+        this.pageNumber = page;
+    }
 
-	public Integer getPageSize() {
-		return pageSize;
-	}
+    @Override
+    public void setPageSize(Integer size) {
+        this.pageSize = size;
+    }
 
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
+    @Override
+    public Integer getPageNumber() {
+        return this.pageNumber;
+    }
+
+    @Override
+    public Integer getPageSize() {
+        return this.pageSize;
+    }
 }

@@ -257,9 +257,9 @@ export class User extends Ithouse implements Service {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
     };
-    // this.cs.sendRequest(this, ActionType.SELECT, ContentType.User, 'select', payload);
+    this.cs.sendRequest(this, ActionType.SELECT, ContentType.User, 'select', payload);
 
-    this.cs.sendGetRequest(this, ActionType.SELECT, ContentType.User, 'select', 1, 10, '/getRequest');
+    // this.cs.sendGetRequest(this, ActionType.SELECT, ContentType.User, 'select', 1, 1, '/getRequest');
   }
 
   checkActiveRole(data) {
