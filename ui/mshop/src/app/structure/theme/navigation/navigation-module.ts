@@ -21,7 +21,6 @@ import { RouterModule } from '@angular/router';
     NgScrollbarModule,
     RouterModule,
   ],
-  // providers: [NabItemsService],
   exports: [
     Navigation,
   ]
