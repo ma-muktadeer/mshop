@@ -1,7 +1,6 @@
 import { ApplicationConfig, importProvidersFrom, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { AngularSlickgridModule } from 'angular-slickgrid';
-
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay, withHttpTransferCacheOptions } from '@angular/platform-browser';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
@@ -33,7 +32,7 @@ export const appConfig: ApplicationConfig = {
     ToggleFullScreenDirective,
     CommonService,
     DatePipe,
-    NabItemsService,
+    // NabItemsService,
     TabManagerService,
   ]
 };

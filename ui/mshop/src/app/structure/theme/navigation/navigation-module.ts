@@ -7,6 +7,7 @@ import { NavGroup } from './nav-content/nav-group/nav-group';
 import { NavItem } from './nav-content/nav-item/nav-item';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { RouterModule } from '@angular/router';
+import { NabItemsService } from './nab-items.service';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { RouterModule } from '@angular/router';
     NgScrollbarModule,
     RouterModule,
   ],
+  providers: [NabItemsService],
   exports: [
     Navigation,
   ]

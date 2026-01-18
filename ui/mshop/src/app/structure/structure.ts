@@ -4,10 +4,13 @@ import { Breadcrumb } from "./shared/components/breadcrumb/breadcrumb";
 import { RouterOutlet } from '@angular/router';
 import { NavigationModule } from './theme/navigation/navigation-module';
 import { NavBarModule } from './theme/nav-bar/nav-bar-module';
+import { NabItemsService } from './theme/navigation/nab-items.service';
+import { InjectPermissionService } from '../ithouse/services/inject-permission.service';
 
 @Component({
   selector: 'app-structure',
   imports: [Breadcrumb, RouterOutlet, NavigationModule, NavBarModule],
+  providers: [NabItemsService, InjectPermissionService],
   templateUrl: './structure.html',
   styleUrl: './structure.scss',
 })

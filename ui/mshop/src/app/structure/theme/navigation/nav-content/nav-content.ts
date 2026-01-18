@@ -8,10 +8,10 @@ import { NavigationItem, NavigationItems } from '../navigation-items';
   templateUrl: './nav-content.html',
   styleUrl: './nav-content.scss',
   standalone: false,
-  providers: [NabItemsService]
+  // providers: [NabItemsService]
 })
 export class NavContent {
-// public pops
+  // public pops
   navigations = signal<NavigationItem[]>([]);
   wrapperWidth!: number;
   windowWidth: number;

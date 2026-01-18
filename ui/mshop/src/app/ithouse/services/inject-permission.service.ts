@@ -3,9 +3,7 @@ import { AppPermission, PermissionStoreService } from './permissioin-store.servi
 import { NabItemsService } from '../../structure/theme/navigation/nab-items.service';
 import { NavigationItems } from '../../structure/theme/navigation/navigation-items';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class InjectPermissionService {
 
   @Input()
