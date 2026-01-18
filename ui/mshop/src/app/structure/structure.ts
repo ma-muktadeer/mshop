@@ -1,4 +1,4 @@
-import { isPlatformBrowser, NgClass } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { Component, HostListener, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { Breadcrumb } from "./shared/components/breadcrumb/breadcrumb";
 import { RouterOutlet } from '@angular/router';

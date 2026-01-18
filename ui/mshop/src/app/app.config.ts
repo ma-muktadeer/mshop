@@ -9,7 +9,6 @@ import { globalInterceptor } from '../global.interceptor';
 import { ConfigService, initializeApplication } from '../config.service';
 import { ToggleFullScreenDirective } from './structure/shared/full-screen/toggle-full-screen';
 import { DatePipe } from '@angular/common';
-import { NabItemsService } from './structure/theme/navigation/nab-items.service';
 import { TabManagerService } from './ithouse/services/tab-manager.service';
 import { layoutGuard } from './ithouse/guard/layout.guard';
 
