@@ -1,4 +1,4 @@
-@if(!loading()) {
+<!-- @if(!loading()) { -->
 <div class="parent">
   <div class="container" [ngClass]="isSignDivVisiable() ? 'active' :'' " id="container">
     <!-- Mobile segmented control: shows only on small screens -->
@@ -38,7 +38,14 @@
         <input type="email" name="email" [(ngModel)]="email" placeholder="Email">
         <input type="password" name="password" [(ngModel)]="password" placeholder="Password">
         <a href="#">→ Forget Your Password? ←</a>
-        <button type="submit" class="primary">Sign In</button>
+        <button type="submit" class="primary" [disabled]="loading()">
+          @if(loading()){
+          <span class="spinner-border spinner-border-sm"></span>
+          Loading...
+          } @else {
+          <span>Sign In</span>
+          }
+        </button>
       </form>
     </div>
     <div class="toggle-container">
@@ -59,7 +66,7 @@
     </div>
   </div>
 </div>
-}
+<!-- } -->
 <!-- @else {
     <app-loading/>
 } -->
