@@ -28,6 +28,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.NonNullFields;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -172,57 +173,37 @@ public class UserService extends ItHouseService<List<User>> {
 
     private List<User> login(Message<List<User>> message, String actionType) throws Exception {
 
-        List<User> userList = null;
-        // List<Role> roleList = null;
-        User user = null;
-
         String appName = (String) message.getHeader().getExtraInfoMap().get("appName");
 
-        user = message.getPayload().getFirst();
+        User user = message.getPayload().getFirst();
 
-        doAuthenticate(user);
+        Authentication auth = doAuthenticate(user);
 
-        User dbUser = userPrincipalService.loadUserByUsername(user.getLoginName()).user();
-
-        if (dbUser != null) {
+//        User dbUser = userPrincipalService.loadUserByUsername(user.getLoginName()).user();
+        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
+        if (userPrincipal != null) {
             // sessionService.expireUserSessions(dbUser.getEmail());
             log.info("dbuser is found for user:[{}]", user.getLoginName());
-            if (dbUser.getAllowLogin() != 1) {
-                log.info("User is not allow to login: [{}]", dbUser.getUserId());
+            if (userPrincipal.user().getAllowLogin() != 1) {
+                log.info("User is not allow to login: [{}]", userPrincipal.user().getUserId());
                 throw new AccessDeniedException("You are not allow to login. Please contact the Admin.");
             }
-            UserPrincipal userPrincipal = new UserPrincipal(dbUser);
+//            UserPrincipal userPrincipal = new UserPrincipal(dbUser);
             if (userPrincipal.getAuthorities().isEmpty()) {
-                log.info("User authority is not added for userId: [{}]", dbUser.getUserId());
+                log.info("User authority is not added for userId: [{}]", userPrincipal.user().getUserId());
                 throw new AccessDeniedException("User access denied. Please contact the Admin.");
             }
-            if (!StringUtils.equals(dbUser.getAppName(), appName)) {
-                log.info("App name is not match. Db appName, appName:[{},{}]", dbUser.getAppName(), appName);
+            if (!userPrincipal.user().getAppName().equals(appName)) {
+                log.info("App name is not match. Db appName, appName:[{},{}]", userPrincipal.user().getAppName(), appName);
                 throw new RuntimeException("User not found.");
             }
 
-            userList = new ArrayList<>();
+            List<User> userList = new ArrayList<>();
             updateLogin(message.getHeader().getSenderSourceIPAddress(), message.getHeader().getSenderGatewayIPAddress(),
-                    dbUser, 1, dbUser.getLoginName(), appName);
-            // dbUser.setPassword(null);
-            userList.add(dbUser);
+                    userPrincipal.user(), 1, userPrincipal.user().getLoginName(), appName);
+            userPrincipal.user().setPassword(null);
+            userList.add(userPrincipal.user());
             return userList;
-
-            // if (isPasswordMatch(dbUser.getPassword(), user.getPassword())) {
-            // log.info("Password is mathched");
-            // userList = new ArrayList<>();
-            // updateLogin(message.getHeader().getSenderSourceIPAddress(),
-            // message.getHeader().getSenderGatewayIPAddress(), dbUser, 1,
-            // dbUser.getLoginName(), appName);
-            ////                dbUser.setPassword(null);
-            // userList.add(dbUser);
-            // return userList;
-            //
-            // // lk?
-            // } else {
-            // log.info("Password not matched.");
-            // throw new Exception("Password not matched.");
-            // }
 
         } else {
             log.info("User not found.");
@@ -337,8 +318,8 @@ public class UserService extends ItHouseService<List<User>> {
     // };
     // }
 
-    public void doAuthenticate(User user) {
-        authService.authenticate(user.getLoginName(), user.getPassword());
+    public Authentication doAuthenticate(User user) {
+       return authService.authenticate(user.getLoginName(), user.getPassword());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
