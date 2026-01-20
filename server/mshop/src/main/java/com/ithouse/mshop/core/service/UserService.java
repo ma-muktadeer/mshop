@@ -85,32 +85,25 @@ public class UserService extends ItHouseService<List<User>> {
             header = requestMessage.getHeader();
             String actionType = header.getActionType();
             log.info("come for action :[{}]", actionType);
-            if (actionType.equals(ActionType.ACTION_LOGIN.toString())) {
-                List<User> userList = login(requestMessage, actionType);
-                msgResponse = ResponseBuilder.buildResponse(header, userList);
-            } else if (actionType.equals(ActionType.ACTION_REGISTER.toString())) {
-                List<User> userList = registration(requestMessage, actionType);
-                msgResponse = ResponseBuilder.buildResponse(header, userList);
-            } else if (actionType.equals(ActionType.ACTION_SELECT.toString())) {
-                Page<User> userList = select(requestMessage, actionType);
-                msgResponse = ResponseBuilder.buildResponse(header, userList);
-            } else if (actionType.equals(ActionType.ACTION_LOGOUT.toString())) {
-                User user = self.logout(requestMessage, actionType);
-                msgResponse = ResponseBuilder.buildResponse(header, user);
-            } else if (actionType.equals(ActionType.LOAD_DETAILS.toString())) {
-                User user = loadDetails(requestMessage, actionType);
-                msgResponse = ResponseBuilder.buildResponse(header, user);
-            } else if (actionType.equals(ActionType.BUILD_IMAGE.toString())) {
-                String img = buildImage(requestMessage, actionType);
-                msgResponse = ResponseBuilder.buildResponse(header, img);
-            } else if (actionType.equals(ActionType.UPDATE.toString())) {
-                User user = updateUser(requestMessage, actionType);
-                msgResponse = ResponseBuilder.buildResponse(header, user);
-            } else {
-                log.info("No action handle [{}]", actionType);
-            }
+
+            var result = switch (ActionType.lookup(actionType)){
+                case ACTION_LOGIN -> login(requestMessage, actionType);
+                case ACTION_REGISTER -> registration(requestMessage, actionType);
+                case ACTION_SELECT -> select(requestMessage, actionType);
+                case ACTION_LOGOUT -> self.logout(requestMessage, actionType);
+                case LOAD_DETAILS -> loadDetails(requestMessage, actionType);
+                case BUILD_IMAGE -> buildImage(requestMessage, actionType);
+                case UPDATE ->updateUser(requestMessage, actionType);
+
+                default -> {
+                    log.error("Unknown Action Type: {}", actionType);
+                    throw new Exception("Invalid Action ");
+                }
+            };
+            msgResponse = ResponseBuilder.buildResponse(header, result);
 
         } catch (Exception ex) {
+            assert header != null;
             msgResponse = ResponseBuilder.buildErrorResponse(header, ex);
             msgResponse.getHeader().setExtraInfoMap(null);
             log.error("Exception Message **** [{}]", ex.getMessage());
