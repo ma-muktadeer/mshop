@@ -7,11 +7,11 @@
     "constantAppName": "M-SHOP",
     "blockMultiTab": false
   },
-  "baseUrl": "http://127.0.0.1:8081/secure",
-  "SERVER_URL": "http://127.0.0.1:8081",
-  "SERVER_BASE_URL": "http://127.0.0.1:8081/secure",
-  "SERVER_BASE_URL_PUBLIC": "http://127.0.0.1:8081/public",
-  "SERVER_BASE_URL_ADMIN": "http://127.0.0.1:8081/secure",
+  "baseUrl": "http://127.0.0.1:8082/secure",
+  "SERVER_URL": "http://127.0.0.1:8082",
+  "SERVER_BASE_URL": "http://127.0.0.1:8082/secure",
+  "SERVER_BASE_URL_PUBLIC": "http://127.0.0.1:8082/public",
+  "SERVER_BASE_URL_ADMIN": "http://127.0.0.1:8082/secure",
   "HTTP_REQUEST_TIMEOUT": 1800000,
   "HTTP_REQUEST_RETRY_COUNT": 0,
   "HTTP_REQUEST_RETRY_DELAY": 2000
